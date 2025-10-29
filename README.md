@@ -2,6 +2,9 @@
 
 Batch download all images & videos from any X/Twitter account — including withheld — in original quality, one click, no login.
 
+### For Mobile Users
+> Use a browser that supports extensions (Kiwi Browser, Lemur Browser, Kito Browser, or Mask Browser) for the extension installation, or use Violentmonkey as your userscript manager for the userscript installation.
+
 # Demo
 
 ![image](https://raw.githubusercontent.com/e1xyezed/demo/main/x_pro_demo.gif)
