@@ -10,30 +10,31 @@
 // @namespace       https://exyezed.cc
 // @supportURL      https://www.patreon.com/exyezed
 // @homepageURL     https://www.patreon.com/exyezed
-// @updateURL       https://github.com/exyezed/chatgpt-tts/releases/latest/download/twitter-x-media-batch-downloader-pro.meta.js
-// @downloadURL     https://github.com/exyezed/chatgpt-tts/releases/latest/download/twitter-x-media-batch-downloader-pro.user.js
-// @version         1.0.9
+// @version         1.1.0
 // @author          exyezed
 // @license         MIT
 // @match           *://twitter.com/*
 // @match           *://x.com/*
-// @require         https://cdn.jsdelivr.net/npm/dayjs@1.11.18/dayjs.min.js
+// @require         https://cdn.jsdelivr.net/npm/dayjs@1.11.19/dayjs.min.js
 // @require         https://cdn.jsdelivr.net/npm/dexie@4.2.1/dist/dexie.min.js
 // @require         https://cdn.jsdelivr.net/npm/file-saver-es@2.0.5/dist/FileSaver.min.js
-// @require         https://cdn.jsdelivr.net/npm/i18next@25.6.0/i18next.min.js
+// @require         https://cdn.jsdelivr.net/npm/gifshot@0.4.5/dist/gifshot.min.js
+// @require         https://cdn.jsdelivr.net/npm/i18next@25.6.2/i18next.min.js
 // @require         https://cdn.jsdelivr.net/npm/preact@10.27.2/dist/preact.min.js
 // @require         https://cdn.jsdelivr.net/npm/preact@10.27.2/hooks/dist/hooks.umd.js
 // @require         https://cdn.jsdelivr.net/npm/@preact/signals-core@1.12.1/dist/signals-core.min.js
-// @require         https://cdn.jsdelivr.net/npm/@preact/signals@2.3.2/dist/signals.min.js
+// @require         https://cdn.jsdelivr.net/npm/@preact/signals@2.5.0/dist/signals.min.js
 // @require         https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js
 // @connect         oregon.exyezed.cc
 // @connect         frankfurt.exyezed.cc
+// @connect         singapore.exyezed.cc
+// @grant           GM_addStyle
 // @grant           GM_xmlhttpRequest
 // @grant           unsafeWindow
 // @run-at          document-start
 // ==/UserScript==
 
-(function (preact, signals, hooks, i18next, dayjs, Dexie, fileSaverEs, fflate) {
+(function (preact, signals, hooks, i18next, dayjs, Dexie, fileSaverEs, gifshot, fflate) {
   'use strict';
 
   var f = 0;
@@ -45,12 +46,6 @@
     if ("function" == typeof e && (a = e.defaultProps)) for (c in a) void 0 === p[c] && (p[c] = a[c]);
     return preact.options.vnode && preact.options.vnode(l), l;
   }
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var defaultAttributes = {
     outline: {
       xmlns: "http://www.w3.org/2000/svg",
@@ -72,12 +67,6 @@
       stroke: "none"
     }
   };
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   const createPreactComponent = (type, iconName, iconNamePascal, iconNode) => {
     const Component2 = ({
       color = "currentColor",
@@ -114,297 +103,66 @@
     Component2.displayName = `${iconNamePascal}`;
     return Component2;
   };
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconAlertTriangle = createPreactComponent("outline", "alert-triangle", "AlertTriangle", [["path", { "d": "M12 9v4", "key": "svg-0" }], ["path", { "d": "M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z", "key": "svg-1" }], ["path", { "d": "M12 16h.01", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconBook = createPreactComponent("outline", "book", "Book", [["path", { "d": "M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0", "key": "svg-0" }], ["path", { "d": "M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0", "key": "svg-1" }], ["path", { "d": "M3 6l0 13", "key": "svg-2" }], ["path", { "d": "M12 6l0 13", "key": "svg-3" }], ["path", { "d": "M21 6l0 13", "key": "svg-4" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconBrandChrome = createPreactComponent("outline", "brand-chrome", "BrandChrome", [["path", { "d": "M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0", "key": "svg-0" }], ["path", { "d": "M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0", "key": "svg-1" }], ["path", { "d": "M12 9h8.4", "key": "svg-2" }], ["path", { "d": "M14.598 13.5l-4.2 7.275", "key": "svg-3" }], ["path", { "d": "M9.402 13.5l-4.2 -7.275", "key": "svg-4" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconBrandPatreon = createPreactComponent("outline", "brand-patreon", "BrandPatreon", [["path", { "d": "M20 8.408c-.003 -2.299 -1.746 -4.182 -3.79 -4.862c-2.54 -.844 -5.888 -.722 -8.312 .453c-2.939 1.425 -3.862 4.545 -3.896 7.656c-.028 2.559 .22 9.297 3.92 9.345c2.75 .036 3.159 -3.603 4.43 -5.356c.906 -1.247 2.071 -1.599 3.506 -1.963c2.465 -.627 4.146 -2.626 4.142 -5.273z", "key": "svg-0" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconBrandTwitter = createPreactComponent("outline", "brand-twitter", "BrandTwitter", [["path", { "d": "M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c0 -.249 1.51 -2.772 1.818 -4.013z", "key": "svg-0" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
+  var IconCalendarWeek = createPreactComponent("outline", "calendar-week", "CalendarWeek", [["path", { "d": "M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z", "key": "svg-0" }], ["path", { "d": "M16 3v4", "key": "svg-1" }], ["path", { "d": "M8 3v4", "key": "svg-2" }], ["path", { "d": "M4 11h16", "key": "svg-3" }], ["path", { "d": "M7 14h.013", "key": "svg-4" }], ["path", { "d": "M10.01 14h.005", "key": "svg-5" }], ["path", { "d": "M13.01 14h.005", "key": "svg-6" }], ["path", { "d": "M16.015 14h.005", "key": "svg-7" }], ["path", { "d": "M13.015 17h.005", "key": "svg-8" }], ["path", { "d": "M7.01 17h.005", "key": "svg-9" }], ["path", { "d": "M10.01 17h.005", "key": "svg-10" }]]);
   var IconChevronLeft = createPreactComponent("outline", "chevron-left", "ChevronLeft", [["path", { "d": "M15 6l-6 6l6 6", "key": "svg-0" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconChevronRight = createPreactComponent("outline", "chevron-right", "ChevronRight", [["path", { "d": "M9 6l6 6l-6 6", "key": "svg-0" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconCircleCheck = createPreactComponent("outline", "circle-check", "CircleCheck", [["path", { "d": "M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0", "key": "svg-0" }], ["path", { "d": "M9 12l2 2l4 -4", "key": "svg-1" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconCircleX = createPreactComponent("outline", "circle-x", "CircleX", [["path", { "d": "M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0", "key": "svg-0" }], ["path", { "d": "M10 10l4 4m0 -4l-4 4", "key": "svg-1" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconCloudDown = createPreactComponent("outline", "cloud-down", "CloudDown", [["path", { "d": "M12 18.004h-5.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.38 0 2.573 .813 3.13 1.99", "key": "svg-0" }], ["path", { "d": "M19 16v6", "key": "svg-1" }], ["path", { "d": "M22 19l-3 3l-3 -3", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconCloudUp = createPreactComponent("outline", "cloud-up", "CloudUp", [["path", { "d": "M12 18.004h-5.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.38 0 2.57 .811 3.128 1.986", "key": "svg-0" }], ["path", { "d": "M19 22v-6", "key": "svg-1" }], ["path", { "d": "M22 19l-3 -3l-3 3", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconDatabaseExport = createPreactComponent("outline", "database-export", "DatabaseExport", [["path", { "d": "M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3", "key": "svg-0" }], ["path", { "d": "M4 6v6c0 1.657 3.582 3 8 3c1.118 0 2.183 -.086 3.15 -.241", "key": "svg-1" }], ["path", { "d": "M20 12v-6", "key": "svg-2" }], ["path", { "d": "M4 12v6c0 1.657 3.582 3 8 3c.157 0 .312 -.002 .466 -.005", "key": "svg-3" }], ["path", { "d": "M16 19h6", "key": "svg-4" }], ["path", { "d": "M19 16l3 3l-3 3", "key": "svg-5" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconDatabaseImport = createPreactComponent("outline", "database-import", "DatabaseImport", [["path", { "d": "M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3", "key": "svg-0" }], ["path", { "d": "M4 6v6c0 1.657 3.582 3 8 3c.856 0 1.68 -.05 2.454 -.144m5.546 -2.856v-6", "key": "svg-1" }], ["path", { "d": "M4 12v6c0 1.657 3.582 3 8 3c.171 0 .341 -.002 .51 -.006", "key": "svg-2" }], ["path", { "d": "M19 22v-6", "key": "svg-3" }], ["path", { "d": "M22 19l-3 -3l-3 3", "key": "svg-4" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconDatabaseSearch = createPreactComponent("outline", "database-search", "DatabaseSearch", [["path", { "d": "M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3", "key": "svg-0" }], ["path", { "d": "M4 6v6c0 1.657 3.582 3 8 3m8 -3.5v-5.5", "key": "svg-1" }], ["path", { "d": "M4 12v6c0 1.657 3.582 3 8 3", "key": "svg-2" }], ["path", { "d": "M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0", "key": "svg-3" }], ["path", { "d": "M20.2 20.2l1.8 1.8", "key": "svg-4" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconDatabaseX = createPreactComponent("outline", "database-x", "DatabaseX", [["path", { "d": "M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3", "key": "svg-0" }], ["path", { "d": "M4 6v6c0 1.657 3.582 3 8 3c.537 0 1.062 -.02 1.57 -.058", "key": "svg-1" }], ["path", { "d": "M20 13.5v-7.5", "key": "svg-2" }], ["path", { "d": "M4 12v6c0 1.657 3.582 3 8 3c.384 0 .762 -.01 1.132 -.03", "key": "svg-3" }], ["path", { "d": "M22 22l-5 -5", "key": "svg-4" }], ["path", { "d": "M17 22l5 -5", "key": "svg-5" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconDatabase = createPreactComponent("outline", "database", "Database", [["path", { "d": "M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0", "key": "svg-0" }], ["path", { "d": "M4 6v6a8 3 0 0 0 16 0v-6", "key": "svg-1" }], ["path", { "d": "M4 12v6a8 3 0 0 0 16 0v-6", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconDownload = createPreactComponent("outline", "download", "Download", [["path", { "d": "M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2", "key": "svg-0" }], ["path", { "d": "M7 11l5 5l5 -5", "key": "svg-1" }], ["path", { "d": "M12 4l0 12", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconExclamationCircle = createPreactComponent("outline", "exclamation-circle", "ExclamationCircle", [["path", { "d": "M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0", "key": "svg-0" }], ["path", { "d": "M12 9v4", "key": "svg-1" }], ["path", { "d": "M12 16v.01", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconExternalLink = createPreactComponent("outline", "external-link", "ExternalLink", [["path", { "d": "M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6", "key": "svg-0" }], ["path", { "d": "M11 13l9 -9", "key": "svg-1" }], ["path", { "d": "M15 4h5v5", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconEyeOff = createPreactComponent("outline", "eye-off", "EyeOff", [["path", { "d": "M10.585 10.587a2 2 0 0 0 2.829 2.828", "key": "svg-0" }], ["path", { "d": "M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87", "key": "svg-1" }], ["path", { "d": "M3 3l18 18", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconEye = createPreactComponent("outline", "eye", "Eye", [["path", { "d": "M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0", "key": "svg-0" }], ["path", { "d": "M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6", "key": "svg-1" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconFileDownload = createPreactComponent("outline", "file-download", "FileDownload", [["path", { "d": "M14 3v4a1 1 0 0 0 1 1h4", "key": "svg-0" }], ["path", { "d": "M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z", "key": "svg-1" }], ["path", { "d": "M12 17v-6", "key": "svg-2" }], ["path", { "d": "M9.5 14.5l2.5 2.5l2.5 -2.5", "key": "svg-3" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconFileTypeJs = createPreactComponent("outline", "file-type-js", "FileTypeJs", [["path", { "d": "M14 3v4a1 1 0 0 0 1 1h4", "key": "svg-0" }], ["path", { "d": "M3 15h3v4.5a1.5 1.5 0 0 1 -3 0", "key": "svg-1" }], ["path", { "d": "M9 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75", "key": "svg-2" }], ["path", { "d": "M5 12v-7a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-1", "key": "svg-3" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconGif = createPreactComponent("outline", "gif", "Gif", [["path", { "d": "M8 8h-2a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2v-4h-1", "key": "svg-0" }], ["path", { "d": "M12 8v8", "key": "svg-1" }], ["path", { "d": "M16 12h3", "key": "svg-2" }], ["path", { "d": "M20 8h-4v8", "key": "svg-3" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
+  var IconHome = createPreactComponent("outline", "home", "Home", [["path", { "d": "M5 12l-2 0l9 -9l9 9l-2 0", "key": "svg-0" }], ["path", { "d": "M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7", "key": "svg-1" }], ["path", { "d": "M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6", "key": "svg-2" }]]);
   var IconInfoCircle = createPreactComponent("outline", "info-circle", "InfoCircle", [["path", { "d": "M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0", "key": "svg-0" }], ["path", { "d": "M12 9h.01", "key": "svg-1" }], ["path", { "d": "M11 12h1v4h1", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconLibraryPhoto = createPreactComponent("outline", "library-photo", "LibraryPhoto", [["path", { "d": "M7 3m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z", "key": "svg-0" }], ["path", { "d": "M4.012 7.26a2.005 2.005 0 0 0 -1.012 1.737v10c0 1.1 .9 2 2 2h10c.75 0 1.158 -.385 1.5 -1", "key": "svg-1" }], ["path", { "d": "M17 7h.01", "key": "svg-2" }], ["path", { "d": "M7 13l3.644 -3.644a1.21 1.21 0 0 1 1.712 0l3.644 3.644", "key": "svg-3" }], ["path", { "d": "M15 12l1.644 -1.644a1.21 1.21 0 0 1 1.712 0l2.644 2.644", "key": "svg-4" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconPhotoEdit = createPreactComponent("outline", "photo-edit", "PhotoEdit", [["path", { "d": "M15 8h.01", "key": "svg-0" }], ["path", { "d": "M11 20h-4a3 3 0 0 1 -3 -3v-10a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v4", "key": "svg-1" }], ["path", { "d": "M4 15l4 -4c.928 -.893 2.072 -.893 3 0l3 3", "key": "svg-2" }], ["path", { "d": "M14 14l1 -1c.31 -.298 .644 -.497 .987 -.596", "key": "svg-3" }], ["path", { "d": "M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z", "key": "svg-4" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconPhoto = createPreactComponent("outline", "photo", "Photo", [["path", { "d": "M15 8h.01", "key": "svg-0" }], ["path", { "d": "M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12z", "key": "svg-1" }], ["path", { "d": "M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5", "key": "svg-2" }], ["path", { "d": "M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3", "key": "svg-3" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconPlayerPlay = createPreactComponent("outline", "player-play", "PlayerPlay", [["path", { "d": "M7 4v16l13 -8z", "key": "svg-0" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconPlayerStop = createPreactComponent("outline", "player-stop", "PlayerStop", [["path", { "d": "M5 5m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z", "key": "svg-0" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconRestore = createPreactComponent("outline", "restore", "Restore", [["path", { "d": "M3.06 13a9 9 0 1 0 .49 -4.087", "key": "svg-0" }], ["path", { "d": "M3 4.001v5h5", "key": "svg-1" }], ["path", { "d": "M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
+  var IconServer = createPreactComponent("outline", "server", "Server", [["path", { "d": "M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z", "key": "svg-0" }], ["path", { "d": "M3 12m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z", "key": "svg-1" }], ["path", { "d": "M7 8l0 .01", "key": "svg-2" }], ["path", { "d": "M7 16l0 .01", "key": "svg-3" }]]);
   var IconSettings = createPreactComponent("outline", "settings", "Settings", [["path", { "d": "M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z", "key": "svg-0" }], ["path", { "d": "M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0", "key": "svg-1" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconStack2 = createPreactComponent("outline", "stack-2", "Stack2", [["path", { "d": "M12 4l-8 4l8 4l8 -4l-8 -4", "key": "svg-0" }], ["path", { "d": "M4 12l8 4l8 -4", "key": "svg-1" }], ["path", { "d": "M4 16l8 4l8 -4", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
+  var IconStack = createPreactComponent("outline", "stack", "Stack", [["path", { "d": "M12 6l-8 4l8 4l8 -4l-8 -4", "key": "svg-0" }], ["path", { "d": "M4 14l8 4l8 -4", "key": "svg-1" }]]);
   var IconTrash = createPreactComponent("outline", "trash", "Trash", [["path", { "d": "M4 7l16 0", "key": "svg-0" }], ["path", { "d": "M10 11l0 6", "key": "svg-1" }], ["path", { "d": "M14 11l0 6", "key": "svg-2" }], ["path", { "d": "M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12", "key": "svg-3" }], ["path", { "d": "M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3", "key": "svg-4" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconVideo = createPreactComponent("outline", "video", "Video", [["path", { "d": "M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z", "key": "svg-0" }], ["path", { "d": "M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z", "key": "svg-1" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
-  var IconWorld = createPreactComponent("outline", "world", "World", [["path", { "d": "M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0", "key": "svg-0" }], ["path", { "d": "M3.6 9h16.8", "key": "svg-1" }], ["path", { "d": "M3.6 15h16.8", "key": "svg-2" }], ["path", { "d": "M11.5 3a17 17 0 0 0 0 18", "key": "svg-3" }], ["path", { "d": "M12.5 3a17 17 0 0 1 0 18", "key": "svg-4" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconWriting = createPreactComponent("outline", "writing", "Writing", [["path", { "d": "M20 17v-12c0 -1.121 -.879 -2 -2 -2s-2 .879 -2 2v12l2 2l2 -2z", "key": "svg-0" }], ["path", { "d": "M16 7h4", "key": "svg-1" }], ["path", { "d": "M18 19h-13a2 2 0 1 1 0 -4h4a2 2 0 1 0 0 -4h-3", "key": "svg-2" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconX = createPreactComponent("outline", "x", "X", [["path", { "d": "M18 6l-12 12", "key": "svg-0" }], ["path", { "d": "M6 6l12 12", "key": "svg-1" }]]);
-  /**
-   * @license @tabler/icons-preact v3.35.0 - MIT
-   *
-   * This source code is licensed under the MIT license.
-   * See the LICENSE file in the root directory of this source tree.
-   */
   var IconUserFilled = createPreactComponent("filled", "user-filled", "UserFilled", [["path", { "d": "M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z", "key": "svg-0" }], ["path", { "d": "M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z", "key": "svg-1" }]]);
-  const ar = { "common": { "Settings": "الإعدادات", "Theme": "السمة", "Change Theme": "تغيير السمة", "Language": "اللغة", "Change Language": "تغيير اللغة", "Date Time Format": "تنسيق التاريخ والوقت", "Sound Effects": "المؤثرات الصوتية", "Debug": "تشخيص الأخطاء", "Global Settings": "الإعدادات العامة", "Version": "الإصدار", "Common Formats:": "التنسيقات الشائعة:", "Date Formats:": "تنسيقات التاريخ:", "Time Formats:": "تنسيقات الوقت:", "Combined Examples:": "أمثلة مجمعة:", "Localized": "محلي", "Reset Settings": "إعادة تعيين الإعدادات", "Are you sure you want to reset settings to defaults?": "هل أنت متأكد من إعادة تعيين الإعدادات إلى القيم الافتراضية؟", "Reset": "إعادة تعيين", "Cancel": "إلغاء", "Chrome": "Chrome", "Userscript": "سكريبت المستخدم", "Website": "الموقع", "Patreon": "Patreon", "Dashboard": "لوحة المراقبة", "Database": "قاعدة البيانات", "Auth": "المصادقة", "Convert Animated GIFs": "تحويل GIF", "Convert GIFs (External)": "تحويل GIF (خارجي)", "Concurrent Downloads": "التنزيلات المتزامنة", "Use 10+ only with fast internet": "استخدم 10+ فقط مع إنترنت سريع", "Smaller size, same quality": "حجم أصغر، نفس الجودة", "Larger size, same quality": "حجم أكبر، نفس الجودة", "Back": "العودة", "Please visit a profile page for auto-detection": "يرجى زيارة صفحة ملف شخصي للاكتشاف التلقائي", "Please configure authentication in the Auth tab first": "يرجى تكوين المصادقة في علامة تبويب المصادقة أولاً", "Invalid username format": "تنسيق اسم المستخدم غير صحيح", "Invalid auth token. Please check your settings.": "رمز المصادقة غير صحيح. يرجى التحقق من إعداداتك.", "Invalid Patreon auth. Please check your settings.": "مصادقة Patreon غير صحيحة. يرجى التحقق من إعداداتك.", "Failed to fetch data": "فشل في جلب البيانات", "Failed to fetch data from all APIs": "فشل جلب البيانات من جميع واجهات برمجة التطبيقات", "Failed to verify auth from all APIs": "فشل التحقق من المصادقة من جميع واجهات برمجة التطبيقات", "Failed to generate token from all APIs": "فشل إنشاء الرمز من جميع واجهات برمجة التطبيقات", "Generating token...": "جارٍ إنشاء الرمز...", "Abort": "إحباط", "Network error occurred": "حدث خطأ في الشبكة", "Request timeout - please try again": "انتهت مهلة الطلب - يرجى المحاولة مرة أخرى", "Failed to parse API response": "فشل تحليل استجابة واجهة برمجة التطبيقات", "Invalid API response structure": "بنية استجابة واجهة برمجة التطبيقات غير صالحة", "Unknown error occurred": "حدث خطأ غير معروف", "HTTP error! status: {{status}}": "خطأ HTTP! الحالة: {{status}}", "Download already in progress": "عملية التنزيل قيد التنفيذ بالفعل", "No media files found": "لم يتم العثور على ملفات وسائط", "Toggle visibility": "إظهار/إخفاء", "Close": "إغلاق", "Converting GIFs...": "...تحويل صور GIF", "Downloading...": "تحميل...", "Download": "تحميل", "Fetching...": "...جارٍ الجلب", "Fetch All": "جلب الكل", "Fetch Video": "جلب الفيديو", "Fetch Image": "جلب الصورة", "Fetch GIF": "جلب GIF", "Posts: {{posts}}": "المنشورات: {{posts}}", "Media: {{media}}": "الوسائط: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "الوسائط الحالية: {{current}} • إجمالي الوسائط: {{total}}", "Failed to download media": "فشل في تحميل الوسائط", "Demo mode is only available for @xbatchdemo": "وضع العرض التجريبي متاح فقط لـ @xbatchdemo", "Auth Token": "رمز المصادقة", "Enter your auth token": "أدخل رمز المصادقة الخاص بك", "Your authentication token for API access": "رمز المصادقة الخاص بك للوصول إلى API", "Patreon Auth": "مصادقة Patreon", "Enter your Patreon auth": "أدخل مصادقة Patreon الخاصة بك", "Your Patreon authentication key": "مفتاح مصادقة Patreon الخاص بك", "Please enter Patreon auth first": "يرجى إدخال مصادقة Patreon أولاً", "Please verify Patreon auth first": "يرجى التحقق من مصادقة Patreon أولاً", "Patreon auth verified successfully": "تم التحقق من مصادقة Patreon بنجاح", "Invalid Patreon auth": "مصادقة Patreon غير صحيحة", "Verification failed. Please try again": "فشل التحقق. يرجى المحاولة مرة أخرى", "Generating": "إنشاء", "Generate": "إنشاء", "Verify": "التحقق", "Token generated successfully": "تم إنشاء الرمز بنجاح ({{current}}/{{total}})", "Failed to generate token": "فشل في إنشاء الرمز", "Token generation failed. Please try again": "فشل إنشاء الرمز. يرجى المحاولة مرة أخرى", "Verifying": "التحقق", "Verified": "تم التحقق", "Use code": "استخدم الرمز", "for Patreon Auth, click Verify to unlock demo. Test at": 'لمصادقة Patreon، انقر "التحقق" لفتح العرض التجريبي. جرّب في', "Need help with Auth Token? See": "بحاجة إلى مساعدة بخصوص رمز المصادقة؟ راجع", "the guide": "الدليل", "Subscribe": "اشترك", "to get your Patreon Auth code and start downloading with ease!": "للحصول على رمز مصادقة Patreon والبدء في التنزيل بسهولة!", "Report bugs or request features:": "أبلغ عن الأخطاء أو اطلب الميزات:", "Import": "استيراد", "Importing...": "...استيراد", "Supports JSON and ZIP formats": "يدعم تنسيقات JSON و ZIP", "Export": "تصدير", "Export All Data": "تصدير كل البيانات", "Exporting...": "...تصدير", "Clear": "مسح", "Filter by Batch": "تصفية حسب الدفعات", "Are you sure to clear all data in the database?": "هل أنت متأكد من مسح جميع البيانات في قاعدة البيانات؟", "Delete Account Data": "حذف بيانات الحساب", "Are you sure you want to delete account data? This action cannot be undone": "هل أنت متأكد من حذف بيانات {{username}}؟ لا يمكن التراجع عن هذا الإجراء.", "Delete": "حذف", "Deleting...": "...حذف", "Overwrite": "استبدال", "Overwrite Existing Data?": "استبدال البيانات الحالية؟", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "بيانات الحساب @{{username}} موجودة بالفعل في قاعدة البيانات. هل تريد استبدالها؟", "No accounts yet": "لا توجد حسابات بعد", "Use Dashboard to fetch data.": "استخدم لوحة المراقبة لجلب البيانات.", "Something went wrong.": "حدث خطأ ما.", "Error:": "خطأ:", "Fetch": "جلب", "Single": "مفرد", "Batch": "دفعات", "Auto Batch": "دفعات تلقائية", "Timeline": "الخط الزمني", "Media": "الوسائط", "Batch Size": "حجم الدُفعة", "Starting Batch": "الدُفعة الابتدائية", "Posts": "المنشورات", "Tweets": "التغريدات", "Replies": "الردود", "All": "الكل", "Image": "صورة", "Video": "فيديو", "GIF": "GIF", "Batch: {{page}}": "الدُفعة: {{page}}", "Start": "بدء", "Stop": "إيقاف", "Prev": "السابق", "Next": "التالي", "Download Current": "تنزيل الحالي", "Download All": "تنزيل الكل", "Use Batch/Auto Batch if single fetch fails": "استخدم الدفعات/الدفعات التلقائية إذا فشل الجلب المفرد", "Load from database": "تحميل من قاعدة البيانات", "Load database": "تحميل قاعدة البيانات", "Home": "البداية", "End": "النهاية", "Failed to load data": "فشل في تحميل البيانات", "Update": "تحديث", "Updating...": "...جارٍ التحديث", "Update will fetch the latest data and overwrite the database. Continue?": "سيقوم التحديث بجلب أحدث البيانات والكتابة فوق قاعدة البيانات. هل تريد المتابعة؟", "Followers": "المتابعون", "Following": "المتابَعون", "Joined": "تاريخ الانضمام", "Open": "فتح", "Preview": "معاينة", "View Database": "عرض قاعدة البيانات", "Converting...": "جارٍ التحويل...", "Convert & Download": "تحويل وتحميل" } };
-  const de = { "common": { "Settings": "Einstellungen", "Theme": "Design", "Change Theme": "Design ändern", "Language": "Sprache", "Change Language": "Sprache ändern", "Date Time Format": "Datum-Uhrzeit-Format", "Sound Effects": "Soundeffekte", "Debug": "Debug", "Global Settings": "Globale Einstellungen", "Version": "Version", "Common Formats:": "Häufige Formate:", "Date Formats:": "Datumsformate:", "Time Formats:": "Zeitformate:", "Combined Examples:": "Kombinierte Beispiele:", "Localized": "Lokalisiert", "Reset Settings": "Einstellungen zurücksetzen", "Are you sure you want to reset settings to defaults?": "Sind Sie sicher, dass Sie die Einstellungen auf Standardwerte zurücksetzen möchten?", "Reset": "Zurücksetzen", "Cancel": "Abbrechen", "Chrome": "Chrome", "Userscript": "Benutzerskript", "Website": "Webseite", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Datenbank", "Auth": "Authentifizierung", "Convert Animated GIFs": "GIFs konvertieren", "Convert GIFs (External)": "GIFs konvertieren (Extern)", "Concurrent Downloads": "Gleichzeitige Downloads", "Use 10+ only with fast internet": "10+ nur bei schneller Internetverbindung verwenden", "Smaller size, same quality": "Kleinere Größe, gleiche Qualität", "Larger size, same quality": "Größere Größe, gleiche Qualität", "Back": "Zurück", "Please visit a profile page for auto-detection": "Bitte besuchen Sie eine Profilseite für die automatische Erkennung", "Please configure authentication in the Auth tab first": "Bitte konfigurieren Sie zuerst die Authentifizierung im Auth-Tab", "Invalid username format": "Ungültiges Benutzernamen-Format", "Invalid auth token. Please check your settings.": "Ungültiger Auth-Token. Bitte überprüfen Sie Ihre Einstellungen.", "Invalid Patreon auth. Please check your settings.": "Ungültige Patreon-Authentifizierung. Bitte überprüfen Sie Ihre Einstellungen.", "Failed to fetch data": "Daten konnten nicht abgerufen werden", "Failed to fetch data from all APIs": "Fehler beim Abrufen der Daten von allen APIs", "Failed to verify auth from all APIs": "Fehler bei der Überprüfung der Authentifizierung über alle APIs", "Failed to generate token from all APIs": "Fehler beim Generieren des Tokens über alle APIs", "Generating token...": "Token wird generiert...", "Abort": "Abbrechen", "Network error occurred": "Es ist ein Netzwerkfehler aufgetreten", "Request timeout - please try again": "Zeitüberschreitung der Anforderung – bitte erneut versuchen", "Failed to parse API response": "API-Antwort konnte nicht analysiert werden", "Invalid API response structure": "Ungültige API-Antwortstruktur", "Unknown error occurred": "Unbekannter Fehler ist aufgetreten", "HTTP error! status: {{status}}": "HTTP-Fehler! Status: {{status}}", "Download already in progress": "Download läuft bereits", "No media files found": "Keine Mediendateien gefunden", "Toggle visibility": "Ein-/Ausblenden", "Close": "Schließen", "Converting GIFs...": "GIFs werden konvertiert...", "Downloading...": "Herunterladen...", "Download": "Herunterladen", "Fetching...": "Abrufen...", "Fetch All": "Alle abrufen", "Fetch Video": "Video abrufen", "Fetch Image": "Bild abrufen", "Fetch GIF": "GIF abrufen", "Posts: {{posts}}": "Beiträge: {{posts}}", "Media: {{media}}": "Medien: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Aktuelle Medien: {{current}} • Medien gesamt: {{total}}", "Failed to download media": "Medien konnten nicht heruntergeladen werden", "Demo mode is only available for @xbatchdemo": "Der Demo-Modus ist nur für @xbatchdemo verfügbar", "Auth Token": "Auth-Token", "Enter your auth token": "Geben Sie Ihren Auth-Token ein", "Your authentication token for API access": "Ihr Authentifizierungs-Token für API-Zugriff", "Patreon Auth": "Patreon-Authentifizierung", "Enter your Patreon auth": "Geben Sie Ihre Patreon-Authentifizierung ein", "Your Patreon authentication key": "Ihr Patreon-Authentifizierungsschlüssel", "Please enter Patreon auth first": "Bitte geben Sie zuerst die Patreon-Authentifizierung ein", "Please verify Patreon auth first": "Bitte überprüfen Sie zuerst die Patreon-Authentifizierung", "Patreon auth verified successfully": "Patreon-Authentifizierung erfolgreich überprüft", "Invalid Patreon auth": "Ungültige Patreon-Authentifizierung", "Verification failed. Please try again": "Überprüfung fehlgeschlagen. Bitte versuchen Sie es erneut", "Generating": "Generieren", "Generate": "Generieren", "Verify": "Überprüfen", "Token generated successfully": "Token erfolgreich generiert ({{current}}/{{total}})", "Failed to generate token": "Token-Generierung fehlgeschlagen", "Token generation failed. Please try again": "Token-Generierung fehlgeschlagen. Bitte versuchen Sie es erneut", "Verifying": "Überprüfen", "Verified": "Überprüft", "Use code": "Verwenden Sie den Code", "for Patreon Auth, click Verify to unlock demo. Test at": "für die Patreon-Authentifizierung, klicken Sie auf „Überprüfen“, um die Demo freizuschalten. Testen bei", "Need help with Auth Token? See": "Benötigen Sie Hilfe mit dem Auth-Token? Siehe", "the guide": "die Anleitung", "Subscribe": "Abonnieren", "to get your Patreon Auth code and start downloading with ease!": "um Ihren Patreon-Authentifizierungscode zu erhalten und mühelos mit dem Herunterladen zu beginnen!", "Report bugs or request features:": "Fehler melden oder Funktionen anfordern:", "Import": "Importieren", "Importing...": "Importieren...", "Supports JSON and ZIP formats": "Unterstützt JSON- und ZIP-Formate", "Export": "Exportieren", "Export All Data": "Alle Daten exportieren", "Exporting...": "Exportieren...", "Clear": "Löschen", "Filter by Batch": "Nach Stapel filtern", "Are you sure to clear all data in the database?": "Sind Sie sicher, dass Sie alle Daten in der Datenbank löschen möchten?", "Delete Account Data": "Kontodaten löschen", "Are you sure you want to delete account data? This action cannot be undone": "Sind Sie sicher, dass Sie die Daten von {{username}} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.", "Delete": "Löschen", "Deleting...": "Löschen...", "Overwrite": "Überschreiben", "Overwrite Existing Data?": "Vorhandene Daten überschreiben?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Kontodaten für @{{username}} existieren bereits in der Datenbank. Möchten Sie sie überschreiben?", "No accounts yet": "Noch keine Konten", "Use Dashboard to fetch data.": "Verwenden Sie das Dashboard zum Abrufen von Daten.", "Something went wrong.": "Etwas ist schief gelaufen.", "Error:": "Fehler:", "Fetch": "Abrufen", "Single": "Einzel", "Batch": "Stapel", "Auto Batch": "Auto-Stapel", "Timeline": "Timeline", "Media": "Medien", "Batch Size": "Stapelgröße", "Starting Batch": "Startstapel", "Posts": "Beiträge", "Tweets": "Tweets", "Replies": "Antworten", "All": "Alle", "Image": "Bild", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Stapel: {{page}}", "Start": "Start", "Stop": "Stopp", "Prev": "Zurück", "Next": "Weiter", "Download Current": "Aktuelles herunterladen", "Download All": "Alles herunterladen", "Use Batch/Auto Batch if single fetch fails": "Verwende Stapel/Auto-Stapel, wenn Einzelabruf fehlschlägt", "Load from database": "Aus Datenbank laden", "Load database": "Datenbank laden", "Home": "Anfang", "End": "Ende", "Failed to load data": "Daten konnten nicht geladen werden", "Update": "Aktualisieren", "Updating...": "Aktualisierung läuft...", "Update will fetch the latest data and overwrite the database. Continue?": "Das Update holt die neuesten Daten und überschreibt die Datenbank. Fortfahren?", "Followers": "Follower", "Following": "Folge ich", "Joined": "Beigetreten", "Open": "Öffnen", "Preview": "Vorschau", "View Database": "Datenbank anzeigen", "Converting...": "Konvertieren...", "Convert & Download": "Konvertieren & Herunterladen" } };
-  const en$1 = { "common": { "Settings": "Settings", "Theme": "Theme", "Change Theme": "Change Theme", "Language": "Language", "Change Language": "Change Language", "Date Time Format": "Date Time Format", "Sound Effects": "Sound Effects", "Debug": "Debug", "Global Settings": "Global Settings", "Version": "Version", "Common Formats:": "Common Formats:", "Date Formats:": "Date Formats:", "Time Formats:": "Time Formats:", "Combined Examples:": "Combined Examples:", "Localized": "Localized", "Reset Settings": "Reset Settings", "Are you sure you want to reset settings to defaults?": "Are you sure you want to reset settings to defaults?", "Reset": "Reset", "Cancel": "Cancel", "Chrome": "Chrome", "Userscript": "Userscript", "Website": "Website", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Database", "Auth": "Auth", "Convert Animated GIFs": "Convert GIFs", "Convert GIFs (External)": "Convert GIFs (External)", "Concurrent Downloads": "Concurrent Downloads", "Use 10+ only with fast internet": "Use 10+ only with fast internet", "Smaller size, same quality": "Smaller size, same quality", "Larger size, same quality": "Larger size, same quality", "Back": "Back", "Please visit a profile page for auto-detection": "Please visit a profile page for auto-detection", "Please configure authentication in the Auth tab first": "Please configure authentication in the Auth tab first", "Invalid username format": "Invalid username format", "Invalid auth token. Please check your settings.": "Invalid auth token. Please check your settings.", "Invalid Patreon auth. Please check your settings.": "Invalid Patreon auth. Please check your settings.", "Failed to fetch data": "Failed to fetch data", "Failed to fetch data from all APIs": "Failed to fetch data from all APIs", "Failed to verify auth from all APIs": "Failed to verify auth from all APIs", "Failed to generate token from all APIs": "Failed to generate token from all APIs", "Generating token...": "Generating token...", "Abort": "Abort", "Network error occurred": "Network error occurred", "Request timeout - please try again": "Request timeout - please try again", "Failed to parse API response": "Failed to parse API response", "Invalid API response structure": "Invalid API response structure", "Unknown error occurred": "Unknown error occurred", "HTTP error! status: {{status}}": "HTTP error! status: {{status}}", "Download already in progress": "Download already in progress", "No media files found": "No media files found", "Toggle visibility": "Toggle visibility", "Close": "Close", "Converting GIFs...": "Converting GIFs...", "Downloading...": "Downloading...", "Download": "Download", "Fetching...": "Fetching...", "Fetch All": "Fetch All", "Fetch Video": "Fetch Video", "Fetch Image": "Fetch Image", "Fetch GIF": "Fetch GIF", "Posts: {{posts}}": "Posts: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Current Media: {{current}} • Total Media: {{total}}", "Failed to download media": "Failed to download media", "Demo mode is only available for @xbatchdemo": "Demo mode is only available for @xbatchdemo", "Auth Token": "Auth Token", "Enter your auth token": "Enter your auth token", "Your authentication token for API access": "Your authentication token for API access", "Patreon Auth": "Patreon Auth", "Enter your Patreon auth": "Enter your Patreon auth", "Your Patreon authentication key": "Your Patreon authentication key", "Please enter Patreon auth first": "Please enter Patreon auth first", "Please verify Patreon auth first": "Please verify Patreon auth first", "Patreon auth verified successfully": "Patreon auth verified successfully", "Invalid Patreon auth": "Invalid Patreon auth", "Verification failed. Please try again": "Verification failed. Please try again", "Generating": "Generating", "Generate": "Generate", "Verify": "Verify", "Token generated successfully": "Token generated successfully ({{current}}/{{total}})", "Failed to generate token": "Failed to generate token", "Token generation failed. Please try again": "Token generation failed. Please try again", "Verifying": "Verifying", "Verified": "Verified", "Use code": "Use code", "for Patreon Auth, click Verify to unlock demo. Test at": "for Patreon Auth, click Verify to unlock demo. Test at", "Need help with Auth Token? See": "Need help with Auth Token? See", "the guide": "the guide", "Subscribe": "Subscribe", "to get your Patreon Auth code and start downloading with ease!": "to get your Patreon Auth code and start downloading with ease!", "Report bugs or request features:": "Report bugs or request features:", "Import": "Import", "Importing...": "Importing...", "Supports JSON and ZIP formats": "Supports JSON and ZIP formats", "Export": "Export", "Export All Data": "Export All Data", "Exporting...": "Exporting...", "Clear": "Clear", "Filter by Batch": "Filter by Batch", "Are you sure to clear all data in the database?": "Are you sure to clear all data in the database?", "Delete Account Data": "Delete Account Data", "Are you sure you want to delete account data? This action cannot be undone": "Are you sure you want to delete {{username}}'s data? This action cannot be undone.", "Delete": "Delete", "Deleting...": "Deleting...", "Overwrite": "Overwrite", "Overwrite Existing Data?": "Overwrite Existing Data?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Account data for @{{username}} already exists in the database. Do you want to overwrite it?", "No accounts yet": "No accounts yet", "Use Dashboard to fetch data.": "Use Dashboard to fetch data.", "Something went wrong.": "Something went wrong.", "Error:": "Error:", "Fetch": "Fetch", "Single": "Single", "Batch": "Batch", "Auto Batch": "Auto Batch", "Timeline": "Timeline", "Media": "Media", "Batch Size": "Batch Size", "Starting Batch": "Starting Batch", "Posts": "Posts", "Tweets": "Tweets", "Replies": "Replies", "All": "All", "Image": "Image", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Start", "Stop": "Stop", "Prev": "Prev", "Next": "Next", "Download Current": "Download Current", "Download All": "Download All", "Use Batch/Auto Batch if single fetch fails": "Use Batch/Auto Batch if single fetch fails", "Load from database": "Load from database", "Load database": "Load database", "Home": "Home", "End": "End", "Failed to load data": "Failed to load data", "Update": "Update", "Updating...": "Updating...", "Update will fetch the latest data and overwrite the database. Continue?": "Update will fetch the latest data and overwrite the database. Continue?", "Followers": "Followers", "Following": "Following", "Joined": "Joined", "Open": "Open", "Preview": "Preview", "View Database": "View Database", "Converting...": "Converting...", "Convert & Download": "Convert & Download" } };
-  const es = { "common": { "Settings": "Configuración", "Theme": "Tema", "Change Theme": "Cambiar Tema", "Language": "Idioma", "Change Language": "Cambiar idioma", "Date Time Format": "Formato de Fecha y Hora", "Sound Effects": "Efectos de Sonido", "Debug": "Depurar", "Global Settings": "Configuración Global", "Version": "Versión", "Common Formats:": "Formatos Comunes:", "Date Formats:": "Formatos de Fecha:", "Time Formats:": "Formatos de Hora:", "Combined Examples:": "Ejemplos Combinados:", "Localized": "Localizado", "Reset Settings": "Restablecer ajustes", "Are you sure you want to reset settings to defaults?": "¿Seguro que quieres restablecer los ajustes a los valores predeterminados?", "Reset": "Restablecer", "Cancel": "Cancelar", "Chrome": "Chrome", "Userscript": "Script de usuario", "Website": "Sitio web", "Patreon": "Patreon", "Dashboard": "Panel de Control", "Database": "Base de Datos", "Auth": "Autenticación", "Convert Animated GIFs": "Convertir GIFs", "Convert GIFs (External)": "Convertir GIFs (Externo)", "Concurrent Downloads": "Descargas simultáneas", "Use 10+ only with fast internet": "Usa 10+ solo con internet rápido", "Smaller size, same quality": "Tamaño más pequeño, misma calidad", "Larger size, same quality": "Tamaño más grande, misma calidad", "Back": "Atrás", "Please visit a profile page for auto-detection": "Visita una página de perfil para detección automática", "Please configure authentication in the Auth tab first": "Configura la autenticación en la pestaña Auth primero", "Invalid username format": "Formato de nombre de usuario no válido", "Invalid auth token. Please check your settings.": "Token de autenticación no válido. Por favor, revisa tu configuración.", "Invalid Patreon auth. Please check your settings.": "Autenticación de Patreon no válida. Por favor, revisa tu configuración.", "Failed to fetch data": "Error al obtener los datos", "Failed to fetch data from all APIs": "Error al obtener los datos de todas las APIs", "Failed to verify auth from all APIs": "Error al verificar la autenticación en todas las APIs", "Failed to generate token from all APIs": "Error al generar el token en todas las APIs", "Generating token...": "Generando token...", "Abort": "Abortar", "Network error occurred": "Se produjo un error de red", "Request timeout - please try again": "Tiempo de espera agotado: inténtalo de nuevo", "Failed to parse API response": "Error al analizar la respuesta de la API", "Invalid API response structure": "Estructura de respuesta de la API no válida", "Unknown error occurred": "Ocurrió un error desconocido", "HTTP error! status: {{status}}": "¡Error HTTP! estado: {{status}}", "Download already in progress": "Ya hay una descarga en curso", "No media files found": "No se encontraron archivos multimedia", "Toggle visibility": "Mostrar/ocultar", "Close": "Cerrar", "Converting GIFs...": "Convirtiendo GIF...", "Downloading...": "Descargando...", "Download": "Descargar", "Fetching...": "Obteniendo...", "Fetch All": "Obtener todo", "Fetch Video": "Obtener video", "Fetch Image": "Obtener imagen", "Fetch GIF": "Obtener GIF", "Posts: {{posts}}": "Publicaciones: {{posts}}", "Media: {{media}}": "Medios: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Medios actuales: {{current}} • Medios totales: {{total}}", "Failed to download media": "Error al descargar los medios", "Demo mode is only available for @xbatchdemo": "El modo demo solo está disponible para @xbatchdemo", "Auth Token": "Token de autenticación", "Enter your auth token": "Introduce tu token de autenticación", "Your authentication token for API access": "Tu token de autenticación para acceso a la API", "Patreon Auth": "Autenticación de Patreon", "Enter your Patreon auth": "Introduce tu autenticación de Patreon", "Your Patreon authentication key": "Tu clave de autenticación de Patreon", "Please enter Patreon auth first": "Introduce primero la autenticación de Patreon", "Please verify Patreon auth first": "Verifica primero la autenticación de Patreon", "Patreon auth verified successfully": "Autenticación de Patreon verificada correctamente", "Invalid Patreon auth": "Autenticación de Patreon no válida", "Verification failed. Please try again": "La verificación falló. Inténtalo de nuevo", "Generating": "Generando", "Generate": "Generar", "Verify": "Verificar", "Token generated successfully": "Token generado correctamente ({{current}}/{{total}})", "Failed to generate token": "Error al generar el token", "Token generation failed. Please try again": "La generación del token falló. Inténtalo de nuevo", "Verifying": "Verificando", "Verified": "Verificado", "Use code": "Usa el código", "for Patreon Auth, click Verify to unlock demo. Test at": 'para la Autenticación de Patreon, haz clic en "Verificar" para desbloquear la demo. Prueba en', "Need help with Auth Token? See": "¿Necesitas ayuda con el token de autenticación? Consulta", "the guide": "la guía", "Subscribe": "Suscríbete", "to get your Patreon Auth code and start downloading with ease!": "para obtener tu código de autenticación de Patreon y empezar a descargar fácilmente.", "Report bugs or request features:": "Informa errores o solicita funciones:", "Import": "Importar", "Importing...": "Importando...", "Supports JSON and ZIP formats": "Admite formatos JSON y ZIP", "Export": "Exportar", "Export All Data": "Exportar todos los datos", "Exporting...": "Exportando...", "Clear": "Limpiar", "Filter by Batch": "Filtrar por lote", "Are you sure to clear all data in the database?": "¿Estás seguro de que quieres borrar todos los datos de la base de datos?", "Delete Account Data": "Eliminar datos de la cuenta", "Are you sure you want to delete account data? This action cannot be undone": "¿Seguro que quieres eliminar los datos de {{username}}? Esta acción no se puede deshacer.", "Delete": "Eliminar", "Deleting...": "Eliminando...", "Overwrite": "Sobrescribir", "Overwrite Existing Data?": "¿Sobrescribir datos existentes?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Los datos de la cuenta @{{username}} ya existen en la base de datos. ¿Deseas sobrescribirlos?", "No accounts yet": "Todavía no hay cuentas", "Use Dashboard to fetch data.": "Usa el Panel de Control para obtener datos.", "Something went wrong.": "Algo salió mal.", "Error:": "Error:", "Fetch": "Obtener", "Single": "Único", "Batch": "Lote", "Auto Batch": "Lote automático", "Timeline": "Cronología", "Media": "Medios", "Batch Size": "Tamaño del lote", "Starting Batch": "Lote inicial", "Posts": "Publicaciones", "Tweets": "Tweets", "Replies": "Respuestas", "All": "Todo", "Image": "Imagen", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Lote: {{page}}", "Start": "Iniciar", "Stop": "Detener", "Prev": "Anterior", "Next": "Siguiente", "Download Current": "Descargar actual", "Download All": "Descargar todo", "Use Batch/Auto Batch if single fetch fails": "Usa Lote/Lote automático si falla la obtención única", "Load from database": "Cargar desde base de datos", "Load database": "Cargar base de datos", "Home": "Inicio", "End": "Fin", "Failed to load data": "Error al cargar los datos", "Update": "Actualizar", "Updating...": "Actualizando...", "Update will fetch the latest data and overwrite the database. Continue?": "La actualización obtendrá los datos más recientes y sobrescribirá la base de datos. ¿Continuar?", "Followers": "Seguidores", "Following": "Siguiendo", "Joined": "Se unió", "Open": "Abrir", "Preview": "Vista previa", "View Database": "Ver base de datos", "Converting...": "Convirtiendo...", "Convert & Download": "Convertir y descargar" } };
-  const fil = { "common": { "Settings": "Mga Setting", "Theme": "Tema", "Change Theme": "Baguhin ang Tema", "Language": "Wika", "Change Language": "Baguhin ang Wika", "Date Time Format": "Format ng Petsa at Oras", "Sound Effects": "Mga Epekto ng Tunog", "Debug": "Debug", "Global Settings": "Pandaigdigang Mga Setting", "Version": "Bersyon", "Common Formats:": "Karaniwang Mga Format:", "Date Formats:": "Mga Format ng Petsa:", "Time Formats:": "Mga Format ng Oras:", "Combined Examples:": "Pinagsama-samang Mga Halimbawa:", "Localized": "Naka-localize", "Reset Settings": "I-reset ang mga Setting", "Are you sure you want to reset settings to defaults?": "Sigurado ka bang gusto mong i-reset ang mga setting sa default?", "Reset": "I-reset", "Cancel": "Kanselahin", "Chrome": "Chrome", "Userscript": "Userscript", "Website": "Website", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Database", "Auth": "Awtorisasyon", "Convert Animated GIFs": "I-convert ang GIF", "Convert GIFs (External)": "I-convert ang GIF (External)", "Concurrent Downloads": "Sabay-sabay na Pag-download", "Use 10+ only with fast internet": "Gumamit ng 10+ lamang sa mabilis na internet", "Smaller size, same quality": "Mas maliit na laki, parehong kalidad", "Larger size, same quality": "Mas malaking laki, parehong kalidad", "Back": "Bumalik", "Please visit a profile page for auto-detection": "Mangyaring bumisita sa isang profile page para sa auto-detection", "Please configure authentication in the Auth tab first": "Mangyaring i-configure muna ang authentication sa Auth tab", "Invalid username format": "Di-wastong format ng username", "Invalid auth token. Please check your settings.": "Di-wastong auth token. Mangyaring suriin ang iyong mga setting.", "Invalid Patreon auth. Please check your settings.": "Di-wastong Patreon auth. Mangyaring suriin ang iyong mga setting.", "Failed to fetch data": "Nabigong kunin ang data", "Failed to fetch data from all APIs": "Nabigong kunin ang data mula sa lahat ng APIs", "Failed to verify auth from all APIs": "Nabigong i-verify ang auth mula sa lahat ng APIs", "Failed to generate token from all APIs": "Nabigong gumawa ng token mula sa lahat ng APIs", "Generating token...": "Gumagawa ng token...", "Abort": "Itigil", "Network error occurred": "May naganap na network error", "Request timeout - please try again": "Nag-timeout ang request - mangyaring subukan muli", "Failed to parse API response": "Nabigong i-parse ang API response", "Invalid API response structure": "Di-wastong istruktura ng API response", "Unknown error occurred": "May naganap na hindi kilalang error", "HTTP error! status: {{status}}": "HTTP error! status: {{status}}", "Download already in progress": "Nagda-download na", "No media files found": "Walang nahanap na media files", "Toggle visibility": "I-toggle ang visibility", "Close": "Isara", "Converting GIFs...": "Kino-convert ang mga GIF...", "Downloading...": "Nagda-download...", "Download": "I-download", "Fetching...": "Kumukuha...", "Fetch All": "Kunin Lahat", "Fetch Video": "Kunin ang Video", "Fetch Image": "Kunin ang Larawan", "Fetch GIF": "Kunin ang GIF", "Posts: {{posts}}": "Mga Post: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Kasalukuyang Media: {{current}} • Kabuuang Media: {{total}}", "Failed to download media": "Nabigong i-download ang media", "Demo mode is only available for @xbatchdemo": "Ang demo mode ay available lang para sa @xbatchdemo", "Auth Token": "Auth Token", "Enter your auth token": "Ilagay ang iyong auth token", "Your authentication token for API access": "Ang iyong authentication token para sa API access", "Patreon Auth": "Patreon Auth", "Enter your Patreon auth": "Ilagay ang iyong Patreon auth", "Your Patreon authentication key": "Ang iyong Patreon authentication key", "Please enter Patreon auth first": "Mangyaring ilagay muna ang Patreon auth", "Please verify Patreon auth first": "Mangyaring i-verify muna ang Patreon auth", "Patreon auth verified successfully": "Matagumpay na na-verify ang Patreon auth", "Invalid Patreon auth": "Di-wastong Patreon auth", "Verification failed. Please try again": "Nabigo ang verification. Mangyaring subukan muli", "Generating": "Gumagawa", "Generate": "Gumawa", "Verify": "I-verify", "Token generated successfully": "Matagumpay na nagawa ang token ({{current}}/{{total}})", "Failed to generate token": "Nabigong gumawa ng token", "Token generation failed. Please try again": "Nabigo ang paggawa ng token. Mangyaring subukan muli", "Verifying": "Vine-verify", "Verified": "Na-verify na", "Use code": "Gamitin ang code", "for Patreon Auth, click Verify to unlock demo. Test at": "para sa Patreon Auth, i-click ang Verify para i-unlock ang demo. Subukan sa", "Need help with Auth Token? See": "Kailangan ng tulong sa Auth Token? Tingnan ang", "the guide": "gabay", "Subscribe": "Mag-subscribe", "to get your Patreon Auth code and start downloading with ease!": "para makuha ang iyong Patreon Auth code at magsimulang mag-download nang madali!", "Report bugs or request features:": "Mag-ulat ng mga bug o humingi ng mga feature:", "Import": "Mag-import", "Importing...": "Nag-iimport...", "Supports JSON and ZIP formats": "Sumusuporta sa JSON at ZIP formats", "Export": "Mag-export", "Export All Data": "I-export ang Lahat ng Data", "Exporting...": "Nag-eexport...", "Clear": "Burahin", "Filter by Batch": "I-filter ayon sa Batch", "Are you sure to clear all data in the database?": "Sigurado ka bang buburahin ang lahat ng data sa database?", "Delete Account Data": "Burahin ang Account Data", "Are you sure you want to delete account data? This action cannot be undone": "Sigurado ka bang buburahin ang data ni {{username}}? Hindi na ito maaaring ibalik.", "Delete": "Burahin", "Deleting...": "Binubura...", "Overwrite": "I-overwrite", "Overwrite Existing Data?": "I-overwrite ang Existing Data?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Ang account data para kay @{{username}} ay umiiral na sa database. Gusto mo bang i-overwrite ito?", "No accounts yet": "Wala pang mga account", "Use Dashboard to fetch data.": "Gamitin ang Dashboard para kunin ang data.", "Something went wrong.": "May nangyaring mali.", "Error:": "Error:", "Fetch": "Kunin", "Single": "Iisa", "Batch": "Batch", "Auto Batch": "Auto Batch", "Timeline": "Timeline", "Media": "Media", "Batch Size": "Laki ng Batch", "Starting Batch": "Nagsisimulang Batch", "Posts": "Mga Post", "Tweets": "Mga Tweet", "Replies": "Mga Tugon", "All": "Lahat", "Image": "Larawan", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Simulan", "Stop": "Itigil", "Prev": "Nakaraan", "Next": "Susunod", "Download Current": "I-download ang Kasalukuyan", "Download All": "I-download Lahat", "Use Batch/Auto Batch if single fetch fails": "Gumamit ng Batch/Auto Batch kung nabigo ang single fetch", "Load from database": "Mag-load mula sa database", "Load database": "Mag-load ng database", "Home": "Home", "End": "Dulo", "Failed to load data": "Nabigong mag-load ng data", "Update": "I-update", "Updating...": "Nag-uupdate...", "Update will fetch the latest data and overwrite the database. Continue?": "Ang update ay kukuha ng pinakabagong data at i-overwrite ang database. Magpatuloy?", "Followers": "Mga Tagasunod", "Following": "Sinusundan", "Joined": "Sumali", "Open": "Buksan", "Preview": "Preview", "View Database": "Tingnan ang Database", "Converting...": "Kino-convert...", "Convert & Download": "I-convert at I-download" } };
-  const fr = { "common": { "Settings": "Paramètres", "Theme": "Thème", "Change Theme": "Changer le thème", "Language": "Langue", "Change Language": "Changer la langue", "Date Time Format": "Format date et heure", "Sound Effects": "Effets Sonores", "Debug": "Débogage", "Global Settings": "Paramètres globaux", "Version": "Version", "Common Formats:": "Formats courants :", "Date Formats:": "Formats de date :", "Time Formats:": "Formats d'heure :", "Combined Examples:": "Exemples combinés :", "Localized": "Localisé", "Reset Settings": "Réinitialiser les paramètres", "Are you sure you want to reset settings to defaults?": "Êtes-vous sûr de vouloir réinitialiser les paramètres par défaut ?", "Reset": "Réinitialiser", "Cancel": "Annuler", "Chrome": "Chrome", "Userscript": "Script utilisateur", "Website": "Site Web", "Patreon": "Patreon", "Dashboard": "Tableau de bord", "Database": "Base de données", "Auth": "Authentification", "Convert Animated GIFs": "Convertir des GIFs", "Convert GIFs (External)": "Convertir des GIFs (Externe)", "Concurrent Downloads": "Téléchargements simultanés", "Use 10+ only with fast internet": "Utilisez 10+ uniquement avec une connexion rapide", "Smaller size, same quality": "Taille plus petite, même qualité", "Larger size, same quality": "Taille plus grande, même qualité", "Back": "Retour", "Please visit a profile page for auto-detection": "Veuillez visiter une page de profil pour la détection automatique", "Please configure authentication in the Auth tab first": "Veuillez d'abord configurer l'authentification dans l'onglet Auth", "Invalid username format": "Format de nom d'utilisateur invalide", "Invalid auth token. Please check your settings.": "Token d'authentification invalide. Veuillez vérifier vos paramètres.", "Invalid Patreon auth. Please check your settings.": "Authentification Patreon invalide. Veuillez vérifier vos paramètres.", "Failed to fetch data": "Échec de récupération des données", "Failed to fetch data from all APIs": "Échec de récupération des données depuis toutes les API", "Failed to verify auth from all APIs": "Échec de vérification de l'authentification depuis toutes les API", "Failed to generate token from all APIs": "Échec de génération du jeton depuis toutes les API", "Generating token...": "Génération du jeton...", "Abort": "Abandonner", "Network error occurred": "Une erreur réseau s'est produite", "Request timeout - please try again": "Délai d’attente dépassé - veuillez réessayer", "Failed to parse API response": "Échec de l’analyse de la réponse de l’API", "Invalid API response structure": "Structure de réponse de l’API invalide", "Unknown error occurred": "Une erreur inconnue s'est produite", "HTTP error! status: {{status}}": "Erreur HTTP ! statut : {{status}}", "Download already in progress": "Téléchargement déjà en cours", "No media files found": "Aucun fichier multimédia trouvé", "Toggle visibility": "Afficher/masquer", "Close": "Fermer", "Converting GIFs...": "Conversion des GIFs...", "Downloading...": "Téléchargement...", "Download": "Télécharger", "Fetching...": "Récupération...", "Fetch All": "Tout récupérer", "Fetch Video": "Récupérer la vidéo", "Fetch Image": "Récupérer l'image", "Fetch GIF": "Récupérer le GIF", "Posts: {{posts}}": "Publications : {{posts}}", "Media: {{media}}": "Médias : {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Médias actuels : {{current}} • Médias totaux : {{total}}", "Failed to download media": "Échec de téléchargement des médias", "Demo mode is only available for @xbatchdemo": "Le mode démo est uniquement disponible pour @xbatchdemo", "Auth Token": "Token d'authentification", "Enter your auth token": "Entrez votre token d'authentification", "Your authentication token for API access": "Votre token d'authentification pour l'accès API", "Patreon Auth": "Authentification Patreon", "Enter your Patreon auth": "Entrez votre authentification Patreon", "Your Patreon authentication key": "Votre clé d'authentification Patreon", "Please enter Patreon auth first": "Veuillez d'abord saisir l'authentification Patreon", "Please verify Patreon auth first": "Veuillez d'abord vérifier l'authentification Patreon", "Patreon auth verified successfully": "Authentification Patreon vérifiée avec succès", "Invalid Patreon auth": "Authentification Patreon invalide", "Verification failed. Please try again": "Échec de vérification. Veuillez réessayer", "Generating": "Génération", "Generate": "Générer", "Verify": "Vérifier", "Token generated successfully": "Token généré avec succès ({{current}}/{{total}})", "Failed to generate token": "Échec de génération du token", "Token generation failed. Please try again": "Échec de génération du token. Veuillez réessayer", "Verifying": "Vérification", "Verified": "Vérifié", "Use code": "Utilisez le code", "for Patreon Auth, click Verify to unlock demo. Test at": "pour l’authentification Patreon, cliquez sur « Vérifier » pour déverrouiller la démo. Testez sur", "Need help with Auth Token? See": "Besoin d’aide avec le jeton d’authentification ? Voir", "the guide": "le guide", "Subscribe": "S’abonner", "to get your Patreon Auth code and start downloading with ease!": "pour obtenir votre code d’authentification Patreon et commencer à télécharger facilement !", "Report bugs or request features:": "Signalez des bugs ou demandez des fonctionnalités :", "Import": "Importer", "Importing...": "Importation...", "Supports JSON and ZIP formats": "Prend en charge les formats JSON et ZIP", "Export": "Exporter", "Export All Data": "Exporter toutes les données", "Exporting...": "Exportation...", "Clear": "Effacer", "Filter by Batch": "Filtrer par lot", "Are you sure to clear all data in the database?": "Êtes-vous sûr de vouloir effacer toutes les données de la base ?", "Delete Account Data": "Supprimer les données du compte", "Are you sure you want to delete account data? This action cannot be undone": "Êtes-vous sûr de vouloir supprimer les données de {{username}} ? Cette action ne peut pas être annulée.", "Delete": "Supprimer", "Deleting...": "Suppression...", "Overwrite": "Écraser", "Overwrite Existing Data?": "Écraser les données existantes ?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Les données du compte @{{username}} existent déjà dans la base de données. Voulez-vous les écraser ?", "No accounts yet": "Aucun compte pour le moment", "Use Dashboard to fetch data.": "Utilisez le Tableau de bord pour récupérer les données.", "Something went wrong.": "Quelque chose s'est mal passé.", "Error:": "Erreur :", "Fetch": "Récupérer", "Single": "Unique", "Batch": "Lot", "Auto Batch": "Lot automatique", "Timeline": "Chronologie", "Media": "Médias", "Batch Size": "Taille du lot", "Starting Batch": "Lot de départ", "Posts": "Publications", "Tweets": "Tweets", "Replies": "Réponses", "All": "Tout", "Image": "Image", "Video": "Vidéo", "GIF": "GIF", "Batch: {{page}}": "Lot : {{page}}", "Start": "Démarrer", "Stop": "Arrêter", "Prev": "Précédent", "Next": "Suivant", "Download Current": "Télécharger l'actuel", "Download All": "Tout télécharger", "Use Batch/Auto Batch if single fetch fails": "Utilisez Lot/Lot automatique si la récupération unique échoue", "Load from database": "Charger depuis la base de données", "Load database": "Charger la base de données", "Home": "Début", "End": "Fin", "Failed to load data": "Échec du chargement des données", "Update": "Mettre à jour", "Updating...": "Mise à jour en cours...", "Update will fetch the latest data and overwrite the database. Continue?": "La mise à jour récupérera les dernières données et écrasera la base de données. Continuer ?", "Followers": "Abonnés", "Following": "Abonnements", "Joined": "Inscrit", "Open": "Ouvrir", "Preview": "Aperçu", "View Database": "Voir la base de données", "Converting...": "Conversion...", "Convert & Download": "Convertir et télécharger" } };
-  const hi = { "common": { "Settings": "सेटिंग्स", "Theme": "थीम", "Change Theme": "थीम बदलें", "Language": "भाषा", "Change Language": "भाषा बदलें", "Date Time Format": "दिनांक समय प्रारूप", "Sound Effects": "ध्वनि प्रभाव", "Debug": "डिबग", "Global Settings": "वैश्विक सेटिंग्स", "Version": "संस्करण", "Common Formats:": "सामान्य प्रारूप:", "Date Formats:": "दिनांक प्रारूप:", "Time Formats:": "समय प्रारूप:", "Combined Examples:": "संयुक्त उदाहरण:", "Localized": "स्थानीयकृत", "Reset Settings": "सेटिंग्स रीसेट करें", "Are you sure you want to reset settings to defaults?": "क्या आप वाकई सेटिंग्स को डिफ़ॉल्ट पर रीसेट करना चाहते हैं?", "Reset": "रीसेट करें", "Cancel": "रद्द करें", "Chrome": "Chrome", "Userscript": "यूज़रस्क्रिप्ट", "Website": "वेबसाइट", "Patreon": "Patreon", "Dashboard": "डैशबोर्ड", "Database": "डेटाबेस", "Auth": "प्रमाणीकरण", "Convert Animated GIFs": "GIFs कन्वर्ट करें", "Convert GIFs (External)": "GIFs कन्वर्ट करें (बाहरी)", "Concurrent Downloads": "समकालिक डाउनलोड", "Use 10+ only with fast internet": "10+ का उपयोग केवल तेज़ इंटरनेट पर करें", "Smaller size, same quality": "आकार छोटा, गुणवत्ता समान", "Larger size, same quality": "आकार बड़ा, गुणवत्ता समान", "Back": "वापस", "Please visit a profile page for auto-detection": "कृपया ऑटो-डिटेक्शन के लिए प्रोफ़ाइल पेज पर जाएं", "Please configure authentication in the Auth tab first": "कृपया पहले ऑथ टैब में प्रमाणीकरण कॉन्फ़िगर करें", "Invalid username format": "अमान्य उपयोगकर्ता नाम प्रारूप", "Invalid auth token. Please check your settings.": "अमान्य ऑथ टोकन। कृपया सेटिंग्स जाँचें।", "Invalid Patreon auth. Please check your settings.": "अमान्य Patreon ऑथ। कृपया अपनी सेटिंग्स जाँचें।", "Failed to fetch data": "डेटा लाना विफल", "Failed to fetch data from all APIs": "सभी API से डेटा प्राप्त करने में विफल", "Failed to verify auth from all APIs": "सभी API से ऑथ सत्यापित करने में विफल", "Failed to generate token from all APIs": "सभी API से टोकन जनरेट करने में विफल", "Generating token...": "टोकन जेनरेट किया जा रहा है...", "Abort": "रद्द करें", "Network error occurred": "नेटवर्क त्रुटि हुई", "Request timeout - please try again": "अनुरोध का समय समाप्त — कृपया पुनः प्रयास करें", "Failed to parse API response": "API प्रतिक्रिया पार्स करने में विफल", "Invalid API response structure": "API प्रतिक्रिया संरचना अमान्य है", "Unknown error occurred": "अज्ञात त्रुटि हुई", "HTTP error! status: {{status}}": "HTTP त्रुटि! स्थिति: {{status}}", "Download already in progress": "डाउनलोड पहले से चल रहा है", "No media files found": "कोई मीडिया फ़ाइलें नहीं मिलीं", "Toggle visibility": "दिखाएँ/छुपाएँ", "Close": "बंद करें", "Converting GIFs...": "GIFs कन्वर्ट हो रहे हैं...", "Downloading...": "डाउनलोड हो रहा है...", "Download": "डाउनलोड करें", "Fetching...": "प्राप्त किया जा रहा है...", "Fetch All": "सब कुछ प्राप्त करें", "Fetch Video": "वीडियो प्राप्त करें", "Fetch Image": "छवि प्राप्त करें", "Fetch GIF": "GIF प्राप्त करें", "Posts: {{posts}}": "पोस्ट: {{posts}}", "Media: {{media}}": "मीडिया: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "वर्तमान मीडिया: {{current}} • कुल मीडिया: {{total}}", "Failed to download media": "मीडिया डाउनलोड विफल", "Demo mode is only available for @xbatchdemo": "डेमो मोड केवल @xbatchdemo के लिए उपलब्ध है", "Auth Token": "ऑथ टोकन", "Enter your auth token": "अपना ऑथ टोकन दर्ज करें", "Your authentication token for API access": "API एक्सेस के लिए आपका ऑथेंटिकेशन टोकन", "Patreon Auth": "Patreon ऑथ", "Enter your Patreon auth": "अपना Patreon ऑथ दर्ज करें", "Your Patreon authentication key": "आपकी Patreon प्रमाणीकरण कुंजी", "Please enter Patreon auth first": "कृपया पहले Patreon ऑथ दर्ज करें", "Please verify Patreon auth first": "कृपया पहले Patreon ऑथ सत्यापित करें", "Patreon auth verified successfully": "Patreon ऑथ सफलतापूर्वक सत्यापित", "Invalid Patreon auth": "अमान्य Patreon ऑथ", "Verification failed. Please try again": "सत्यापन विफल। कृपया पुनः प्रयास करें", "Generating": "उत्पन्न किया जा रहा है", "Generate": "उत्पन्न करें", "Verify": "सत्यापित करें", "Token generated successfully": "टोकन सफलतापूर्वक जनरेट हुआ ({{current}}/{{total}})", "Failed to generate token": "टोकन जनरेट करना विफल", "Token generation failed. Please try again": "टोकन जनरेशन विफल। कृपया पुनः प्रयास करें", "Verifying": "सत्यापित किया जा रहा है", "Verified": "सत्यापित", "Use code": "कोड उपयोग करें", "for Patreon Auth, click Verify to unlock demo. Test at": 'Patreon प्रमाणीकरण के लिए, डेमो अनलॉक करने हेतु "सत्यापित करें" पर क्लिक करें। परीक्षण करें:', "Need help with Auth Token? See": "ऑथ टोकन में मदद चाहिए? देखें", "the guide": "मार्गदर्शिका", "Subscribe": "सदस्यता लें", "to get your Patreon Auth code and start downloading with ease!": "अपना Patreon ऑथ कोड प्राप्त करें और आसानी से डाउनलोड शुरू करें!", "Report bugs or request features:": "बग रिपोर्ट करें या फीचर का अनुरोध करें:", "Import": "आयात करें", "Importing...": "आयात हो रहा है...", "Supports JSON and ZIP formats": "JSON और ZIP प्रारूप समर्थित हैं", "Export": "निर्यात करें", "Export All Data": "सभी डेटा निर्यात करें", "Exporting...": "निर्यात हो रहा है...", "Clear": "साफ़ करें", "Filter by Batch": "बैच द्वारा फ़िल्टर करें", "Are you sure to clear all data in the database?": "क्या आप वाकई डेटाबेस का सारा डेटा साफ़ करना चाहते हैं?", "Delete Account Data": "खाता डेटा हटाएँ", "Are you sure you want to delete account data? This action cannot be undone": "क्या आप वाकई {{username}} का डेटा हटाना चाहते हैं? यह क्रिया वापस नहीं की जा सकती।", "Delete": "हटाएं", "Deleting...": "हटा रहे हैं...", "Overwrite": "ओवरराइट करें", "Overwrite Existing Data?": "मौजूदा डेटा ओवरराइट करें?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "@{{username}} के लिए खाता डेटा पहले से ही डेटाबेस में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?", "No accounts yet": "अभी तक कोई खाता नहीं", "Use Dashboard to fetch data.": "डेटा प्राप्त करने के लिए डैशबोर्ड का उपयोग करें।", "Something went wrong.": "कुछ गलत हो गया।", "Error:": "त्रुटि:", "Fetch": "प्राप्त करें", "Single": "एकल", "Batch": "बैच", "Auto Batch": "ऑटो बैच", "Timeline": "टाइमलाइन", "Media": "मीडिया", "Batch Size": "बैच आकार", "Starting Batch": "प्रारंभिक बैच", "Posts": "पोस्ट", "Tweets": "ट्वीट्स", "Replies": "जवाब", "All": "सभी", "Image": "छवि", "Video": "वीडियो", "GIF": "GIF", "Batch: {{page}}": "बैच: {{page}}", "Start": "प्रारंभ", "Stop": "रोकें", "Prev": "पिछला", "Next": "अगला", "Download Current": "वर्तमान डाउनलोड करें", "Download All": "सभी डाउनलोड करें", "Use Batch/Auto Batch if single fetch fails": "यदि एकल प्राप्ति विफल हो, तो बैच/ऑटो बैच का उपयोग करें", "Load from database": "डेटाबेस से लोड करें", "Load database": "डेटाबेस लोड करें", "Home": "होम", "End": "अंत", "Failed to load data": "डेटा लोड करना विफल", "Update": "अपडेट करें", "Updating...": "अपडेट हो रहा है...", "Update will fetch the latest data and overwrite the database. Continue?": "अपडेट नवीनतम डेटा प्राप्त करेगा और डेटाबेस को ओवरराइट करेगा। जारी रखें?", "Followers": "फॉलोवर्स", "Following": "फॉलो कर रहे हैं", "Joined": "जुड़े", "Open": "खोलें", "Preview": "पूर्वावलोकन", "View Database": "डेटाबेस देखें", "Converting...": "कन्वर्ट हो रहा है...", "Convert & Download": "कन्वर्ट करें और डाउनलोड करें" } };
-  const id = { "common": { "Settings": "Pengaturan", "Theme": "Tema", "Change Theme": "Ubah Tema", "Language": "Bahasa", "Change Language": "Ubah Bahasa", "Date Time Format": "Format Tanggal Waktu", "Sound Effects": "Efek Suara", "Debug": "Debug", "Global Settings": "Pengaturan Global", "Version": "Versi", "Common Formats:": "Format Umum:", "Date Formats:": "Format Tanggal:", "Time Formats:": "Format Waktu:", "Combined Examples:": "Contoh Gabungan:", "Localized": "Terlokalisasi", "Reset Settings": "Reset Pengaturan", "Are you sure you want to reset settings to defaults?": "Apakah Anda yakin ingin mereset pengaturan ke default?", "Reset": "Reset", "Cancel": "Batal", "Chrome": "Chrome", "Userscript": "Userscript", "Website": "Website", "Patreon": "Patreon", "Dashboard": "Dasbor", "Database": "Database", "Auth": "Autentikasi", "Convert Animated GIFs": "Konversi GIF", "Convert GIFs (External)": "Konversi GIF (Eksternal)", "Concurrent Downloads": "Unduhan Bersamaan", "Use 10+ only with fast internet": "Gunakan 10+ hanya dengan internet cepat", "Smaller size, same quality": "Ukuran lebih kecil, kualitas sama", "Larger size, same quality": "Ukuran lebih besar, kualitas sama", "Back": "Kembali", "Please visit a profile page for auto-detection": "Silakan kunjungi halaman profil untuk deteksi otomatis", "Please configure authentication in the Auth tab first": "Silakan konfigurasi autentikasi di tab Auth terlebih dahulu", "Invalid username format": "Format username tidak valid", "Invalid auth token. Please check your settings.": "Token autentikasi tidak valid. Silakan periksa pengaturan Anda.", "Invalid Patreon auth. Please check your settings.": "Autentikasi Patreon tidak valid. Silakan periksa pengaturan Anda.", "Failed to fetch data": "Gagal mengambil data", "Failed to fetch data from all APIs": "Gagal mengambil data dari semua API", "Failed to verify auth from all APIs": "Gagal memverifikasi autentikasi dari semua API", "Failed to generate token from all APIs": "Gagal menghasilkan token dari semua API", "Generating token...": "Menghasilkan token...", "Abort": "Batalkan", "Network error occurred": "Terjadi kesalahan jaringan", "Request timeout - please try again": "Permintaan timeout - silakan coba lagi", "Failed to parse API response": "Gagal mem-parsing respons API", "Invalid API response structure": "Struktur respons API tidak valid", "Unknown error occurred": "Terjadi kesalahan yang tidak diketahui", "HTTP error! status: {{status}}": "Kesalahan HTTP! status: {{status}}", "Download already in progress": "Unduhan sudah berlangsung", "No media files found": "Tidak ada file media ditemukan", "Toggle visibility": "Alihkan visibilitas", "Close": "Tutup", "Converting GIFs...": "Mengonversi GIF...", "Downloading...": "Mengunduh...", "Download": "Unduh", "Fetching...": "Mengambil...", "Fetch All": "Ambil Semua", "Fetch Video": "Ambil Video", "Fetch Image": "Ambil Gambar", "Fetch GIF": "Ambil GIF", "Posts: {{posts}}": "Postingan: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Media Saat Ini: {{current}} • Total Media: {{total}}", "Failed to download media": "Gagal mengunduh media", "Demo mode is only available for @xbatchdemo": "Mode demo hanya tersedia untuk @xbatchdemo", "Auth Token": "Token Autentikasi", "Enter your auth token": "Masukkan token autentikasi Anda", "Your authentication token for API access": "Token autentikasi Anda untuk akses API", "Patreon Auth": "Autentikasi Patreon", "Enter your Patreon auth": "Masukkan autentikasi Patreon Anda", "Your Patreon authentication key": "Kunci autentikasi Patreon Anda", "Please enter Patreon auth first": "Silakan masukkan autentikasi Patreon terlebih dahulu", "Please verify Patreon auth first": "Silakan verifikasi autentikasi Patreon terlebih dahulu", "Patreon auth verified successfully": "Autentikasi Patreon berhasil diverifikasi", "Invalid Patreon auth": "Autentikasi Patreon tidak valid", "Verification failed. Please try again": "Verifikasi gagal. Silakan coba lagi", "Generating": "Menghasilkan", "Generate": "Hasilkan", "Verify": "Verifikasi", "Token generated successfully": "Token berhasil dihasilkan ({{current}}/{{total}})", "Failed to generate token": "Gagal menghasilkan token", "Token generation failed. Please try again": "Pembuatan token gagal. Silakan coba lagi", "Verifying": "Memverifikasi", "Verified": "Terverifikasi", "Use code": "Gunakan kode", "for Patreon Auth, click Verify to unlock demo. Test at": "untuk Autentikasi Patreon, klik Verifikasi untuk membuka demo. Tes di", "Need help with Auth Token? See": "Butuh bantuan dengan Token Autentikasi? Lihat", "the guide": "panduannya", "Subscribe": "Berlangganan", "to get your Patreon Auth code and start downloading with ease!": "untuk mendapatkan kode Autentikasi Patreon dan mulai mengunduh dengan mudah!", "Report bugs or request features:": "Laporkan bug atau minta fitur:", "Import": "Impor", "Importing...": "Mengimpor...", "Supports JSON and ZIP formats": "Mendukung format JSON dan ZIP", "Export": "Ekspor", "Export All Data": "Ekspor Semua Data", "Exporting...": "Mengekspor...", "Clear": "Hapus", "Filter by Batch": "Filter berdasarkan Batch", "Are you sure to clear all data in the database?": "Apakah Anda yakin ingin menghapus semua data di database?", "Delete Account Data": "Hapus Data Akun", "Are you sure you want to delete account data? This action cannot be undone": "Apakah Anda yakin ingin menghapus data {{username}}? Tindakan ini tidak dapat dibatalkan.", "Delete": "Hapus", "Deleting...": "Menghapus...", "Overwrite": "Timpa", "Overwrite Existing Data?": "Timpa Data yang Ada?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Data akun untuk @{{username}} sudah ada di database. Apakah Anda ingin menimpanya?", "No accounts yet": "Belum ada akun", "Use Dashboard to fetch data.": "Gunakan Dasbor untuk mengambil data.", "Something went wrong.": "Terjadi kesalahan.", "Error:": "Kesalahan:", "Fetch": "Ambil", "Single": "Tunggal", "Batch": "Batch", "Auto Batch": "Batch Otomatis", "Timeline": "Timeline", "Media": "Media", "Batch Size": "Ukuran Batch", "Starting Batch": "Batch Awal", "Posts": "Postingan", "Tweets": "Tweet", "Replies": "Balasan", "All": "Semua", "Image": "Gambar", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Mulai", "Stop": "Berhenti", "Prev": "Sebelumnya", "Next": "Selanjutnya", "Download Current": "Unduh Saat Ini", "Download All": "Unduh Semua", "Use Batch/Auto Batch if single fetch fails": "Gunakan Batch/Batch Otomatis jika pengambilan tunggal gagal", "Load from database": "Muat dari database", "Load database": "Muat database", "Home": "Beranda", "End": "Akhir", "Failed to load data": "Gagal memuat data", "Update": "Perbarui", "Updating...": "Memperbarui...", "Update will fetch the latest data and overwrite the database. Continue?": "Pembaruan akan mengambil data terbaru dan menimpa database. Lanjutkan?", "Followers": "Pengikut", "Following": "Mengikuti", "Joined": "Bergabung", "Open": "Buka", "Preview": "Pratinjau", "View Database": "Lihat Database", "Converting...": "Mengonversi...", "Convert & Download": "Konversi & Unduh" } };
-  const it = { "common": { "Settings": "Impostazioni", "Theme": "Tema", "Change Theme": "Cambia Tema", "Language": "Lingua", "Change Language": "Cambia Lingua", "Date Time Format": "Formato Data Ora", "Sound Effects": "Effetti Sonori", "Debug": "Debug", "Global Settings": "Impostazioni Globali", "Version": "Versione", "Common Formats:": "Formati Comuni:", "Date Formats:": "Formati Data:", "Time Formats:": "Formati Ora:", "Combined Examples:": "Esempi Combinati:", "Localized": "Localizzato", "Reset Settings": "Ripristina Impostazioni", "Are you sure you want to reset settings to defaults?": "Sei sicuro di voler ripristinare le impostazioni predefinite?", "Reset": "Ripristina", "Cancel": "Annulla", "Chrome": "Chrome", "Userscript": "Userscript", "Website": "Sito Web", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Database", "Auth": "Autenticazione", "Convert Animated GIFs": "Converti GIF", "Convert GIFs (External)": "Converti GIF (Esterno)", "Concurrent Downloads": "Download Simultanei", "Use 10+ only with fast internet": "Usa 10+ solo con internet veloce", "Smaller size, same quality": "Dimensione ridotta, stessa qualità", "Larger size, same quality": "Dimensione maggiore, stessa qualità", "Back": "Indietro", "Please visit a profile page for auto-detection": "Visita una pagina profilo per il rilevamento automatico", "Please configure authentication in the Auth tab first": "Configura prima l'autenticazione nella scheda Auth", "Invalid username format": "Formato nome utente non valido", "Invalid auth token. Please check your settings.": "Token di autenticazione non valido. Controlla le impostazioni.", "Invalid Patreon auth. Please check your settings.": "Autenticazione Patreon non valida. Controlla le impostazioni.", "Failed to fetch data": "Impossibile recuperare i dati", "Failed to fetch data from all APIs": "Impossibile recuperare i dati da tutte le API", "Failed to verify auth from all APIs": "Impossibile verificare l'autenticazione da tutte le API", "Failed to generate token from all APIs": "Impossibile generare il token da tutte le API", "Generating token...": "Generazione token...", "Abort": "Interrompi", "Network error occurred": "Si è verificato un errore di rete", "Request timeout - please try again": "Timeout della richiesta - riprova", "Failed to parse API response": "Impossibile analizzare la risposta API", "Invalid API response structure": "Struttura risposta API non valida", "Unknown error occurred": "Si è verificato un errore sconosciuto", "HTTP error! status: {{status}}": "Errore HTTP! stato: {{status}}", "Download already in progress": "Download già in corso", "No media files found": "Nessun file multimediale trovato", "Toggle visibility": "Attiva/disattiva visibilità", "Close": "Chiudi", "Converting GIFs...": "Conversione GIF...", "Downloading...": "Download in corso...", "Download": "Scarica", "Fetching...": "Recupero...", "Fetch All": "Recupera Tutto", "Fetch Video": "Recupera Video", "Fetch Image": "Recupera Immagine", "Fetch GIF": "Recupera GIF", "Posts: {{posts}}": "Post: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Media Corrente: {{current}} • Media Totale: {{total}}", "Failed to download media": "Impossibile scaricare i media", "Demo mode is only available for @xbatchdemo": "La modalità demo è disponibile solo per @xbatchdemo", "Auth Token": "Token di Autenticazione", "Enter your auth token": "Inserisci il tuo token di autenticazione", "Your authentication token for API access": "Il tuo token di autenticazione per l'accesso API", "Patreon Auth": "Autenticazione Patreon", "Enter your Patreon auth": "Inserisci la tua autenticazione Patreon", "Your Patreon authentication key": "La tua chiave di autenticazione Patreon", "Please enter Patreon auth first": "Inserisci prima l'autenticazione Patreon", "Please verify Patreon auth first": "Verifica prima l'autenticazione Patreon", "Patreon auth verified successfully": "Autenticazione Patreon verificata con successo", "Invalid Patreon auth": "Autenticazione Patreon non valida", "Verification failed. Please try again": "Verifica fallita. Riprova", "Generating": "Generazione", "Generate": "Genera", "Verify": "Verifica", "Token generated successfully": "Token generato con successo ({{current}}/{{total}})", "Failed to generate token": "Impossibile generare il token", "Token generation failed. Please try again": "Generazione token fallita. Riprova", "Verifying": "Verifica in corso", "Verified": "Verificato", "Use code": "Usa il codice", "for Patreon Auth, click Verify to unlock demo. Test at": "per l'autenticazione Patreon, clicca Verifica per sbloccare la demo. Testa su", "Need help with Auth Token? See": "Hai bisogno di aiuto con il Token di Autenticazione? Vedi", "the guide": "la guida", "Subscribe": "Abbonati", "to get your Patreon Auth code and start downloading with ease!": "per ottenere il tuo codice di autenticazione Patreon e iniziare a scaricare facilmente!", "Report bugs or request features:": "Segnala bug o richiedi funzionalità:", "Import": "Importa", "Importing...": "Importazione...", "Supports JSON and ZIP formats": "Supporta formati JSON e ZIP", "Export": "Esporta", "Export All Data": "Esporta Tutti i Dati", "Exporting...": "Esportazione...", "Clear": "Cancella", "Filter by Batch": "Filtra per Batch", "Are you sure to clear all data in the database?": "Sei sicuro di voler cancellare tutti i dati nel database?", "Delete Account Data": "Elimina Dati Account", "Are you sure you want to delete account data? This action cannot be undone": "Sei sicuro di voler eliminare i dati di {{username}}? Questa azione non può essere annullata.", "Delete": "Elimina", "Deleting...": "Eliminazione...", "Overwrite": "Sovrascrivi", "Overwrite Existing Data?": "Sovrascrivere i Dati Esistenti?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "I dati dell'account per @{{username}} esistono già nel database. Vuoi sovrascriverli?", "No accounts yet": "Nessun account ancora", "Use Dashboard to fetch data.": "Usa la Dashboard per recuperare i dati.", "Something went wrong.": "Qualcosa è andato storto.", "Error:": "Errore:", "Fetch": "Recupera", "Single": "Singolo", "Batch": "Batch", "Auto Batch": "Batch Automatico", "Timeline": "Timeline", "Media": "Media", "Batch Size": "Dimensione Batch", "Starting Batch": "Batch Iniziale", "Posts": "Post", "Tweets": "Tweet", "Replies": "Risposte", "All": "Tutto", "Image": "Immagine", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Avvia", "Stop": "Ferma", "Prev": "Prec", "Next": "Succ", "Download Current": "Scarica Corrente", "Download All": "Scarica Tutto", "Use Batch/Auto Batch if single fetch fails": "Usa Batch/Batch Automatico se il recupero singolo fallisce", "Load from database": "Carica dal database", "Load database": "Carica database", "Home": "Home", "End": "Fine", "Failed to load data": "Impossibile caricare i dati", "Update": "Aggiorna", "Updating...": "Aggiornamento...", "Update will fetch the latest data and overwrite the database. Continue?": "L'aggiornamento recupererà i dati più recenti e sovrascriverà il database. Continuare?", "Followers": "Follower", "Following": "Seguiti", "Joined": "Iscritto", "Open": "Apri", "Preview": "Anteprima", "View Database": "Visualizza Database", "Converting...": "Conversione...", "Convert & Download": "Converti e Scarica" } };
-  const ja = { "common": { "Settings": "設定", "Theme": "テーマ", "Change Theme": "テーマを変更", "Language": "言語", "Change Language": "言語を変更", "Date Time Format": "日時フォーマット", "Sound Effects": "サウンドエフェクト", "Debug": "デバッグ", "Global Settings": "グローバル設定", "Version": "バージョン", "Common Formats:": "一般的な形式:", "Date Formats:": "日付形式:", "Time Formats:": "時刻形式:", "Combined Examples:": "組み合わせ例:", "Localized": "ローカライズ済み", "Reset Settings": "設定のリセット", "Are you sure you want to reset settings to defaults?": "設定をデフォルトにリセットしてもよろしいですか？", "Reset": "リセット", "Cancel": "キャンセル", "Chrome": "Chrome", "Userscript": "ユーザースクリプト", "Website": "ウェブサイト", "Patreon": "Patreon", "Dashboard": "ダッシュボード", "Database": "データベース", "Auth": "認証", "Convert Animated GIFs": "GIFを変換", "Convert GIFs (External)": "GIFを変換（外部）", "Concurrent Downloads": "同時ダウンロード数", "Use 10+ only with fast internet": "10以上は高速なインターネット環境でのみ使用してください", "Smaller size, same quality": "サイズは小さく、品質は同じです", "Larger size, same quality": "サイズは大きく、品質は同じです", "Back": "戻る", "Please visit a profile page for auto-detection": "プロフィールページを訪問して自動検出してください", "Please configure authentication in the Auth tab first": "最初に認証タブで認証を設定してください", "Invalid username format": "無効なユーザー名形式", "Invalid auth token. Please check your settings.": "無効な認証トークンです。設定を確認してください。", "Invalid Patreon auth. Please check your settings.": "無効なPatreon認証です。設定を確認してください。", "Failed to fetch data": "データ取得に失敗しました", "Failed to fetch data from all APIs": "すべてのAPIからデータ取得に失敗しました", "Failed to verify auth from all APIs": "すべてのAPIで認証の検証に失敗しました", "Failed to generate token from all APIs": "すべてのAPIでトークン生成に失敗しました", "Generating token...": "トークン生成中...", "Abort": "中止", "Network error occurred": "ネットワークエラーが発生しました", "Request timeout - please try again": "リクエストがタイムアウトしました。もう一度お試しください", "Failed to parse API response": "API 応答の解析に失敗しました", "Invalid API response structure": "無効な API 応答構造です", "Unknown error occurred": "不明なエラーが発生しました", "HTTP error! status: {{status}}": "HTTP エラー! ステータス: {{status}}", "Download already in progress": "ダウンロードはすでに進行中です", "No media files found": "メディアファイルが見つかりません", "Toggle visibility": "表示/非表示を切り替え", "Close": "閉じる", "Converting GIFs...": "GIF変換中...", "Downloading...": "ダウンロード中...", "Download": "ダウンロード", "Fetching...": "取得中...", "Fetch All": "すべて取得", "Fetch Video": "ビデオを取得", "Fetch Image": "画像を取得", "Fetch GIF": "GIFを取得", "Posts: {{posts}}": "投稿: {{posts}}", "Media: {{media}}": "メディア: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "現在のメディア: {{current}} • 合計メディア: {{total}}", "Failed to download media": "メディアダウンロードに失敗しました", "Demo mode is only available for @xbatchdemo": "デモモードは @xbatchdemo のみ利用できます", "Auth Token": "認証トークン", "Enter your auth token": "認証トークンを入力", "Your authentication token for API access": "APIアクセス用の認証トークン", "Patreon Auth": "Patreon認証", "Enter your Patreon auth": "Patreon認証を入力", "Your Patreon authentication key": "Patreon認証キー", "Please enter Patreon auth first": "最初にPatreon認証を入力してください", "Please verify Patreon auth first": "最初にPatreon認証を確認してください", "Patreon auth verified successfully": "Patreon認証が正常に確認されました", "Invalid Patreon auth": "無効なPatreon認証", "Verification failed. Please try again": "検証に失敗しました。再試行してください", "Generating": "生成中", "Generate": "生成", "Verify": "確認", "Token generated successfully": "トークンが正常に生成されました ({{current}}/{{total}})", "Failed to generate token": "トークン生成に失敗しました", "Token generation failed. Please try again": "トークン生成に失敗しました。再試行してください", "Verifying": "確認中", "Verified": "確認済み", "Use code": "コードを使用", "for Patreon Auth, click Verify to unlock demo. Test at": "Patreon 認証用。デモを有効にするには「確認」をクリック。テスト先:", "Need help with Auth Token? See": "認証トークンでお困りですか？こちらをご覧ください:", "the guide": "ガイド", "Subscribe": "購読する", "to get your Patreon Auth code and start downloading with ease!": "Patreon 認証コードを入手して、簡単にダウンロードを開始しましょう！", "Report bugs or request features:": "バグ報告や機能リクエストはこちら:", "Import": "インポート", "Importing...": "インポート中...", "Supports JSON and ZIP formats": "JSON および ZIP 形式をサポート", "Export": "エクスポート", "Export All Data": "すべてのデータをエクスポート", "Exporting...": "エクスポート中...", "Clear": "クリア", "Filter by Batch": "バッチでフィルター", "Are you sure to clear all data in the database?": "データベースのすべてのデータをクリアしてもよろしいですか？", "Delete Account Data": "アカウントデータの削除", "Are you sure you want to delete account data? This action cannot be undone": "{{username}}のデータを削除してもよろしいですか？この操作は元に戻せません。", "Delete": "削除", "Deleting...": "削除中...", "Overwrite": "上書き", "Overwrite Existing Data?": "既存のデータを上書きしますか？", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "@{{username}} のアカウントデータは既にデータベースに存在します。上書きしますか？", "No accounts yet": "まだアカウントがありません", "Use Dashboard to fetch data.": "ダッシュボードを使用してデータを取得してください。", "Something went wrong.": "何かが間違っています。", "Error:": "エラー:", "Fetch": "取得", "Single": "シングル", "Batch": "バッチ", "Auto Batch": "自動バッチ", "Timeline": "タイムライン", "Media": "メディア", "Batch Size": "バッチサイズ", "Starting Batch": "開始バッチ", "Posts": "投稿", "Tweets": "ツイート", "Replies": "返信", "All": "すべて", "Image": "画像", "Video": "ビデオ", "GIF": "GIF", "Batch: {{page}}": "バッチ: {{page}}", "Start": "開始", "Stop": "停止", "Prev": "前へ", "Next": "次へ", "Download Current": "現在をダウンロード", "Download All": "すべてダウンロード", "Use Batch/Auto Batch if single fetch fails": "単一取得が失敗した場合はバッチ/自動バッチを使用してください", "Load from database": "データベースから読み込む", "Load database": "データベースを読み込む", "Home": "先頭", "End": "末尾", "Failed to load data": "データの読み込みに失敗しました", "Update": "更新", "Updating...": "更新中...", "Update will fetch the latest data and overwrite the database. Continue?": "更新により最新データを取得し、データベースを上書きします。続行しますか？", "Followers": "フォロワー", "Following": "フォロー中", "Joined": "参加日", "Open": "開く", "Preview": "プレビュー", "View Database": "データベースを表示", "Converting...": "変換中...", "Convert & Download": "変換してダウンロード" } };
-  const ko = { "common": { "Settings": "설정", "Theme": "테마", "Change Theme": "테마 변경", "Language": "언어", "Change Language": "언어 변경", "Date Time Format": "날짜 시간 형식", "Sound Effects": "사운드 효과", "Debug": "디버그", "Global Settings": "전역 설정", "Version": "버전", "Common Formats:": "일반 형식:", "Date Formats:": "날짜 형식:", "Time Formats:": "시간 형식:", "Combined Examples:": "결합 예시:", "Localized": "현지화됨", "Reset Settings": "설정 재설정", "Are you sure you want to reset settings to defaults?": "설정을 기본값으로 재설정하시겠습니까?", "Reset": "재설정", "Cancel": "취소", "Chrome": "Chrome", "Userscript": "유저스크립트", "Website": "웹사이트", "Patreon": "Patreon", "Dashboard": "대시보드", "Database": "데이터베이스", "Auth": "인증", "Convert Animated GIFs": "GIF 변환", "Convert GIFs (External)": "GIF 변환 (외부)", "Concurrent Downloads": "동시 다운로드", "Use 10+ only with fast internet": "빠른 인터넷에서만 10+를 사용하세요", "Smaller size, same quality": "더 작은 용량, 동일한 품질", "Larger size, same quality": "더 큰 용량, 동일한 품질", "Back": "뒤로", "Please visit a profile page for auto-detection": "자동 감지를 위해 프로필 페이지를 방문해주세요", "Please configure authentication in the Auth tab first": "먼저 Auth 탭에서 인증을 구성해주세요", "Invalid username format": "잘못된 사용자명 형식", "Invalid auth token. Please check your settings.": "잘못된 인증 토큰입니다. 설정을 확인해주세요.", "Invalid Patreon auth. Please check your settings.": "잘못된 Patreon 인증입니다. 설정을 확인해주세요.", "Failed to fetch data": "데이터 가져오기 실패", "Failed to fetch data from all APIs": "모든 API에서 데이터를 가져오지 못했습니다", "Failed to verify auth from all APIs": "모든 API에서 인증 확인에 실패했습니다", "Failed to generate token from all APIs": "모든 API에서 토큰 생성에 실패했습니다", "Generating token...": "토큰 생성 중...", "Abort": "중단", "Network error occurred": "네트워크 오류가 발생했습니다", "Request timeout - please try again": "요청 시간 초과 - 다시 시도해 주세요", "Failed to parse API response": "API 응답을 파싱하지 못했습니다", "Invalid API response structure": "잘못된 API 응답 구조입니다", "Unknown error occurred": "알 수 없는 오류가 발생했습니다", "HTTP error! status: {{status}}": "HTTP 오류! 상태: {{status}}", "Download already in progress": "다운로드가 이미 진행 중입니다", "No media files found": "미디어 파일을 찾을 수 없습니다", "Toggle visibility": "표시/숨기기", "Close": "닫기", "Converting GIFs...": "GIF 변환 중...", "Downloading...": "다운로드 중...", "Download": "다운로드", "Fetching...": "가져오는 중...", "Fetch All": "전체 가져오기", "Fetch Video": "비디오 가져오기", "Fetch Image": "이미지 가져오기", "Fetch GIF": "GIF 가져오기", "Posts: {{posts}}": "게시물: {{posts}}", "Media: {{media}}": "미디어: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "현재 미디어: {{current}} • 전체 미디어: {{total}}", "Failed to download media": "미디어 다운로드 실패", "Demo mode is only available for @xbatchdemo": "데모 모드는 @xbatchdemo에게만 제공됩니다", "Auth Token": "인증 토큰", "Enter your auth token": "인증 토큰을 입력하세요", "Your authentication token for API access": "API 접근을 위한 인증 토큰", "Patreon Auth": "Patreon 인증", "Enter your Patreon auth": "Patreon 인증을 입력하세요", "Your Patreon authentication key": "Patreon 인증 키", "Please enter Patreon auth first": "먼저 Patreon 인증을 입력해주세요", "Please verify Patreon auth first": "먼저 Patreon 인증을 확인해주세요", "Patreon auth verified successfully": "Patreon 인증이 성공적으로 확인되었습니다", "Invalid Patreon auth": "잘못된 Patreon 인증", "Verification failed. Please try again": "확인 실패. 다시 시도해주세요", "Generating": "생성 중", "Generate": "생성", "Verify": "확인", "Token generated successfully": "토큰이 성공적으로 생성되었습니다 ({{current}}/{{total}})", "Failed to generate token": "토큰 생성 실패", "Token generation failed. Please try again": "토큰 생성 실패. 다시 시도해주세요", "Verifying": "확인 중", "Verified": "확인됨", "Use code": "코드를 사용", "for Patreon Auth, click Verify to unlock demo. Test at": "Patreon 인증용입니다. 데모를 해제하려면 ‘확인’을 클릭하세요. 테스트:", "Need help with Auth Token? See": "인증 토큰이 필요하신가요? 다음을 참조하세요:", "the guide": "가이드", "Subscribe": "구독하기", "to get your Patreon Auth code and start downloading with ease!": "Patreon 인증 코드를 받아 손쉽게 다운로드를 시작하세요!", "Report bugs or request features:": "버그 신고 또는 기능 요청:", "Import": "가져오기", "Importing...": "가져오는 중...", "Supports JSON and ZIP formats": "JSON 및 ZIP 형식 지원", "Export": "내보내기", "Export All Data": "모든 데이터 내보내기", "Exporting...": "내보내는 중...", "Clear": "삭제", "Filter by Batch": "배치별 필터", "Are you sure to clear all data in the database?": "데이터베이스의 모든 데이터를 삭제하시겠습니까?", "Delete Account Data": "계정 데이터 삭제", "Are you sure you want to delete account data? This action cannot be undone": "{{username}}의 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.", "Delete": "삭제", "Deleting...": "삭제 중...", "Overwrite": "덮어쓰기", "Overwrite Existing Data?": "기존 데이터를 덮어쓰시겠습니까?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "@{{username}}의 계정 데이터가 이미 데이터베이스에 존재합니다. 덮어쓰시겠습니까?", "No accounts yet": "아직 계정이 없습니다", "Use Dashboard to fetch data.": "대시보드를 사용하여 데이터를 가져와주세요.", "Something went wrong.": "문제가 발생했습니다.", "Error:": "오류:", "Fetch": "가져오기", "Single": "단일", "Batch": "배치", "Auto Batch": "자동 배치", "Timeline": "타임라인", "Media": "미디어", "Batch Size": "배치 크기", "Starting Batch": "시작 배치", "Posts": "게시물", "Tweets": "트윗", "Replies": "답글", "All": "전체", "Image": "이미지", "Video": "비디오", "GIF": "GIF", "Batch: {{page}}": "배치: {{page}}", "Start": "시작", "Stop": "중지", "Prev": "이전", "Next": "다음", "Download Current": "현재 다운로드", "Download All": "모두 다운로드", "Use Batch/Auto Batch if single fetch fails": "단일 가져오기가 실패하면 배치/자동 배치를 사용하세요", "Load from database": "데이터베이스에서 불러오기", "Load database": "데이터베이스 불러오기", "Home": "처음", "End": "끝", "Failed to load data": "데이터 불러오기 실패", "Update": "업데이트", "Updating...": "업데이트 중...", "Update will fetch the latest data and overwrite the database. Continue?": "업데이트는 최신 데이터를 가져와 데이터베이스를 덮어씁니다. 계속하시겠습니까?", "Followers": "팔로워", "Following": "팔로잉", "Joined": "가입일", "Open": "열기", "Preview": "미리보기", "View Database": "데이터베이스 보기", "Converting...": "변환 중...", "Convert & Download": "변환 및 다운로드" } };
-  const nl = { "common": { "Settings": "Instellingen", "Theme": "Thema", "Change Theme": "Verander Thema", "Language": "Taal", "Change Language": "Verander Taal", "Date Time Format": "Datum Tijd Formaat", "Sound Effects": "Geluidseffecten", "Debug": "Debug", "Global Settings": "Algemene Instellingen", "Version": "Versie", "Common Formats:": "Veelgebruikte Formaten:", "Date Formats:": "Datumformaten:", "Time Formats:": "Tijdformaten:", "Combined Examples:": "Gecombineerde Voorbeelden:", "Localized": "Gelokaliseerd", "Reset Settings": "Reset Instellingen", "Are you sure you want to reset settings to defaults?": "Weet je zeker dat je de instellingen wilt resetten naar standaard?", "Reset": "Reset", "Cancel": "Annuleren", "Chrome": "Chrome", "Userscript": "Userscript", "Website": "Website", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Database", "Auth": "Authenticatie", "Convert Animated GIFs": "Converteer GIF's", "Convert GIFs (External)": "Converteer GIF's (Extern)", "Concurrent Downloads": "Gelijktijdige Downloads", "Use 10+ only with fast internet": "Gebruik 10+ alleen met snel internet", "Smaller size, same quality": "Kleinere grootte, zelfde kwaliteit", "Larger size, same quality": "Grotere grootte, zelfde kwaliteit", "Back": "Terug", "Please visit a profile page for auto-detection": "Bezoek een profielpagina voor automatische detectie", "Please configure authentication in the Auth tab first": "Configureer eerst de authenticatie in het Auth-tabblad", "Invalid username format": "Ongeldige gebruikersnaam", "Invalid auth token. Please check your settings.": "Ongeldig authenticatietoken. Controleer je instellingen.", "Invalid Patreon auth. Please check your settings.": "Ongeldige Patreon-authenticatie. Controleer je instellingen.", "Failed to fetch data": "Kan gegevens niet ophalen", "Failed to fetch data from all APIs": "Kan gegevens niet ophalen van alle API's", "Failed to verify auth from all APIs": "Kan authenticatie niet verifiëren van alle API's", "Failed to generate token from all APIs": "Kan token niet genereren van alle API's", "Generating token...": "Token genereren...", "Abort": "Afbreken", "Network error occurred": "Netwerkfout opgetreden", "Request timeout - please try again": "Time-out verzoek - probeer opnieuw", "Failed to parse API response": "Kan API-reactie niet parseren", "Invalid API response structure": "Ongeldige API-reactiestructuur", "Unknown error occurred": "Onbekende fout opgetreden", "HTTP error! status: {{status}}": "HTTP-fout! status: {{status}}", "Download already in progress": "Download al bezig", "No media files found": "Geen mediabestanden gevonden", "Toggle visibility": "Schakel zichtbaarheid", "Close": "Sluiten", "Converting GIFs...": "GIF's converteren...", "Downloading...": "Downloaden...", "Download": "Downloaden", "Fetching...": "Ophalen...", "Fetch All": "Alles Ophalen", "Fetch Video": "Video Ophalen", "Fetch Image": "Afbeelding Ophalen", "Fetch GIF": "GIF Ophalen", "Posts: {{posts}}": "Berichten: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Huidige Media: {{current}} • Totale Media: {{total}}", "Failed to download media": "Kan media niet downloaden", "Demo mode is only available for @xbatchdemo": "Demomodus is alleen beschikbaar voor @xbatchdemo", "Auth Token": "Authenticatietoken", "Enter your auth token": "Voer je authenticatietoken in", "Your authentication token for API access": "Je authenticatietoken voor API-toegang", "Patreon Auth": "Patreon Authenticatie", "Enter your Patreon auth": "Voer je Patreon-authenticatie in", "Your Patreon authentication key": "Je Patreon-authenticatiesleutel", "Please enter Patreon auth first": "Voer eerst Patreon-authenticatie in", "Please verify Patreon auth first": "Verifieer eerst Patreon-authenticatie", "Patreon auth verified successfully": "Patreon-authenticatie succesvol geverifieerd", "Invalid Patreon auth": "Ongeldige Patreon-authenticatie", "Verification failed. Please try again": "Verificatie mislukt. Probeer opnieuw", "Generating": "Genereren", "Generate": "Genereren", "Verify": "Verifiëren", "Token generated successfully": "Token succesvol gegenereerd ({{current}}/{{total}})", "Failed to generate token": "Kan token niet genereren", "Token generation failed. Please try again": "Tokengeneratie mislukt. Probeer opnieuw", "Verifying": "Verifiëren", "Verified": "Geverifieerd", "Use code": "Gebruik code", "for Patreon Auth, click Verify to unlock demo. Test at": "voor Patreon Auth, klik op Verifiëren om demo te ontgrendelen. Test op", "Need help with Auth Token? See": "Hulp nodig met Authenticatietoken? Zie", "the guide": "de handleiding", "Subscribe": "Abonneren", "to get your Patreon Auth code and start downloading with ease!": "om je Patreon Auth-code te krijgen en gemakkelijk te beginnen met downloaden!", "Report bugs or request features:": "Rapporteer bugs of vraag functies aan:", "Import": "Importeren", "Importing...": "Importeren...", "Supports JSON and ZIP formats": "Ondersteunt JSON en ZIP formaten", "Export": "Exporteren", "Export All Data": "Alle Gegevens Exporteren", "Exporting...": "Exporteren...", "Clear": "Wissen", "Filter by Batch": "Filter op Batch", "Are you sure to clear all data in the database?": "Weet je zeker dat je alle gegevens in de database wilt wissen?", "Delete Account Data": "Accountgegevens Verwijderen", "Are you sure you want to delete account data? This action cannot be undone": "Weet je zeker dat je de gegevens van {{username}} wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.", "Delete": "Verwijderen", "Deleting...": "Verwijderen...", "Overwrite": "Overschrijven", "Overwrite Existing Data?": "Bestaande Gegevens Overschrijven?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Accountgegevens voor @{{username}} bestaan al in de database. Wil je deze overschrijven?", "No accounts yet": "Nog geen accounts", "Use Dashboard to fetch data.": "Gebruik Dashboard om gegevens op te halen.", "Something went wrong.": "Er is iets misgegaan.", "Error:": "Fout:", "Fetch": "Ophalen", "Single": "Enkel", "Batch": "Batch", "Auto Batch": "Auto Batch", "Timeline": "Tijdlijn", "Media": "Media", "Batch Size": "Batch Grootte", "Starting Batch": "Start Batch", "Posts": "Berichten", "Tweets": "Tweets", "Replies": "Antwoorden", "All": "Alles", "Image": "Afbeelding", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Start", "Stop": "Stop", "Prev": "Vorige", "Next": "Volgende", "Download Current": "Huidige Downloaden", "Download All": "Alles Downloaden", "Use Batch/Auto Batch if single fetch fails": "Gebruik Batch/Auto Batch als enkele ophaal mislukt", "Load from database": "Laden vanuit database", "Load database": "Database laden", "Home": "Home", "End": "Einde", "Failed to load data": "Kan gegevens niet laden", "Update": "Bijwerken", "Updating...": "Bijwerken...", "Update will fetch the latest data and overwrite the database. Continue?": "Bijwerken haalt de laatste gegevens op en overschrijft de database. Doorgaan?", "Followers": "Volgers", "Following": "Volgend", "Joined": "Lid sinds", "Open": "Openen", "Preview": "Voorbeeld", "View Database": "Database Bekijken", "Converting...": "Converteren...", "Convert & Download": "Converteren & Downloaden" } };
-  const pt = { "common": { "Settings": "Configurações", "Theme": "Tema", "Change Theme": "Alterar Tema", "Language": "Idioma", "Change Language": "Alterar Idioma", "Date Time Format": "Formato de Data e Hora", "Sound Effects": "Efeitos Sonoros", "Debug": "Depurar", "Global Settings": "Configurações Globais", "Version": "Versão", "Common Formats:": "Formatos Comuns:", "Date Formats:": "Formatos de Data:", "Time Formats:": "Formatos de Hora:", "Combined Examples:": "Exemplos Combinados:", "Localized": "Localizado", "Reset Settings": "Redefinir configurações", "Are you sure you want to reset settings to defaults?": "Tem certeza de que deseja redefinir as configurações para o padrão?", "Reset": "Redefinir", "Cancel": "Cancelar", "Chrome": "Chrome", "Userscript": "Script de usuário", "Website": "Site", "Patreon": "Patreon", "Dashboard": "Painel", "Database": "Banco de Dados", "Auth": "Autenticação", "Convert Animated GIFs": "Converter GIFs", "Convert GIFs (External)": "Converter GIFs (Externo)", "Concurrent Downloads": "Downloads simultâneos", "Use 10+ only with fast internet": "Use 10+ apenas com internet rápida", "Smaller size, same quality": "Tamanho menor, mesma qualidade", "Larger size, same quality": "Tamanho maior, mesma qualidade", "Back": "Voltar", "Please visit a profile page for auto-detection": "Visite uma página de perfil para detecção automática", "Please configure authentication in the Auth tab first": "Configure a autenticação na aba Auth primeiro", "Invalid username format": "Formato de nome de usuário inválido", "Invalid auth token. Please check your settings.": "Token de autenticação inválido. Verifique suas configurações.", "Invalid Patreon auth. Please check your settings.": "Autenticação do Patreon inválida. Verifique suas configurações.", "Failed to fetch data": "Falha ao buscar os dados", "Failed to fetch data from all APIs": "Falha ao buscar os dados em todas as APIs", "Failed to verify auth from all APIs": "Falha ao verificar a autenticação em todas as APIs", "Failed to generate token from all APIs": "Falha ao gerar o token em todas as APIs", "Generating token...": "Gerando token...", "Abort": "Abortar", "Network error occurred": "Ocorreu um erro de rede", "Request timeout - please try again": "Tempo de requisição esgotado - tente novamente", "Failed to parse API response": "Falha ao analisar a resposta da API", "Invalid API response structure": "Estrutura de resposta da API inválida", "Unknown error occurred": "Ocorreu um erro desconhecido", "HTTP error! status: {{status}}": "Erro HTTP! status: {{status}}", "Download already in progress": "Download já em andamento", "No media files found": "Nenhum arquivo de mídia encontrado", "Toggle visibility": "Mostrar/ocultar", "Close": "Fechar", "Converting GIFs...": "Convertendo GIFs...", "Downloading...": "Baixando...", "Download": "Baixar", "Fetching...": "Obtendo...", "Fetch All": "Obter tudo", "Fetch Video": "Obter vídeo", "Fetch Image": "Obter imagem", "Fetch GIF": "Obter GIF", "Posts: {{posts}}": "Publicações: {{posts}}", "Media: {{media}}": "Mídia: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Mídia atual: {{current}} • Mídia total: {{total}}", "Failed to download media": "Falha ao baixar a mídia", "Demo mode is only available for @xbatchdemo": "O modo demonstração está disponível apenas para @xbatchdemo", "Auth Token": "Token de autenticação", "Enter your auth token": "Insira seu token de autenticação", "Your authentication token for API access": "Seu token de autenticação para acesso à API", "Patreon Auth": "Autenticação do Patreon", "Enter your Patreon auth": "Insira sua autenticação do Patreon", "Your Patreon authentication key": "Sua chave de autenticação do Patreon", "Please enter Patreon auth first": "Insira primeiro a autenticação do Patreon", "Please verify Patreon auth first": "Verifique primeiro a autenticação do Patreon", "Patreon auth verified successfully": "Autenticação do Patreon verificada com sucesso", "Invalid Patreon auth": "Autenticação do Patreon inválida", "Verification failed. Please try again": "Falha na verificação. Tente novamente", "Generating": "Gerando", "Generate": "Gerar", "Verify": "Verificar", "Token generated successfully": "Token gerado com sucesso ({{current}}/{{total}})", "Failed to generate token": "Falha ao gerar o token", "Token generation failed. Please try again": "Falha na geração do token. Tente novamente", "Verifying": "Verificando", "Verified": "Verificado", "Use code": "Use o código", "for Patreon Auth, click Verify to unlock demo. Test at": 'para Autenticação do Patreon, clique em "Verificar" para desbloquear a demonstração. Teste em', "Need help with Auth Token? See": "Precisa de ajuda com o token de autenticação? Veja", "the guide": "o guia", "Subscribe": "Assine", "to get your Patreon Auth code and start downloading with ease!": "para obter seu código de autenticação do Patreon e começar a baixar com facilidade!", "Report bugs or request features:": "Relate bugs ou solicite recursos:", "Import": "Importar", "Importing...": "Importando...", "Supports JSON and ZIP formats": "Suporta formatos JSON e ZIP", "Export": "Exportar", "Export All Data": "Exportar todos os dados", "Exporting...": "Exportando...", "Clear": "Limpar", "Filter by Batch": "Filtrar por lote", "Are you sure to clear all data in the database?": "Tem certeza de que deseja limpar todos os dados do banco de dados?", "Delete Account Data": "Excluir dados da conta", "Are you sure you want to delete account data? This action cannot be undone": "Tem certeza de que deseja excluir os dados de {{username}}? Esta ação não pode ser desfeita.", "Delete": "Excluir", "Deleting...": "Excluindo...", "Overwrite": "Substituir", "Overwrite Existing Data?": "Substituir dados existentes?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Os dados da conta @{{username}} já existem no banco de dados. Deseja substituí-los?", "No accounts yet": "Ainda não há contas", "Use Dashboard to fetch data.": "Use o Painel para buscar os dados.", "Something went wrong.": "Algo deu errado.", "Error:": "Erro:", "Fetch": "Buscar", "Single": "Único", "Batch": "Lote", "Auto Batch": "Lote automático", "Timeline": "Linha do tempo", "Media": "Mídia", "Batch Size": "Tamanho do lote", "Starting Batch": "Lote inicial", "Posts": "Publicações", "Tweets": "Tweets", "Replies": "Respostas", "All": "Tudo", "Image": "Imagem", "Video": "Vídeo", "GIF": "GIF", "Batch: {{page}}": "Lote: {{page}}", "Start": "Iniciar", "Stop": "Parar", "Prev": "Anterior", "Next": "Próximo", "Download Current": "Baixar atual", "Download All": "Baixar tudo", "Use Batch/Auto Batch if single fetch fails": "Use Lote/Lote automático se a busca única falhar", "Load from database": "Carregar do banco de dados", "Load database": "Carregar banco de dados", "Home": "Início", "End": "Fim", "Failed to load data": "Falha ao carregar os dados", "Update": "Atualizar", "Updating...": "Atualizando...", "Update will fetch the latest data and overwrite the database. Continue?": "A atualização buscará os dados mais recentes e sobrescreverá o banco de dados. Continuar?", "Followers": "Seguidores", "Following": "Seguindo", "Joined": "Entrou em", "Open": "Abrir", "Preview": "Visualizar", "View Database": "Ver banco de dados", "Converting...": "Convertendo...", "Convert & Download": "Converter e baixar" } };
-  const ru = { "common": { "Settings": "Настройки", "Theme": "Тема", "Change Theme": "Изменить тему", "Language": "Язык", "Change Language": "Изменить язык", "Date Time Format": "Формат даты и времени", "Sound Effects": "Звуковые Эффекты", "Debug": "Отладка", "Global Settings": "Глобальные настройки", "Version": "Версия", "Common Formats:": "Общие форматы:", "Date Formats:": "Форматы дат:", "Time Formats:": "Форматы времени:", "Combined Examples:": "Комбинированные примеры:", "Localized": "Локализованный", "Reset Settings": "Сбросить настройки", "Are you sure you want to reset settings to defaults?": "Вы уверены, что хотите сбросить настройки к значениям по умолчанию?", "Reset": "Сброс", "Cancel": "Отмена", "Chrome": "Chrome", "Userscript": "Пользовательский скрипт", "Website": "Сайт", "Patreon": "Patreon", "Dashboard": "Панель управления", "Database": "База данных", "Auth": "Аутентификация", "Convert Animated GIFs": "Конвертировать GIF", "Convert GIFs (External)": "Конвертировать GIF (внешний)", "Concurrent Downloads": "Одновременные загрузки", "Use 10+ only with fast internet": "Используйте 10+ только при быстром интернете", "Smaller size, same quality": "Меньший размер, то же качество", "Larger size, same quality": "Больший размер, то же качество", "Back": "Назад", "Please visit a profile page for auto-detection": "Посетите страницу профиля для автоопределения", "Please configure authentication in the Auth tab first": "Сначала настройте аутентификацию на вкладке Auth", "Invalid username format": "Недопустимый формат имени пользователя", "Invalid auth token. Please check your settings.": "Недействительный токен аутентификации. Проверьте настройки.", "Invalid Patreon auth. Please check your settings.": "Недействительная авторизация Patreon. Проверьте настройки.", "Failed to fetch data": "Не удалось получить данные", "Failed to fetch data from all APIs": "Не удалось получить данные со всех API", "Failed to verify auth from all APIs": "Не удалось проверить авторизацию через все API", "Failed to generate token from all APIs": "Не удалось сгенерировать токен через все API", "Generating token...": "Генерация токена...", "Abort": "Отменить", "Network error occurred": "Произошла сетевая ошибка", "Request timeout - please try again": "Время ожидания запроса истекло — попробуйте снова", "Failed to parse API response": "Не удалось разобрать ответ API", "Invalid API response structure": "Недопустимая структура ответа API", "Unknown error occurred": "Произошла неизвестная ошибка", "HTTP error! status: {{status}}": "Ошибка HTTP! статус: {{status}}", "Download already in progress": "Загрузка уже выполняется", "No media files found": "Медиафайлы не найдены", "Toggle visibility": "Показать/скрыть", "Close": "Закрыть", "Converting GIFs...": "Конвертация GIF...", "Downloading...": "Загрузка...", "Download": "Скачать", "Fetching...": "Получение...", "Fetch All": "Получить всё", "Fetch Video": "Получить видео", "Fetch Image": "Получить изображение", "Fetch GIF": "Получить GIF", "Posts: {{posts}}": "Публикации: {{posts}}", "Media: {{media}}": "Медиа: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Текущая медиа: {{current}} • Всего медиа: {{total}}", "Failed to download media": "Не удалось скачать медиа", "Demo mode is only available for @xbatchdemo": "Демо-режим доступен только для @xbatchdemo", "Auth Token": "Токен аутентификации", "Enter your auth token": "Введите токен аутентификации", "Your authentication token for API access": "Ваш токен аутентификации для доступа к API", "Patreon Auth": "Авторизация Patreon", "Enter your Patreon auth": "Введите авторизацию Patreon", "Your Patreon authentication key": "Ваш ключ аутентификации Patreon", "Please enter Patreon auth first": "Сначала введите авторизацию Patreon", "Please verify Patreon auth first": "Сначала подтвердите авторизацию Patreon", "Patreon auth verified successfully": "Авторизация Patreon успешно проверена", "Invalid Patreon auth": "Недействительная авторизация Patreon", "Verification failed. Please try again": "Не удалось выполнить проверку. Попробуйте ещё раз", "Generating": "Генерация...", "Generate": "Создать", "Verify": "Проверить", "Token generated successfully": "Токен успешно сгенерирован ({{current}}/{{total}})", "Failed to generate token": "Не удалось сгенерировать токен", "Token generation failed. Please try again": "Не удалось сгенерировать токен. Попробуйте ещё раз", "Verifying": "Проверка...", "Verified": "Проверено", "Use code": "Используйте код", "for Patreon Auth, click Verify to unlock demo. Test at": "для аутентификации Patreon, нажмите «Проверить», чтобы разблокировать демо. Тест:", "Need help with Auth Token? See": "Нужна помощь с токеном аутентификации? См.", "the guide": "руководство", "Subscribe": "Подписаться", "to get your Patreon Auth code and start downloading with ease!": "чтобы получить код аутентификации Patreon и с лёгкостью начать скачивание!", "Report bugs or request features:": "Сообщить об ошибках или запросить функции:", "Import": "Импорт", "Importing...": "Импорт...", "Supports JSON and ZIP formats": "Поддерживает форматы JSON и ZIP", "Export": "Экспорт", "Export All Data": "Экспортировать все данные", "Exporting...": "Экспорт...", "Clear": "Очистить", "Filter by Batch": "Фильтр по пакетам", "Are you sure to clear all data in the database?": "Вы уверены, что хотите очистить все данные в базе данных?", "Delete Account Data": "Удалить данные аккаунта", "Are you sure you want to delete account data? This action cannot be undone": "Вы уверены, что хотите удалить данные {{username}}? Это действие нельзя отменить.", "Delete": "Удалить", "Deleting...": "Удаление...", "Overwrite": "Перезаписать", "Overwrite Existing Data?": "Перезаписать существующие данные?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Данные аккаунта @{{username}} уже существуют в базе данных. Перезаписать их?", "No accounts yet": "Пока нет аккаунтов", "Use Dashboard to fetch data.": "Используйте панель, чтобы получить данные.", "Something went wrong.": "Что-то пошло не так.", "Error:": "Ошибка:", "Fetch": "Получить", "Single": "Одиночный", "Batch": "Пакет", "Auto Batch": "Автопакет", "Timeline": "Лента", "Media": "Медиа", "Batch Size": "Размер пакета", "Starting Batch": "Начальный пакет", "Posts": "Публикации", "Tweets": "Твиты", "Replies": "Ответы", "All": "Все", "Image": "Изображение", "Video": "Видео", "GIF": "GIF", "Batch: {{page}}": "Пакет: {{page}}", "Start": "Старт", "Stop": "Стоп", "Prev": "Назад", "Next": "Далее", "Download Current": "Скачать текущее", "Download All": "Скачать всё", "Use Batch/Auto Batch if single fetch fails": "Используйте пакет/автопакет, если одиночное получение не удалось", "Load from database": "Загрузить из базы данных", "Load database": "Загрузить базу данных", "Home": "Начало", "End": "Конец", "Failed to load data": "Не удалось загрузить данные", "Update": "Обновить", "Updating...": "Обновление...", "Update will fetch the latest data and overwrite the database. Continue?": "Обновление получит последние данные и перезапишет базу данных. Продолжить?", "Followers": "Подписчики", "Following": "Подписки", "Joined": "Дата регистрации", "Open": "Открыть", "Preview": "Предпросмотр", "View Database": "Просмотреть базу данных", "Converting...": "Конвертация...", "Convert & Download": "Конвертировать и скачать" } };
-  const th = { "common": { "Settings": "การตั้งค่า", "Theme": "ธีม", "Change Theme": "เปลี่ยนธีม", "Language": "ภาษา", "Change Language": "เปลี่ยนภาษา", "Date Time Format": "รูปแบบวันที่และเวลา", "Sound Effects": "เอฟเฟกต์เสียง", "Debug": "ดีบัก", "Global Settings": "การตั้งค่าทั่วไป", "Version": "เวอร์ชัน", "Common Formats:": "รูปแบบทั่วไป:", "Date Formats:": "รูปแบบวันที่:", "Time Formats:": "รูปแบบเวลา:", "Combined Examples:": "ตัวอย่างรวม:", "Localized": "แปลเป็นภาษาท้องถิ่น", "Reset Settings": "รีเซ็ตการตั้งค่า", "Are you sure you want to reset settings to defaults?": "คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตการตั้งค่าเป็นค่าเริ่มต้น?", "Reset": "รีเซ็ต", "Cancel": "ยกเลิก", "Chrome": "Chrome", "Userscript": "Userscript", "Website": "เว็บไซต์", "Patreon": "Patreon", "Dashboard": "แดชบอร์ด", "Database": "ฐานข้อมูล", "Auth": "การยืนยันตัวตน", "Convert Animated GIFs": "แปลง GIF", "Convert GIFs (External)": "แปลง GIF (ภายนอก)", "Concurrent Downloads": "ดาวน์โหลดพร้อมกัน", "Use 10+ only with fast internet": "ใช้ 10+ เฉพาะกับอินเทอร์เน็ตเร็วเท่านั้น", "Smaller size, same quality": "ขนาดเล็กลง คุณภาพเท่าเดิม", "Larger size, same quality": "ขนาดใหญ่ขึ้น คุณภาพเท่าเดิม", "Back": "กลับ", "Please visit a profile page for auto-detection": "โปรดไปที่หน้าโปรไฟล์สำหรับการตรวจจับอัตโนมัติ", "Please configure authentication in the Auth tab first": "โปรดกำหนดค่าการยืนยันตัวตนในแท็บ Auth ก่อน", "Invalid username format": "รูปแบบชื่อผู้ใช้ไม่ถูกต้อง", "Invalid auth token. Please check your settings.": "โทเค็นการยืนยันตัวตนไม่ถูกต้อง โปรดตรวจสอบการตั้งค่าของคุณ", "Invalid Patreon auth. Please check your settings.": "การยืนยันตัวตน Patreon ไม่ถูกต้อง โปรดตรวจสอบการตั้งค่าของคุณ", "Failed to fetch data": "ไม่สามารถดึงข้อมูล", "Failed to fetch data from all APIs": "ไม่สามารถดึงข้อมูลจาก API ทั้งหมด", "Failed to verify auth from all APIs": "ไม่สามารถยืนยันตัวตนจาก API ทั้งหมด", "Failed to generate token from all APIs": "ไม่สามารถสร้างโทเค็นจาก API ทั้งหมด", "Generating token...": "กำลังสร้างโทเค็น...", "Abort": "ยกเลิก", "Network error occurred": "เกิดข้อผิดพลาดเครือข่าย", "Request timeout - please try again": "คำขอหมดเวลา - โปรดลองอีกครั้ง", "Failed to parse API response": "ไม่สามารถแยกวิเคราะห์การตอบกลับของ API", "Invalid API response structure": "โครงสร้างการตอบกลับของ API ไม่ถูกต้อง", "Unknown error occurred": "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ", "HTTP error! status: {{status}}": "ข้อผิดพลาด HTTP! สถานะ: {{status}}", "Download already in progress": "กำลังดาวน์โหลดอยู่แล้ว", "No media files found": "ไม่พบไฟล์สื่อ", "Toggle visibility": "สลับการมองเห็น", "Close": "ปิด", "Converting GIFs...": "กำลังแปลง GIF...", "Downloading...": "กำลังดาวน์โหลด...", "Download": "ดาวน์โหลด", "Fetching...": "กำลังดึงข้อมูล...", "Fetch All": "ดึงทั้งหมด", "Fetch Video": "ดึงวิดีโอ", "Fetch Image": "ดึงรูปภาพ", "Fetch GIF": "ดึง GIF", "Posts: {{posts}}": "โพสต์: {{posts}}", "Media: {{media}}": "สื่อ: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "สื่อปัจจุบัน: {{current}} • สื่อทั้งหมด: {{total}}", "Failed to download media": "ไม่สามารถดาวน์โหลดสื่อ", "Demo mode is only available for @xbatchdemo": "โหมดสาธิตใช้ได้เฉพาะสำหรับ @xbatchdemo เท่านั้น", "Auth Token": "โทเค็นการยืนยันตัวตน", "Enter your auth token": "ป้อนโทเค็นการยืนยันตัวตนของคุณ", "Your authentication token for API access": "โทเค็นการยืนยันตัวตนของคุณสำหรับการเข้าถึง API", "Patreon Auth": "การยืนยันตัวตน Patreon", "Enter your Patreon auth": "ป้อนการยืนยันตัวตน Patreon ของคุณ", "Your Patreon authentication key": "คีย์การยืนยันตัวตน Patreon ของคุณ", "Please enter Patreon auth first": "โปรดป้อนการยืนยันตัวตน Patreon ก่อน", "Please verify Patreon auth first": "โปรดยืนยันการยืนยันตัวตน Patreon ก่อน", "Patreon auth verified successfully": "ยืนยันการยืนยันตัวตน Patreon สำเร็จ", "Invalid Patreon auth": "การยืนยันตัวตน Patreon ไม่ถูกต้อง", "Verification failed. Please try again": "การยืนยันล้มเหลว โปรดลองอีกครั้ง", "Generating": "กำลังสร้าง", "Generate": "สร้าง", "Verify": "ยืนยัน", "Token generated successfully": "สร้างโทเค็นสำเร็จ ({{current}}/{{total}})", "Failed to generate token": "ไม่สามารถสร้างโทเค็น", "Token generation failed. Please try again": "การสร้างโทเค็นล้มเหลว โปรดลองอีกครั้ง", "Verifying": "กำลังยืนยัน", "Verified": "ยืนยันแล้ว", "Use code": "ใช้รหัส", "for Patreon Auth, click Verify to unlock demo. Test at": "สำหรับการยืนยันตัวตน Patreon คลิกยืนยันเพื่อปลดล็อกสาธิต ทดสอบที่", "Need help with Auth Token? See": "ต้องการความช่วยเหลือเกี่ยวกับโทเค็นการยืนยันตัวตนหรือไม่? ดู", "the guide": "คู่มือ", "Subscribe": "สมัครสมาชิก", "to get your Patreon Auth code and start downloading with ease!": "เพื่อรับรหัสการยืนยันตัวตน Patreon และเริ่มดาวน์โหลดได้อย่างง่ายดาย!", "Report bugs or request features:": "รายงานบั๊กหรือขอฟีเจอร์:", "Import": "นำเข้า", "Importing...": "กำลังนำเข้า...", "Supports JSON and ZIP formats": "รองรับรูปแบบ JSON และ ZIP", "Export": "ส่งออก", "Export All Data": "ส่งออกข้อมูลทั้งหมด", "Exporting...": "กำลังส่งออก...", "Clear": "ล้าง", "Filter by Batch": "กรองตามแบทช์", "Are you sure to clear all data in the database?": "คุณแน่ใจหรือไม่ที่จะล้างข้อมูลทั้งหมดในฐานข้อมูล?", "Delete Account Data": "ลบข้อมูลบัญชี", "Are you sure you want to delete account data? This action cannot be undone": "คุณแน่ใจหรือไม่ที่จะลบข้อมูล {{username}}? การกระทำนี้ไม่สามารถยกเลิกได้", "Delete": "ลบ", "Deleting...": "กำลังลบ...", "Overwrite": "เขียนทับ", "Overwrite Existing Data?": "เขียนทับข้อมูลที่มีอยู่?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "ข้อมูลบัญชีสำหรับ @{{username}} มีอยู่แล้วในฐานข้อมูล คุณต้องการเขียนทับหรือไม่?", "No accounts yet": "ยังไม่มีบัญชี", "Use Dashboard to fetch data.": "ใช้แดชบอร์ดเพื่อดึงข้อมูล", "Something went wrong.": "เกิดข้อผิดพลาดบางอย่าง", "Error:": "ข้อผิดพลาด:", "Fetch": "ดึง", "Single": "เดี่ยว", "Batch": "แบทช์", "Auto Batch": "แบทช์อัตโนมัติ", "Timeline": "ไทม์ไลน์", "Media": "สื่อ", "Batch Size": "ขนาดแบทช์", "Starting Batch": "แบทช์เริ่มต้น", "Posts": "โพสต์", "Tweets": "ทวีต", "Replies": "ตอบกลับ", "All": "ทั้งหมด", "Image": "รูปภาพ", "Video": "วิดีโอ", "GIF": "GIF", "Batch: {{page}}": "แบทช์: {{page}}", "Start": "เริ่ม", "Stop": "หยุด", "Prev": "ก่อนหน้า", "Next": "ถัดไป", "Download Current": "ดาวน์โหลดปัจจุบัน", "Download All": "ดาวน์โหลดทั้งหมด", "Use Batch/Auto Batch if single fetch fails": "ใช้แบทช์/แบทช์อัตโนมัติหากการดึงเดี่ยวล้มเหลว", "Load from database": "โหลดจากฐานข้อมูล", "Load database": "โหลดฐานข้อมูล", "Home": "หน้าแรก", "End": "สิ้นสุด", "Failed to load data": "ไม่สามารถโหลดข้อมูล", "Update": "อัปเดต", "Updating...": "กำลังอัปเดต...", "Update will fetch the latest data and overwrite the database. Continue?": "การอัปเดตจะดึงข้อมูลล่าสุดและเขียนทับฐานข้อมูล ดำเนินการต่อหรือไม่?", "Followers": "ผู้ติดตาม", "Following": "กำลังติดตาม", "Joined": "เข้าร่วม", "Open": "เปิด", "Preview": "ดูตัวอย่าง", "View Database": "ดูฐานข้อมูล", "Converting...": "กำลังแปลง...", "Convert & Download": "แปลงและดาวน์โหลด" } };
-  const tr = { "common": { "Settings": "Ayarlar", "Theme": "Tema", "Change Theme": "Tema Değiştir", "Language": "Dil", "Change Language": "Dil Değiştir", "Date Time Format": "Tarih Saat Formatı", "Sound Effects": "Ses Efektleri", "Debug": "Hata Ayıklama", "Global Settings": "Genel Ayarlar", "Version": "Sürüm", "Common Formats:": "Yaygın Formatlar:", "Date Formats:": "Tarih Formatları:", "Time Formats:": "Saat Formatları:", "Combined Examples:": "Birleşik Örnekler:", "Localized": "Yerelleştirilmiş", "Reset Settings": "Ayarları Sıfırla", "Are you sure you want to reset settings to defaults?": "Ayarları varsayılanlara sıfırlamak istediğinizden emin misiniz?", "Reset": "Sıfırla", "Cancel": "İptal", "Chrome": "Chrome", "Userscript": "Kullanıcı Betiği", "Website": "Web Sitesi", "Patreon": "Patreon", "Dashboard": "Kontrol Paneli", "Database": "Veritabanı", "Auth": "Kimlik Doğrulama", "Convert Animated GIFs": "GIF Dönüştür", "Convert GIFs (External)": "GIF Dönüştür (Harici)", "Concurrent Downloads": "Eşzamanlı İndirmeler", "Use 10+ only with fast internet": "10+'ı yalnızca hızlı internetle kullanın", "Smaller size, same quality": "Daha küçük boyut, aynı kalite", "Larger size, same quality": "Daha büyük boyut, aynı kalite", "Back": "Geri", "Please visit a profile page for auto-detection": "Otomatik algılama için lütfen bir profil sayfasını ziyaret edin", "Please configure authentication in the Auth tab first": "Lütfen önce Kimlik Doğrulama sekmesinde kimlik doğrulamayı yapılandırın", "Invalid username format": "Geçersiz kullanıcı adı formatı", "Invalid auth token. Please check your settings.": "Geçersiz kimlik doğrulama jetonu. Lütfen ayarlarınızı kontrol edin.", "Invalid Patreon auth. Please check your settings.": "Geçersiz Patreon kimlik doğrulaması. Lütfen ayarlarınızı kontrol edin.", "Failed to fetch data": "Veri alınamadı", "Failed to fetch data from all APIs": "Tüm API'lerden veri alınamadı", "Failed to verify auth from all APIs": "Tüm API'lerden kimlik doğrulama doğrulanamadı", "Failed to generate token from all APIs": "Tüm API'lerden jeton oluşturulamadı", "Generating token...": "Jeton oluşturuluyor...", "Abort": "İptal Et", "Network error occurred": "Ağ hatası oluştu", "Request timeout - please try again": "İstek zaman aşımına uğradı - lütfen tekrar deneyin", "Failed to parse API response": "API yanıtı ayrıştırılamadı", "Invalid API response structure": "Geçersiz API yanıt yapısı", "Unknown error occurred": "Bilinmeyen bir hata oluştu", "HTTP error! status: {{status}}": "HTTP hatası! durum: {{status}}", "Download already in progress": "İndirme zaten devam ediyor", "No media files found": "Medya dosyası bulunamadı", "Toggle visibility": "Görünürlüğü değiştir", "Close": "Kapat", "Converting GIFs...": "GIF'ler dönüştürülüyor...", "Downloading...": "İndiriliyor...", "Download": "İndir", "Fetching...": "Alınıyor...", "Fetch All": "Tümünü Al", "Fetch Video": "Video Al", "Fetch Image": "Resim Al", "Fetch GIF": "GIF Al", "Posts: {{posts}}": "Gönderiler: {{posts}}", "Media: {{media}}": "Medya: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Mevcut Medya: {{current}} • Toplam Medya: {{total}}", "Failed to download media": "Medya indirilemedi", "Demo mode is only available for @xbatchdemo": "Demo modu yalnızca @xbatchdemo için kullanılabilir", "Auth Token": "Kimlik Doğrulama Jetonu", "Enter your auth token": "Kimlik doğrulama jetonunuzu girin", "Your authentication token for API access": "API erişimi için kimlik doğrulama jetonunuz", "Patreon Auth": "Patreon Kimlik Doğrulaması", "Enter your Patreon auth": "Patreon kimlik doğrulamanızı girin", "Your Patreon authentication key": "Patreon kimlik doğrulama anahtarınız", "Please enter Patreon auth first": "Lütfen önce Patreon kimlik doğrulamasını girin", "Please verify Patreon auth first": "Lütfen önce Patreon kimlik doğrulamasını doğrulayın", "Patreon auth verified successfully": "Patreon kimlik doğrulaması başarıyla doğrulandı", "Invalid Patreon auth": "Geçersiz Patreon kimlik doğrulaması", "Verification failed. Please try again": "Doğrulama başarısız. Lütfen tekrar deneyin", "Generating": "Oluşturuluyor", "Generate": "Oluştur", "Verify": "Doğrula", "Token generated successfully": "Jeton başarıyla oluşturuldu ({{current}}/{{total}})", "Failed to generate token": "Jeton oluşturulamadı", "Token generation failed. Please try again": "Jeton oluşturma başarısız. Lütfen tekrar deneyin", "Verifying": "Doğrulanıyor", "Verified": "Doğrulandı", "Use code": "Kodu kullan", "for Patreon Auth, click Verify to unlock demo. Test at": "Patreon Kimlik Doğrulaması için, demoyu açmak için Doğrula'ya tıklayın. Test edin:", "Need help with Auth Token? See": "Kimlik Doğrulama Jetonu için yardıma mı ihtiyacınız var? Bakın:", "the guide": "kılavuz", "Subscribe": "Abone Ol", "to get your Patreon Auth code and start downloading with ease!": "Patreon Kimlik Doğrulama kodunuzu almak ve kolayca indirmeye başlamak için!", "Report bugs or request features:": "Hata bildirin veya özellik isteyin:", "Import": "İçe Aktar", "Importing...": "İçe aktarılıyor...", "Supports JSON and ZIP formats": "JSON ve ZIP formatlarını destekler", "Export": "Dışa Aktar", "Export All Data": "Tüm Verileri Dışa Aktar", "Exporting...": "Dışa aktarılıyor...", "Clear": "Temizle", "Filter by Batch": "Toplu İşleme Göre Filtrele", "Are you sure to clear all data in the database?": "Veritabanındaki tüm verileri temizlemek istediğinizden emin misiniz?", "Delete Account Data": "Hesap Verilerini Sil", "Are you sure you want to delete account data? This action cannot be undone": "{{username}} verilerini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.", "Delete": "Sil", "Deleting...": "Siliniyor...", "Overwrite": "Üzerine Yaz", "Overwrite Existing Data?": "Mevcut Verilerin Üzerine Yazılsın mı?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "@{{username}} için hesap verileri veritabanında zaten mevcut. Üzerine yazmak istiyor musunuz?", "No accounts yet": "Henüz hesap yok", "Use Dashboard to fetch data.": "Veri almak için Kontrol Panelini kullanın.", "Something went wrong.": "Bir şeyler ters gitti.", "Error:": "Hata:", "Fetch": "Al", "Single": "Tekil", "Batch": "Toplu İşlem", "Auto Batch": "Otomatik Toplu İşlem", "Timeline": "Zaman Çizelgesi", "Media": "Medya", "Batch Size": "Toplu İşlem Boyutu", "Starting Batch": "Başlangıç Toplu İşlemi", "Posts": "Gönderiler", "Tweets": "Tweet'ler", "Replies": "Yanıtlar", "All": "Tümü", "Image": "Resim", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Toplu İşlem: {{page}}", "Start": "Başlat", "Stop": "Durdur", "Prev": "Önceki", "Next": "Sonraki", "Download Current": "Mevcut'u İndir", "Download All": "Tümünü İndir", "Use Batch/Auto Batch if single fetch fails": "Tekil alma başarısız olursa Toplu İşlem/Otomatik Toplu İşlem kullanın", "Load from database": "Veritabanından yükle", "Load database": "Veritabanını yükle", "Home": "Ana Sayfa", "End": "Son", "Failed to load data": "Veri yüklenemedi", "Update": "Güncelle", "Updating...": "Güncelleniyor...", "Update will fetch the latest data and overwrite the database. Continue?": "Güncelleme en son verileri alacak ve veritabanının üzerine yazacak. Devam edilsin mi?", "Followers": "Takipçiler", "Following": "Takip Edilenler", "Joined": "Katıldı", "Open": "Aç", "Preview": "Önizleme", "View Database": "Veritabanını Görüntüle", "Converting...": "Dönüştürülüyor...", "Convert & Download": "Dönüştür ve İndir" } };
-  const vi = { "common": { "Settings": "Cài đặt", "Theme": "Giao diện", "Change Theme": "Đổi giao diện", "Language": "Ngôn ngữ", "Change Language": "Đổi ngôn ngữ", "Date Time Format": "Định dạng ngày giờ", "Sound Effects": "Hiệu Ứng Âm Thanh", "Debug": "Gỡ lỗi", "Global Settings": "Cài đặt chung", "Version": "Phiên bản", "Common Formats:": "Định dạng phổ biến:", "Date Formats:": "Định dạng ngày:", "Time Formats:": "Định dạng giờ:", "Combined Examples:": "Ví dụ kết hợp:", "Localized": "Đã bản địa hóa", "Reset Settings": "Đặt lại cài đặt", "Are you sure you want to reset settings to defaults?": "Bạn có chắc muốn đặt lại cài đặt về mặc định không?", "Reset": "Đặt lại", "Cancel": "Hủy", "Chrome": "Chrome", "Userscript": "Userscript", "Website": "Trang web", "Patreon": "Patreon", "Dashboard": "Bảng điều khiển", "Database": "Cơ sở dữ liệu", "Auth": "Xác thực", "Convert Animated GIFs": "Chuyển đổi GIF", "Convert GIFs (External)": "Chuyển đổi GIF (Bên ngoài)", "Concurrent Downloads": "Tải xuống đồng thời", "Use 10+ only with fast internet": "Chỉ sử dụng 10+ với internet nhanh", "Smaller size, same quality": "Kích thước nhỏ hơn, chất lượng tương tự", "Larger size, same quality": "Kích thước lớn hơn, chất lượng tương tự", "Back": "Quay lại", "Please visit a profile page for auto-detection": "Vui lòng truy cập trang hồ sơ để tự động phát hiện", "Please configure authentication in the Auth tab first": "Vui lòng cấu hình xác thực trong tab Xác thực trước", "Invalid username format": "Định dạng tên người dùng không hợp lệ", "Invalid auth token. Please check your settings.": "Token xác thực không hợp lệ. Vui lòng kiểm tra cài đặt của bạn.", "Invalid Patreon auth. Please check your settings.": "Xác thực Patreon không hợp lệ. Vui lòng kiểm tra cài đặt của bạn.", "Failed to fetch data": "Không thể lấy dữ liệu", "Failed to fetch data from all APIs": "Không thể lấy dữ liệu từ tất cả các API", "Failed to verify auth from all APIs": "Không thể xác minh xác thực từ tất cả các API", "Failed to generate token from all APIs": "Không thể tạo token từ tất cả các API", "Generating token...": "Đang tạo token...", "Abort": "Hủy bỏ", "Network error occurred": "Đã xảy ra lỗi mạng", "Request timeout - please try again": "Yêu cầu hết thời gian - vui lòng thử lại", "Failed to parse API response": "Không thể phân tích phản hồi API", "Invalid API response structure": "Cấu trúc phản hồi API không hợp lệ", "Unknown error occurred": "Đã xảy ra lỗi không xác định", "HTTP error! status: {{status}}": "Lỗi HTTP! trạng thái: {{status}}", "Download already in progress": "Đang tải xuống", "No media files found": "Không tìm thấy tệp phương tiện", "Toggle visibility": "Chuyển đổi hiển thị", "Close": "Đóng", "Converting GIFs...": "Đang chuyển đổi GIF...", "Downloading...": "Đang tải xuống...", "Download": "Tải xuống", "Fetching...": "Đang lấy...", "Fetch All": "Lấy tất cả", "Fetch Video": "Lấy video", "Fetch Image": "Lấy hình ảnh", "Fetch GIF": "Lấy GIF", "Posts: {{posts}}": "Bài viết: {{posts}}", "Media: {{media}}": "Phương tiện: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Phương tiện hiện tại: {{current}} • Tổng phương tiện: {{total}}", "Failed to download media": "Không thể tải xuống phương tiện", "Demo mode is only available for @xbatchdemo": "Chế độ demo chỉ khả dụng cho @xbatchdemo", "Auth Token": "Token xác thực", "Enter your auth token": "Nhập token xác thực của bạn", "Your authentication token for API access": "Token xác thực của bạn để truy cập API", "Patreon Auth": "Xác thực Patreon", "Enter your Patreon auth": "Nhập xác thực Patreon của bạn", "Your Patreon authentication key": "Khóa xác thực Patreon của bạn", "Please enter Patreon auth first": "Vui lòng nhập xác thực Patreon trước", "Please verify Patreon auth first": "Vui lòng xác minh xác thực Patreon trước", "Patreon auth verified successfully": "Xác thực Patreon thành công", "Invalid Patreon auth": "Xác thực Patreon không hợp lệ", "Verification failed. Please try again": "Xác minh thất bại. Vui lòng thử lại", "Generating": "Đang tạo", "Generate": "Tạo", "Verify": "Xác minh", "Token generated successfully": "Tạo token thành công ({{current}}/{{total}})", "Failed to generate token": "Không thể tạo token", "Token generation failed. Please try again": "Tạo token thất bại. Vui lòng thử lại", "Verifying": "Đang xác minh", "Verified": "Đã xác minh", "Use code": "Sử dụng mã", "for Patreon Auth, click Verify to unlock demo. Test at": "cho Xác thực Patreon, nhấp Xác minh để mở khóa demo. Thử nghiệm tại", "Need help with Auth Token? See": "Cần trợ giúp với Token xác thực? Xem", "the guide": "hướng dẫn", "Subscribe": "Đăng ký", "to get your Patreon Auth code and start downloading with ease!": "để nhận mã Xác thực Patreon và bắt đầu tải xuống dễ dàng!", "Report bugs or request features:": "Báo cáo lỗi hoặc yêu cầu tính năng:", "Import": "Nhập", "Importing...": "Đang nhập...", "Supports JSON and ZIP formats": "Hỗ trợ định dạng JSON và ZIP", "Export": "Xuất", "Export All Data": "Xuất tất cả dữ liệu", "Exporting...": "Đang xuất...", "Clear": "Xóa", "Filter by Batch": "Lọc theo đợt", "Are you sure to clear all data in the database?": "Bạn có chắc muốn xóa tất cả dữ liệu trong cơ sở dữ liệu không?", "Delete Account Data": "Xóa dữ liệu tài khoản", "Are you sure you want to delete account data? This action cannot be undone": "Bạn có chắc muốn xóa dữ liệu của {{username}} không? Hành động này không thể hoàn tác.", "Delete": "Xóa", "Deleting...": "Đang xóa...", "Overwrite": "Ghi đè", "Overwrite Existing Data?": "Ghi đè dữ liệu hiện có?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Dữ liệu tài khoản cho @{{username}} đã tồn tại trong cơ sở dữ liệu. Bạn có muốn ghi đè không?", "No accounts yet": "Chưa có tài khoản", "Use Dashboard to fetch data.": "Sử dụng Bảng điều khiển để lấy dữ liệu.", "Something went wrong.": "Đã xảy ra lỗi.", "Error:": "Lỗi:", "Fetch": "Lấy", "Single": "Đơn lẻ", "Batch": "Đợt", "Auto Batch": "Đợt tự động", "Timeline": "Dòng thời gian", "Media": "Phương tiện", "Batch Size": "Kích thước đợt", "Starting Batch": "Đợt bắt đầu", "Posts": "Bài viết", "Tweets": "Tweet", "Replies": "Phản hồi", "All": "Tất cả", "Image": "Hình ảnh", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Đợt: {{page}}", "Start": "Bắt đầu", "Stop": "Dừng", "Prev": "Trước", "Next": "Tiếp", "Download Current": "Tải xuống hiện tại", "Download All": "Tải xuống tất cả", "Use Batch/Auto Batch if single fetch fails": "Sử dụng Đợt/Đợt tự động nếu lấy đơn lẻ thất bại", "Load from database": "Tải từ cơ sở dữ liệu", "Load database": "Tải cơ sở dữ liệu", "Home": "Trang chủ", "End": "Kết thúc", "Failed to load data": "Không thể tải dữ liệu", "Update": "Cập nhật", "Updating...": "Đang cập nhật...", "Update will fetch the latest data and overwrite the database. Continue?": "Cập nhật sẽ lấy dữ liệu mới nhất và ghi đè cơ sở dữ liệu. Tiếp tục?", "Followers": "Người theo dõi", "Following": "Đang theo dõi", "Joined": "Đã tham gia", "Open": "Mở", "Preview": "Xem trước", "View Database": "Xem cơ sở dữ liệu", "Converting...": "Đang chuyển đổi...", "Convert & Download": "Chuyển đổi và Tải xuống" } };
-  const zh_Hans = { "common": { "Settings": "设置", "Theme": "主题", "Change Theme": "更改主题", "Language": "语言", "Change Language": "更改语言", "Date Time Format": "日期时间格式", "Sound Effects": "音效", "Debug": "调试开关", "Global Settings": "全局设置", "Version": "版本", "Common Formats:": "常用格式：", "Date Formats:": "日期格式：", "Time Formats:": "时间格式：", "Combined Examples:": "组合示例：", "Localized": "本地化", "Reset Settings": "重置设置", "Are you sure you want to reset settings to defaults?": "确定要将设置重置为默认值吗？", "Reset": "重置", "Cancel": "取消", "Chrome": "Chrome", "Userscript": "用户脚本", "Website": "网站", "Patreon": "Patreon", "Dashboard": "仪表板", "Database": "数据库", "Auth": "认证", "Convert Animated GIFs": "转换 GIF", "Convert GIFs (External)": "转换 GIF（外部）", "Concurrent Downloads": "并发下载", "Use 10+ only with fast internet": "仅在网络快速时使用 10+", "Smaller size, same quality": "体积更小，质量相同", "Larger size, same quality": "体积更大，质量相同", "Back": "返回", "Please visit a profile page for auto-detection": "请访问个人资料页面进行自动检测", "Please configure authentication in the Auth tab first": "请先在认证选项卡中配置身份验证", "Invalid username format": "无效的用户名格式", "Invalid auth token. Please check your settings.": "无效的认证令牌，请检查您的设置。", "Invalid Patreon auth. Please check your settings.": "无效的 Patreon 认证，请检查您的设置。", "Failed to fetch data": "获取数据失败", "Failed to fetch data from all APIs": "所有 API 均无法获取数据", "Failed to verify auth from all APIs": "所有 API 均无法验证认证", "Failed to generate token from all APIs": "所有 API 均无法生成令牌", "Generating token...": "正在生成令牌...", "Abort": "中止", "Network error occurred": "发生网络错误", "Request timeout - please try again": "请求超时 - 请重试", "Failed to parse API response": "解析 API 响应失败", "Invalid API response structure": "无效的 API 响应结构", "Unknown error occurred": "发生未知错误", "HTTP error! status: {{status}}": "HTTP 错误！状态：{{status}}", "Download already in progress": "下载已在进行中", "No media files found": "未找到媒体文件", "Toggle visibility": "显示/隐藏", "Close": "关闭", "Converting GIFs...": "正在转换 GIF...", "Downloading...": "正在下载...", "Download": "下载", "Fetching...": "正在获取...", "Fetch All": "获取全部", "Fetch Video": "获取视频", "Fetch Image": "获取图片", "Fetch GIF": "获取 GIF", "Posts: {{posts}}": "帖子：{{posts}}", "Media: {{media}}": "媒体：{{media}}", "Current Media: {{current}} • Total Media: {{total}}": "当前媒体：{{current}} • 总媒体：{{total}}", "Failed to download media": "下载媒体失败", "Demo mode is only available for @xbatchdemo": "演示模式仅适用于 @xbatchdemo", "Auth Token": "认证令牌", "Enter your auth token": "输入您的认证令牌", "Your authentication token for API access": "用于 API 访问的身份验证令牌", "Patreon Auth": "Patreon 认证", "Enter your Patreon auth": "输入您的 Patreon 认证", "Your Patreon authentication key": "您的 Patreon 身份验证密钥", "Please enter Patreon auth first": "请先输入 Patreon 认证", "Please verify Patreon auth first": "请先验证 Patreon 认证", "Patreon auth verified successfully": "Patreon 认证验证成功", "Invalid Patreon auth": "无效的 Patreon 认证", "Verification failed. Please try again": "验证失败，请重试", "Generating": "正在生成", "Generate": "生成", "Verify": "验证", "Token generated successfully": "令牌生成成功 ({{current}}/{{total}})", "Failed to generate token": "生成令牌失败", "Token generation failed. Please try again": "令牌生成失败，请重试", "Verifying": "正在验证", "Verified": "已验证", "Use code": "使用代码", "for Patreon Auth, click Verify to unlock demo. Test at": "用于 Patreon 认证，点击“验证”以解锁演示。测试地址：", "Need help with Auth Token? See": "需要获取认证令牌的帮助？请查看", "the guide": "指南", "Subscribe": "订阅", "to get your Patreon Auth code and start downloading with ease!": "即可获取您的 Patreon 认证码，轻松开始下载！", "Report bugs or request features:": "报告问题或请求功能：", "Import": "导入", "Importing...": "正在导入...", "Supports JSON and ZIP formats": "支持 JSON 和 ZIP 格式", "Export": "导出", "Export All Data": "导出全部数据", "Exporting...": "正在导出...", "Clear": "清空", "Filter by Batch": "按批次过滤", "Are you sure to clear all data in the database?": "确定要清空数据库中的所有数据吗？", "Delete Account Data": "删除账户数据", "Are you sure you want to delete account data? This action cannot be undone": "您确定要删除 {{username}} 的数据吗？此操作无法撤销。", "Delete": "删除", "Deleting...": "正在删除...", "Overwrite": "覆盖", "Overwrite Existing Data?": "覆盖现有数据？", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "账户 @{{username}} 的数据已存在于数据库中。您要覆盖吗？", "No accounts yet": "尚未有账户", "Use Dashboard to fetch data.": "使用仪表板获取数据。", "Something went wrong.": "出错了。", "Error:": "错误:", "Fetch": "获取", "Single": "单次", "Batch": "批量", "Auto Batch": "自动批量", "Timeline": "时间线", "Media": "媒体", "Batch Size": "批量大小", "Starting Batch": "起始批次", "Posts": "帖子", "Tweets": "推文", "Replies": "回复", "All": "全部", "Image": "图片", "Video": "视频", "GIF": "GIF", "Batch: {{page}}": "批次：{{page}}", "Start": "开始", "Stop": "停止", "Prev": "上一页", "Next": "下一页", "Download Current": "下载当前", "Download All": "下载全部", "Use Batch/Auto Batch if single fetch fails": "若单次获取失败，请使用批量/自动批量", "Load from database": "从数据库加载", "Load database": "加载数据库", "Home": "首页", "End": "末页", "Failed to load data": "加载数据失败", "Update": "更新", "Updating...": "更新中...", "Update will fetch the latest data and overwrite the database. Continue?": "更新将获取最新数据并覆盖数据库。继续吗？", "Followers": "粉丝", "Following": "正在关注", "Joined": "加入时间", "Open": "打开", "Preview": "预览", "View Database": "查看数据库", "Converting...": "转换中...", "Convert & Download": "转换并下载" } };
+  const ar = { "common": { "Settings": "الإعدادات", "Server": "الخادم", "Choose the server closest to your location for best performance": "اختر الخادم الأقرب إلى موقعك للحصول على أفضل أداء", "Theme": "السمة", "Change Theme": "تغيير السمة", "Language": "اللغة", "Change Language": "تغيير اللغة", "Font Family": "نوع الخط", "System Default": "افتراضي النظام", "Date Time Format": "تنسيق التاريخ والوقت", "Sound Effects": "المؤثرات الصوتية", "Debug": "تشخيص الأخطاء", "Global Settings": "الإعدادات العامة", "Version": "الإصدار", "Common Formats:": "التنسيقات الشائعة:", "Date Formats:": "تنسيقات التاريخ:", "Time Formats:": "تنسيقات الوقت:", "Combined Examples:": "أمثلة مجمعة:", "Localized": "محلي", "Reset Settings": "إعادة تعيين الإعدادات", "Are you sure you want to reset settings to defaults?": "هل أنت متأكد من إعادة تعيين الإعدادات إلى القيم الافتراضية؟", "Reset": "إعادة تعيين", "Cancel": "إلغاء", "Chrome": "Chrome", "Userscript": "سكريبت المستخدم", "Status": "الحالة", "Home": "الصفحة الرئيسية", "Patreon": "Patreon", "Dashboard": "لوحة المراقبة", "Database": "قاعدة البيانات", "Auth": "المصادقة", "Convert Animated GIFs": "تحويل GIF", "Convert GIFs (External)": "تحويل GIF (خارجي)", "Concurrent Downloads": "التنزيلات المتزامنة", "Use 10+ only with fast internet": "استخدم 10+ فقط مع إنترنت سريع", "Smaller size, same quality": "حجم أصغر، نفس الجودة", "Larger size, same quality": "حجم أكبر، نفس الجودة", "Back": "العودة", "Please visit a profile page for auto-detection": "يرجى زيارة صفحة ملف شخصي للاكتشاف التلقائي", "Please configure authentication in the Auth tab first": "يرجى تكوين المصادقة في علامة تبويب المصادقة أولاً", "Invalid username format": "تنسيق اسم المستخدم غير صحيح", "Invalid auth token. Please check your settings.": "رمز المصادقة غير صحيح. يرجى التحقق من إعداداتك.", "Invalid Patreon auth. Please check your settings.": "مصادقة Patreon غير صحيحة. يرجى التحقق من إعداداتك.", "Failed to fetch data": "فشل في جلب البيانات", "Failed to fetch data from all APIs": "فشل جلب البيانات من جميع واجهات برمجة التطبيقات", "Failed to verify auth from all APIs": "فشل التحقق من المصادقة من جميع واجهات برمجة التطبيقات", "Failed to generate token from all APIs": "فشل إنشاء الرمز من جميع واجهات برمجة التطبيقات", "Generating token...": "جارٍ إنشاء الرمز...", "Abort": "إحباط", "Network error occurred": "حدث خطأ في الشبكة", "Request timeout - please try again": "انتهت مهلة الطلب - يرجى المحاولة مرة أخرى", "Failed to parse API response": "فشل تحليل استجابة واجهة برمجة التطبيقات", "Invalid API response structure": "بنية استجابة واجهة برمجة التطبيقات غير صالحة", "Unknown error occurred": "حدث خطأ غير معروف", "HTTP error! status: {{status}}": "خطأ HTTP! الحالة: {{status}}", "Download already in progress": "عملية التنزيل قيد التنفيذ بالفعل", "No media files found": "لم يتم العثور على ملفات وسائط", "Toggle visibility": "إظهار/إخفاء", "Close": "إغلاق", "Converting GIFs...": "...تحويل صور GIF", "Downloading...": "تحميل...", "Download": "تحميل", "Fetching...": "...جارٍ الجلب", "Fetch All": "جلب الكل", "Fetch Video": "جلب الفيديو", "Fetch Image": "جلب الصورة", "Fetch GIF": "جلب GIF", "Posts: {{posts}}": "المنشورات: {{posts}}", "Media: {{media}}": "الوسائط: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "الوسائط الحالية: {{current}} • إجمالي الوسائط: {{total}}", "Failed to download media": "فشل في تحميل الوسائط", "Demo mode is only available for @xbatchdemo": "وضع العرض التجريبي متاح فقط لـ @xbatchdemo", "Auth Token": "رمز المصادقة", "Enter your auth token": "أدخل رمز المصادقة الخاص بك", "Your authentication token for API access": "رمز المصادقة الخاص بك للوصول إلى API", "Patreon Auth": "مصادقة Patreon", "Enter your Patreon auth": "أدخل مصادقة Patreon الخاصة بك", "Your Patreon authentication key": "مفتاح مصادقة Patreon الخاص بك", "Please enter Patreon auth first": "يرجى إدخال مصادقة Patreon أولاً", "Please verify Patreon auth first": "يرجى التحقق من مصادقة Patreon أولاً", "Patreon auth verified successfully": "تم التحقق من مصادقة Patreon بنجاح", "Invalid Patreon auth": "مصادقة Patreon غير صحيحة", "Verification failed. Please try again": "فشل التحقق. يرجى المحاولة مرة أخرى", "Generating": "إنشاء", "Generate": "إنشاء", "Verify": "التحقق", "Token generated successfully": "تم إنشاء الرمز بنجاح ({{current}}/{{total}})", "Failed to generate token": "فشل في إنشاء الرمز", "Token generation failed. Please try again": "فشل إنشاء الرمز. يرجى المحاولة مرة أخرى", "Verifying": "التحقق", "Verified": "تم التحقق", "Use code": "استخدم الرمز", "for Patreon Auth, click Verify to unlock demo. Test at": 'لمصادقة Patreon، انقر "التحقق" لفتح العرض التجريبي. جرّب في', "Need help with Auth Token? See": "بحاجة إلى مساعدة بخصوص رمز المصادقة؟ راجع", "the guide": "الدليل", "Subscribe": "اشترك", "to get your Patreon Auth code and start downloading with ease!": "للحصول على رمز مصادقة Patreon والبدء في التنزيل بسهولة!", "Report bugs or request features:": "أبلغ عن الأخطاء أو اطلب الميزات:", "Import": "استيراد", "Importing...": "...استيراد", "Supports JSON and ZIP formats": "يدعم تنسيقات JSON و ZIP", "Export": "تصدير", "Export All Data": "تصدير كل البيانات", "Exporting...": "...تصدير", "Clear": "مسح", "Filter by Batch": "تصفية حسب الدفعات", "Are you sure to clear all data in the database?": "هل أنت متأكد من مسح جميع البيانات في قاعدة البيانات؟", "Delete Account Data": "حذف بيانات الحساب", "Are you sure you want to delete account data? This action cannot be undone": "هل أنت متأكد من حذف بيانات {{username}}؟ لا يمكن التراجع عن هذا الإجراء.", "Delete": "حذف", "Deleting...": "...حذف", "Overwrite": "استبدال", "Overwrite Existing Data?": "استبدال البيانات الحالية؟", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "بيانات الحساب @{{username}} موجودة بالفعل في قاعدة البيانات. هل تريد استبدالها؟", "No accounts yet": "لا توجد حسابات بعد", "Use Dashboard to fetch data.": "استخدم لوحة المراقبة لجلب البيانات.", "Something went wrong.": "حدث خطأ ما.", "Error:": "خطأ:", "Fetch": "جلب", "Single": "مفرد", "Batch": "دفعات", "Auto Batch": "دفعات تلقائية", "Timeline": "الخط الزمني", "Media": "الوسائط", "Batch Size": "حجم الدُفعة", "Starting Batch": "الدُفعة الابتدائية", "Posts": "المنشورات", "Tweets": "التغريدات", "Replies": "الردود", "All": "الكل", "Image": "صورة", "Video": "فيديو", "GIF": "GIF", "Batch: {{page}}": "الدُفعة: {{page}}", "Start": "بدء", "Stop": "إيقاف", "Prev": "السابق", "Next": "التالي", "Download Current": "تنزيل الحالي", "Download All": "تنزيل الكل", "Use Batch/Auto Batch if single fetch fails": "استخدم الدفعات/الدفعات التلقائية إذا فشل الجلب المفرد", "Load from database": "تحميل من قاعدة البيانات", "Load database": "تحميل قاعدة البيانات", "First Page": "الصفحة الأولى", "Last Page": "الصفحة الأخيرة", "Failed to load data": "فشل في تحميل البيانات", "Update": "تحديث", "Updating...": "...جارٍ التحديث", "Update will fetch the latest data and overwrite the database. Continue?": "سيقوم التحديث بجلب أحدث البيانات والكتابة فوق قاعدة البيانات. هل تريد المتابعة؟", "Followers": "المتابعون", "Following": "المتابَعون", "Joined": "تاريخ الانضمام", "Open": "فتح", "Preview": "معاينة", "View Database": "عرض قاعدة البيانات", "Converting...": "جارٍ التحويل...", "Convert & Download": "تحويل وتحميل", "Date Since": "تاريخ البدء", "Date Until": "تاريخ الانتهاء", "Empty dates will fetch all available media": "التواريخ الفارغة ستجلب جميع الوسائط المتاحة", "Filter by Date Range": "التصفية حسب نطاق التاريخ", "Include Retweets": "تضمين إعادة التغريد", "Not supported with Media timeline": "غير مدعوم مع الجدول الزمني للوسائط", "No media found for date range {{since}} to {{until}}": "لم يتم العثور على وسائط للفترة من {{since}} إلى {{until}}", "No tweets found for this account": "لم يتم العثور على تغريدات لهذا الحساب", "No media found in {{count}} tweets": "لم يتم العثور على وسائط في {{count}} تغريدة" } };
+  const de = { "common": { "Settings": "Einstellungen", "Server": "Server", "Choose the server closest to your location for best performance": "Wählen Sie den Server, der Ihrem Standort am nächsten ist, für die beste Leistung", "Theme": "Design", "Change Theme": "Design ändern", "Language": "Sprache", "Change Language": "Sprache ändern", "Font Family": "Schriftart", "System Default": "Systemstandard", "Date Time Format": "Datum-Uhrzeit-Format", "Sound Effects": "Soundeffekte", "Debug": "Debug", "Global Settings": "Globale Einstellungen", "Version": "Version", "Common Formats:": "Häufige Formate:", "Date Formats:": "Datumsformate:", "Time Formats:": "Zeitformate:", "Combined Examples:": "Kombinierte Beispiele:", "Localized": "Lokalisiert", "Reset Settings": "Einstellungen zurücksetzen", "Are you sure you want to reset settings to defaults?": "Sind Sie sicher, dass Sie die Einstellungen auf Standardwerte zurücksetzen möchten?", "Reset": "Zurücksetzen", "Cancel": "Abbrechen", "Chrome": "Chrome", "Userscript": "Benutzerskript", "Status": "Status", "Home": "Startseite", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Datenbank", "Auth": "Authentifizierung", "Convert Animated GIFs": "GIFs konvertieren", "Convert GIFs (External)": "GIFs konvertieren (Extern)", "Concurrent Downloads": "Gleichzeitige Downloads", "Use 10+ only with fast internet": "10+ nur bei schneller Internetverbindung verwenden", "Smaller size, same quality": "Kleinere Größe, gleiche Qualität", "Larger size, same quality": "Größere Größe, gleiche Qualität", "Back": "Zurück", "Please visit a profile page for auto-detection": "Bitte besuchen Sie eine Profilseite für die automatische Erkennung", "Please configure authentication in the Auth tab first": "Bitte konfigurieren Sie zuerst die Authentifizierung im Auth-Tab", "Invalid username format": "Ungültiges Benutzernamen-Format", "Invalid auth token. Please check your settings.": "Ungültiger Auth-Token. Bitte überprüfen Sie Ihre Einstellungen.", "Invalid Patreon auth. Please check your settings.": "Ungültige Patreon-Authentifizierung. Bitte überprüfen Sie Ihre Einstellungen.", "Failed to fetch data": "Daten konnten nicht abgerufen werden", "Failed to fetch data from all APIs": "Fehler beim Abrufen der Daten von allen APIs", "Failed to verify auth from all APIs": "Fehler bei der Überprüfung der Authentifizierung über alle APIs", "Failed to generate token from all APIs": "Fehler beim Generieren des Tokens über alle APIs", "Generating token...": "Token wird generiert...", "Abort": "Abbrechen", "Network error occurred": "Es ist ein Netzwerkfehler aufgetreten", "Request timeout - please try again": "Zeitüberschreitung der Anforderung – bitte erneut versuchen", "Failed to parse API response": "API-Antwort konnte nicht analysiert werden", "Invalid API response structure": "Ungültige API-Antwortstruktur", "Unknown error occurred": "Unbekannter Fehler ist aufgetreten", "HTTP error! status: {{status}}": "HTTP-Fehler! Status: {{status}}", "Download already in progress": "Download läuft bereits", "No media files found": "Keine Mediendateien gefunden", "Toggle visibility": "Ein-/Ausblenden", "Close": "Schließen", "Converting GIFs...": "GIFs werden konvertiert...", "Downloading...": "Herunterladen...", "Download": "Herunterladen", "Fetching...": "Abrufen...", "Fetch All": "Alle abrufen", "Fetch Video": "Video abrufen", "Fetch Image": "Bild abrufen", "Fetch GIF": "GIF abrufen", "Posts: {{posts}}": "Beiträge: {{posts}}", "Media: {{media}}": "Medien: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Aktuelle Medien: {{current}} • Medien gesamt: {{total}}", "Failed to download media": "Medien konnten nicht heruntergeladen werden", "Demo mode is only available for @xbatchdemo": "Der Demo-Modus ist nur für @xbatchdemo verfügbar", "Auth Token": "Auth-Token", "Enter your auth token": "Geben Sie Ihren Auth-Token ein", "Your authentication token for API access": "Ihr Authentifizierungs-Token für API-Zugriff", "Patreon Auth": "Patreon-Authentifizierung", "Enter your Patreon auth": "Geben Sie Ihre Patreon-Authentifizierung ein", "Your Patreon authentication key": "Ihr Patreon-Authentifizierungsschlüssel", "Please enter Patreon auth first": "Bitte geben Sie zuerst die Patreon-Authentifizierung ein", "Please verify Patreon auth first": "Bitte überprüfen Sie zuerst die Patreon-Authentifizierung", "Patreon auth verified successfully": "Patreon-Authentifizierung erfolgreich überprüft", "Invalid Patreon auth": "Ungültige Patreon-Authentifizierung", "Verification failed. Please try again": "Überprüfung fehlgeschlagen. Bitte versuchen Sie es erneut", "Generating": "Generieren", "Generate": "Generieren", "Verify": "Überprüfen", "Token generated successfully": "Token erfolgreich generiert ({{current}}/{{total}})", "Failed to generate token": "Token-Generierung fehlgeschlagen", "Token generation failed. Please try again": "Token-Generierung fehlgeschlagen. Bitte versuchen Sie es erneut", "Verifying": "Überprüfen", "Verified": "Überprüft", "Use code": "Verwenden Sie den Code", "for Patreon Auth, click Verify to unlock demo. Test at": "für die Patreon-Authentifizierung, klicken Sie auf „Überprüfen“, um die Demo freizuschalten. Testen bei", "Need help with Auth Token? See": "Benötigen Sie Hilfe mit dem Auth-Token? Siehe", "the guide": "die Anleitung", "Subscribe": "Abonnieren", "to get your Patreon Auth code and start downloading with ease!": "um Ihren Patreon-Authentifizierungscode zu erhalten und mühelos mit dem Herunterladen zu beginnen!", "Report bugs or request features:": "Fehler melden oder Funktionen anfordern:", "Import": "Importieren", "Importing...": "Importieren...", "Supports JSON and ZIP formats": "Unterstützt JSON- und ZIP-Formate", "Export": "Exportieren", "Export All Data": "Alle Daten exportieren", "Exporting...": "Exportieren...", "Clear": "Löschen", "Filter by Batch": "Nach Stapel filtern", "Are you sure to clear all data in the database?": "Sind Sie sicher, dass Sie alle Daten in der Datenbank löschen möchten?", "Delete Account Data": "Kontodaten löschen", "Are you sure you want to delete account data? This action cannot be undone": "Sind Sie sicher, dass Sie die Daten von {{username}} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.", "Delete": "Löschen", "Deleting...": "Löschen...", "Overwrite": "Überschreiben", "Overwrite Existing Data?": "Vorhandene Daten überschreiben?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Kontodaten für @{{username}} existieren bereits in der Datenbank. Möchten Sie sie überschreiben?", "No accounts yet": "Noch keine Konten", "Use Dashboard to fetch data.": "Verwenden Sie das Dashboard zum Abrufen von Daten.", "Something went wrong.": "Etwas ist schief gelaufen.", "Error:": "Fehler:", "Fetch": "Abrufen", "Single": "Einzel", "Batch": "Stapel", "Auto Batch": "Auto-Stapel", "Timeline": "Timeline", "Media": "Medien", "Batch Size": "Stapelgröße", "Starting Batch": "Startstapel", "Posts": "Beiträge", "Tweets": "Tweets", "Replies": "Antworten", "All": "Alle", "Image": "Bild", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Stapel: {{page}}", "Start": "Start", "Stop": "Stopp", "Prev": "Zurück", "Next": "Weiter", "Download Current": "Aktuelles herunterladen", "Download All": "Alles herunterladen", "Use Batch/Auto Batch if single fetch fails": "Verwende Stapel/Auto-Stapel, wenn Einzelabruf fehlschlägt", "Load from database": "Aus Datenbank laden", "Load database": "Datenbank laden", "First Page": "Erste Seite", "Last Page": "Letzte Seite", "Failed to load data": "Daten konnten nicht geladen werden", "Update": "Aktualisieren", "Updating...": "Aktualisierung läuft...", "Update will fetch the latest data and overwrite the database. Continue?": "Das Update holt die neuesten Daten und überschreibt die Datenbank. Fortfahren?", "Followers": "Follower", "Following": "Folge ich", "Joined": "Beigetreten", "Open": "Öffnen", "Preview": "Vorschau", "View Database": "Datenbank anzeigen", "Converting...": "Konvertieren...", "Convert & Download": "Konvertieren & Herunterladen", "Date Since": "Datum Von", "Date Until": "Datum Bis", "Empty dates will fetch all available media": "Leere Daten holen alle verfügbaren Medien", "Filter by Date Range": "Nach Datumsbereich filtern", "Include Retweets": "Retweets einbeziehen", "Not supported with Media timeline": "Nicht unterstützt mit Medien-Timeline", "No media found for date range {{since}} to {{until}}": "Keine Medien für den Zeitraum {{since}} bis {{until}} gefunden", "No tweets found for this account": "Keine Tweets für dieses Konto gefunden", "No media found in {{count}} tweets": "Keine Medien in {{count}} Tweets gefunden" } };
+  const en$1 = { "common": { "Settings": "Settings", "Server": "Server", "Choose the server closest to your location for best performance": "Choose the server closest to your location for best performance", "Theme": "Theme", "Change Theme": "Change Theme", "Language": "Language", "Change Language": "Change Language", "Font Family": "Font Family", "System Default": "System Default", "Date Time Format": "Date Time Format", "Sound Effects": "Sound Effects", "Debug": "Debug", "Global Settings": "Global Settings", "Version": "Version", "Common Formats:": "Common Formats:", "Date Formats:": "Date Formats:", "Time Formats:": "Time Formats:", "Combined Examples:": "Combined Examples:", "Localized": "Localized", "Reset Settings": "Reset Settings", "Are you sure you want to reset settings to defaults?": "Are you sure you want to reset settings to defaults?", "Reset": "Reset", "Cancel": "Cancel", "Chrome": "Chrome", "Userscript": "Userscript", "Status": "Status", "Home": "Home", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Database", "Auth": "Auth", "Convert Animated GIFs": "Convert GIFs", "Convert GIFs (External)": "Convert GIFs (External)", "Concurrent Downloads": "Concurrent Downloads", "Use 10+ only with fast internet": "Use 10+ only with fast internet", "Smaller size, same quality": "Smaller size, same quality", "Larger size, same quality": "Larger size, same quality", "Back": "Back", "Please visit a profile page for auto-detection": "Please visit a profile page for auto-detection", "Please configure authentication in the Auth tab first": "Please configure authentication in the Auth tab first", "Invalid username format": "Invalid username format", "Invalid auth token. Please check your settings.": "Invalid auth token. Please check your settings.", "Invalid Patreon auth. Please check your settings.": "Invalid Patreon auth. Please check your settings.", "Failed to fetch data": "Failed to fetch data", "Failed to fetch data from all APIs": "Failed to fetch data from all APIs", "Failed to verify auth from all APIs": "Failed to verify auth from all APIs", "Failed to generate token from all APIs": "Failed to generate token from all APIs", "Generating token...": "Generating token...", "Abort": "Abort", "Network error occurred": "Network error occurred", "Request timeout - please try again": "Request timeout - please try again", "Failed to parse API response": "Failed to parse API response", "Invalid API response structure": "Invalid API response structure", "Unknown error occurred": "Unknown error occurred", "HTTP error! status: {{status}}": "HTTP error! status: {{status}}", "Download already in progress": "Download already in progress", "No media files found": "No media files found", "Toggle visibility": "Toggle visibility", "Close": "Close", "Converting GIFs...": "Converting GIFs...", "Downloading...": "Downloading...", "Download": "Download", "Fetching...": "Fetching...", "Fetch All": "Fetch All", "Fetch Video": "Fetch Video", "Fetch Image": "Fetch Image", "Fetch GIF": "Fetch GIF", "Posts: {{posts}}": "Posts: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Current Media: {{current}} • Total Media: {{total}}", "Failed to download media": "Failed to download media", "Demo mode is only available for @xbatchdemo": "Demo mode is only available for @xbatchdemo", "Auth Token": "Auth Token", "Enter your auth token": "Enter your auth token", "Your authentication token for API access": "Your authentication token for API access", "Patreon Auth": "Patreon Auth", "Enter your Patreon auth": "Enter your Patreon auth", "Your Patreon authentication key": "Your Patreon authentication key", "Please enter Patreon auth first": "Please enter Patreon auth first", "Please verify Patreon auth first": "Please verify Patreon auth first", "Patreon auth verified successfully": "Patreon auth verified successfully", "Invalid Patreon auth": "Invalid Patreon auth", "Verification failed. Please try again": "Verification failed. Please try again", "Generating": "Generating", "Generate": "Generate", "Verify": "Verify", "Token generated successfully": "Token generated successfully ({{current}}/{{total}})", "Failed to generate token": "Failed to generate token", "Token generation failed. Please try again": "Token generation failed. Please try again", "Verifying": "Verifying", "Verified": "Verified", "Use code": "Use code", "for Patreon Auth, click Verify to unlock demo. Test at": "for Patreon Auth, click Verify to unlock demo. Test at", "Need help with Auth Token? See": "Need help with Auth Token? See", "the guide": "the guide", "Subscribe": "Subscribe", "to get your Patreon Auth code and start downloading with ease!": "to get your Patreon Auth code and start downloading with ease!", "Report bugs or request features:": "Report bugs or request features:", "Import": "Import", "Importing...": "Importing...", "Supports JSON and ZIP formats": "Supports JSON and ZIP formats", "Export": "Export", "Export All Data": "Export All Data", "Exporting...": "Exporting...", "Clear": "Clear", "Filter by Batch": "Filter by Batch", "Are you sure to clear all data in the database?": "Are you sure to clear all data in the database?", "Delete Account Data": "Delete Account Data", "Are you sure you want to delete account data? This action cannot be undone": "Are you sure you want to delete {{username}}'s data? This action cannot be undone.", "Delete": "Delete", "Deleting...": "Deleting...", "Overwrite": "Overwrite", "Overwrite Existing Data?": "Overwrite Existing Data?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Account data for @{{username}} already exists in the database. Do you want to overwrite it?", "No accounts yet": "No accounts yet", "Use Dashboard to fetch data.": "Use Dashboard to fetch data.", "Something went wrong.": "Something went wrong.", "Error:": "Error:", "Fetch": "Fetch", "Single": "Single", "Batch": "Batch", "Auto Batch": "Auto Batch", "Timeline": "Timeline", "Media": "Media", "Batch Size": "Batch Size", "Starting Batch": "Starting Batch", "Posts": "Posts", "Tweets": "Tweets", "Replies": "Replies", "All": "All", "Image": "Image", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Start", "Stop": "Stop", "Prev": "Prev", "Next": "Next", "Download Current": "Download Current", "Download All": "Download All", "Use Batch/Auto Batch if single fetch fails": "Use Batch/Auto Batch if single fetch fails", "Load from database": "Load from database", "Load database": "Load database", "First Page": "First Page", "Last Page": "Last Page", "Failed to load data": "Failed to load data", "Update": "Update", "Updating...": "Updating...", "Update will fetch the latest data and overwrite the database. Continue?": "Update will fetch the latest data and overwrite the database. Continue?", "Followers": "Followers", "Following": "Following", "Joined": "Joined", "Open": "Open", "Preview": "Preview", "View Database": "View Database", "Converting...": "Converting...", "Convert & Download": "Convert & Download", "Date Since": "Date Since", "Date Until": "Date Until", "Empty dates will fetch all available media": "Empty dates will fetch all available media", "Filter by Date Range": "Filter by Date Range", "Include Retweets": "Include Retweets", "Not supported with Media timeline": "Not supported with Media timeline", "No media found for date range {{since}} to {{until}}": "No media found for date range {{since}} to {{until}}", "No tweets found for this account": "No tweets found for this account", "No media found in {{count}} tweets": "No media found in {{count}} tweets" } };
+  const es = { "common": { "Settings": "Configuración", "Server": "Servidor", "Choose the server closest to your location for best performance": "Elija el servidor más cercano a su ubicación para un mejor rendimiento", "Theme": "Tema", "Change Theme": "Cambiar Tema", "Language": "Idioma", "Change Language": "Cambiar idioma", "Font Family": "Familia de Fuente", "System Default": "Predeterminado del Sistema", "Date Time Format": "Formato de Fecha y Hora", "Sound Effects": "Efectos de Sonido", "Debug": "Depurar", "Global Settings": "Configuración Global", "Version": "Versión", "Common Formats:": "Formatos Comunes:", "Date Formats:": "Formatos de Fecha:", "Time Formats:": "Formatos de Hora:", "Combined Examples:": "Ejemplos Combinados:", "Localized": "Localizado", "Reset Settings": "Restablecer ajustes", "Are you sure you want to reset settings to defaults?": "¿Seguro que quieres restablecer los ajustes a los valores predeterminados?", "Reset": "Restablecer", "Cancel": "Cancelar", "Chrome": "Chrome", "Userscript": "Script de usuario", "Status": "Estado", "Home": "Inicio", "Patreon": "Patreon", "Dashboard": "Panel de Control", "Database": "Base de Datos", "Auth": "Autenticación", "Convert Animated GIFs": "Convertir GIFs", "Convert GIFs (External)": "Convertir GIFs (Externo)", "Concurrent Downloads": "Descargas simultáneas", "Use 10+ only with fast internet": "Usa 10+ solo con internet rápido", "Smaller size, same quality": "Tamaño más pequeño, misma calidad", "Larger size, same quality": "Tamaño más grande, misma calidad", "Back": "Atrás", "Please visit a profile page for auto-detection": "Visita una página de perfil para detección automática", "Please configure authentication in the Auth tab first": "Configura la autenticación en la pestaña Auth primero", "Invalid username format": "Formato de nombre de usuario no válido", "Invalid auth token. Please check your settings.": "Token de autenticación no válido. Por favor, revisa tu configuración.", "Invalid Patreon auth. Please check your settings.": "Autenticación de Patreon no válida. Por favor, revisa tu configuración.", "Failed to fetch data": "Error al obtener los datos", "Failed to fetch data from all APIs": "Error al obtener los datos de todas las APIs", "Failed to verify auth from all APIs": "Error al verificar la autenticación en todas las APIs", "Failed to generate token from all APIs": "Error al generar el token en todas las APIs", "Generating token...": "Generando token...", "Abort": "Abortar", "Network error occurred": "Se produjo un error de red", "Request timeout - please try again": "Tiempo de espera agotado: inténtalo de nuevo", "Failed to parse API response": "Error al analizar la respuesta de la API", "Invalid API response structure": "Estructura de respuesta de la API no válida", "Unknown error occurred": "Ocurrió un error desconocido", "HTTP error! status: {{status}}": "¡Error HTTP! estado: {{status}}", "Download already in progress": "Ya hay una descarga en curso", "No media files found": "No se encontraron archivos multimedia", "Toggle visibility": "Mostrar/ocultar", "Close": "Cerrar", "Converting GIFs...": "Convirtiendo GIF...", "Downloading...": "Descargando...", "Download": "Descargar", "Fetching...": "Obteniendo...", "Fetch All": "Obtener todo", "Fetch Video": "Obtener video", "Fetch Image": "Obtener imagen", "Fetch GIF": "Obtener GIF", "Posts: {{posts}}": "Publicaciones: {{posts}}", "Media: {{media}}": "Medios: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Medios actuales: {{current}} • Medios totales: {{total}}", "Failed to download media": "Error al descargar los medios", "Demo mode is only available for @xbatchdemo": "El modo demo solo está disponible para @xbatchdemo", "Auth Token": "Token de autenticación", "Enter your auth token": "Introduce tu token de autenticación", "Your authentication token for API access": "Tu token de autenticación para acceso a la API", "Patreon Auth": "Autenticación de Patreon", "Enter your Patreon auth": "Introduce tu autenticación de Patreon", "Your Patreon authentication key": "Tu clave de autenticación de Patreon", "Please enter Patreon auth first": "Introduce primero la autenticación de Patreon", "Please verify Patreon auth first": "Verifica primero la autenticación de Patreon", "Patreon auth verified successfully": "Autenticación de Patreon verificada correctamente", "Invalid Patreon auth": "Autenticación de Patreon no válida", "Verification failed. Please try again": "La verificación falló. Inténtalo de nuevo", "Generating": "Generando", "Generate": "Generar", "Verify": "Verificar", "Token generated successfully": "Token generado correctamente ({{current}}/{{total}})", "Failed to generate token": "Error al generar el token", "Token generation failed. Please try again": "La generación del token falló. Inténtalo de nuevo", "Verifying": "Verificando", "Verified": "Verificado", "Use code": "Usa el código", "for Patreon Auth, click Verify to unlock demo. Test at": 'para la Autenticación de Patreon, haz clic en "Verificar" para desbloquear la demo. Prueba en', "Need help with Auth Token? See": "¿Necesitas ayuda con el token de autenticación? Consulta", "the guide": "la guía", "Subscribe": "Suscríbete", "to get your Patreon Auth code and start downloading with ease!": "para obtener tu código de autenticación de Patreon y empezar a descargar fácilmente.", "Report bugs or request features:": "Informa errores o solicita funciones:", "Import": "Importar", "Importing...": "Importando...", "Supports JSON and ZIP formats": "Admite formatos JSON y ZIP", "Export": "Exportar", "Export All Data": "Exportar todos los datos", "Exporting...": "Exportando...", "Clear": "Limpiar", "Filter by Batch": "Filtrar por lote", "Are you sure to clear all data in the database?": "¿Estás seguro de que quieres borrar todos los datos de la base de datos?", "Delete Account Data": "Eliminar datos de la cuenta", "Are you sure you want to delete account data? This action cannot be undone": "¿Seguro que quieres eliminar los datos de {{username}}? Esta acción no se puede deshacer.", "Delete": "Eliminar", "Deleting...": "Eliminando...", "Overwrite": "Sobrescribir", "Overwrite Existing Data?": "¿Sobrescribir datos existentes?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Los datos de la cuenta @{{username}} ya existen en la base de datos. ¿Deseas sobrescribirlos?", "No accounts yet": "Todavía no hay cuentas", "Use Dashboard to fetch data.": "Usa el Panel de Control para obtener datos.", "Something went wrong.": "Algo salió mal.", "Error:": "Error:", "Fetch": "Obtener", "Single": "Único", "Batch": "Lote", "Auto Batch": "Lote automático", "Timeline": "Cronología", "Media": "Medios", "Batch Size": "Tamaño del lote", "Starting Batch": "Lote inicial", "Posts": "Publicaciones", "Tweets": "Tweets", "Replies": "Respuestas", "All": "Todo", "Image": "Imagen", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Lote: {{page}}", "Start": "Iniciar", "Stop": "Detener", "Prev": "Anterior", "Next": "Siguiente", "Download Current": "Descargar actual", "Download All": "Descargar todo", "Use Batch/Auto Batch if single fetch fails": "Usa Lote/Lote automático si falla la obtención única", "Load from database": "Cargar desde base de datos", "Load database": "Cargar base de datos", "First Page": "Primera Página", "Last Page": "Última Página", "Failed to load data": "Error al cargar los datos", "Update": "Actualizar", "Updating...": "Actualizando...", "Update will fetch the latest data and overwrite the database. Continue?": "La actualización obtendrá los datos más recientes y sobrescribirá la base de datos. ¿Continuar?", "Followers": "Seguidores", "Following": "Siguiendo", "Joined": "Se unió", "Open": "Abrir", "Preview": "Vista previa", "View Database": "Ver base de datos", "Converting...": "Convirtiendo...", "Convert & Download": "Convertir y descargar", "Date Since": "Fecha Desde", "Date Until": "Fecha Hasta", "Empty dates will fetch all available media": "Fechas vacías obtendrán todos los medios disponibles", "Filter by Date Range": "Filtrar por rango de fechas", "Include Retweets": "Incluir Retweets", "Not supported with Media timeline": "No compatible con línea de tiempo de medios", "No media found for date range {{since}} to {{until}}": "No se encontraron medios para el rango de fechas {{since}} a {{until}}", "No tweets found for this account": "No se encontraron tweets para esta cuenta", "No media found in {{count}} tweets": "No se encontraron medios en {{count}} tweets" } };
+  const fil = { "common": { "Settings": "Mga Setting", "Server": "Server", "Choose the server closest to your location for best performance": "Piliin ang server na pinakamalapit sa iyong lokasyon para sa pinakamahusay na pagganap", "Theme": "Tema", "Change Theme": "Baguhin ang Tema", "Language": "Wika", "Change Language": "Baguhin ang Wika", "Font Family": "Uri ng Font", "System Default": "Default ng Sistema", "Date Time Format": "Format ng Petsa at Oras", "Sound Effects": "Mga Epekto ng Tunog", "Debug": "Debug", "Global Settings": "Pandaigdigang Mga Setting", "Version": "Bersyon", "Common Formats:": "Karaniwang Mga Format:", "Date Formats:": "Mga Format ng Petsa:", "Time Formats:": "Mga Format ng Oras:", "Combined Examples:": "Pinagsama-samang Mga Halimbawa:", "Localized": "Naka-localize", "Reset Settings": "I-reset ang mga Setting", "Are you sure you want to reset settings to defaults?": "Sigurado ka bang gusto mong i-reset ang mga setting sa default?", "Reset": "I-reset", "Cancel": "Kanselahin", "Chrome": "Chrome", "Userscript": "Userscript", "Status": "Katayuan", "Home": "Home", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Database", "Auth": "Awtorisasyon", "Convert Animated GIFs": "I-convert ang GIF", "Convert GIFs (External)": "I-convert ang GIF (External)", "Concurrent Downloads": "Sabay-sabay na Pag-download", "Use 10+ only with fast internet": "Gumamit ng 10+ lamang sa mabilis na internet", "Smaller size, same quality": "Mas maliit na laki, parehong kalidad", "Larger size, same quality": "Mas malaking laki, parehong kalidad", "Back": "Bumalik", "Please visit a profile page for auto-detection": "Mangyaring bumisita sa isang profile page para sa auto-detection", "Please configure authentication in the Auth tab first": "Mangyaring i-configure muna ang authentication sa Auth tab", "Invalid username format": "Di-wastong format ng username", "Invalid auth token. Please check your settings.": "Di-wastong auth token. Mangyaring suriin ang iyong mga setting.", "Invalid Patreon auth. Please check your settings.": "Di-wastong Patreon auth. Mangyaring suriin ang iyong mga setting.", "Failed to fetch data": "Nabigong kunin ang data", "Failed to fetch data from all APIs": "Nabigong kunin ang data mula sa lahat ng APIs", "Failed to verify auth from all APIs": "Nabigong i-verify ang auth mula sa lahat ng APIs", "Failed to generate token from all APIs": "Nabigong gumawa ng token mula sa lahat ng APIs", "Generating token...": "Gumagawa ng token...", "Abort": "Itigil", "Network error occurred": "May naganap na network error", "Request timeout - please try again": "Nag-timeout ang request - mangyaring subukan muli", "Failed to parse API response": "Nabigong i-parse ang API response", "Invalid API response structure": "Di-wastong istruktura ng API response", "Unknown error occurred": "May naganap na hindi kilalang error", "HTTP error! status: {{status}}": "HTTP error! status: {{status}}", "Download already in progress": "Nagda-download na", "No media files found": "Walang nahanap na media files", "Toggle visibility": "I-toggle ang visibility", "Close": "Isara", "Converting GIFs...": "Kino-convert ang mga GIF...", "Downloading...": "Nagda-download...", "Download": "I-download", "Fetching...": "Kumukuha...", "Fetch All": "Kunin Lahat", "Fetch Video": "Kunin ang Video", "Fetch Image": "Kunin ang Larawan", "Fetch GIF": "Kunin ang GIF", "Posts: {{posts}}": "Mga Post: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Kasalukuyang Media: {{current}} • Kabuuang Media: {{total}}", "Failed to download media": "Nabigong i-download ang media", "Demo mode is only available for @xbatchdemo": "Ang demo mode ay available lang para sa @xbatchdemo", "Auth Token": "Auth Token", "Enter your auth token": "Ilagay ang iyong auth token", "Your authentication token for API access": "Ang iyong authentication token para sa API access", "Patreon Auth": "Patreon Auth", "Enter your Patreon auth": "Ilagay ang iyong Patreon auth", "Your Patreon authentication key": "Ang iyong Patreon authentication key", "Please enter Patreon auth first": "Mangyaring ilagay muna ang Patreon auth", "Please verify Patreon auth first": "Mangyaring i-verify muna ang Patreon auth", "Patreon auth verified successfully": "Matagumpay na na-verify ang Patreon auth", "Invalid Patreon auth": "Di-wastong Patreon auth", "Verification failed. Please try again": "Nabigo ang verification. Mangyaring subukan muli", "Generating": "Gumagawa", "Generate": "Gumawa", "Verify": "I-verify", "Token generated successfully": "Matagumpay na nagawa ang token ({{current}}/{{total}})", "Failed to generate token": "Nabigong gumawa ng token", "Token generation failed. Please try again": "Nabigo ang paggawa ng token. Mangyaring subukan muli", "Verifying": "Vine-verify", "Verified": "Na-verify na", "Use code": "Gamitin ang code", "for Patreon Auth, click Verify to unlock demo. Test at": "para sa Patreon Auth, i-click ang Verify para i-unlock ang demo. Subukan sa", "Need help with Auth Token? See": "Kailangan ng tulong sa Auth Token? Tingnan ang", "the guide": "gabay", "Subscribe": "Mag-subscribe", "to get your Patreon Auth code and start downloading with ease!": "para makuha ang iyong Patreon Auth code at magsimulang mag-download nang madali!", "Report bugs or request features:": "Mag-ulat ng mga bug o humingi ng mga feature:", "Import": "Mag-import", "Importing...": "Nag-iimport...", "Supports JSON and ZIP formats": "Sumusuporta sa JSON at ZIP formats", "Export": "Mag-export", "Export All Data": "I-export ang Lahat ng Data", "Exporting...": "Nag-eexport...", "Clear": "Burahin", "Filter by Batch": "I-filter ayon sa Batch", "Are you sure to clear all data in the database?": "Sigurado ka bang buburahin ang lahat ng data sa database?", "Delete Account Data": "Burahin ang Account Data", "Are you sure you want to delete account data? This action cannot be undone": "Sigurado ka bang buburahin ang data ni {{username}}? Hindi na ito maaaring ibalik.", "Delete": "Burahin", "Deleting...": "Binubura...", "Overwrite": "I-overwrite", "Overwrite Existing Data?": "I-overwrite ang Existing Data?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Ang account data para kay @{{username}} ay umiiral na sa database. Gusto mo bang i-overwrite ito?", "No accounts yet": "Wala pang mga account", "Use Dashboard to fetch data.": "Gamitin ang Dashboard para kunin ang data.", "Something went wrong.": "May nangyaring mali.", "Error:": "Error:", "Fetch": "Kunin", "Single": "Iisa", "Batch": "Batch", "Auto Batch": "Auto Batch", "Timeline": "Timeline", "Media": "Media", "Batch Size": "Laki ng Batch", "Starting Batch": "Nagsisimulang Batch", "Posts": "Mga Post", "Tweets": "Mga Tweet", "Replies": "Mga Tugon", "All": "Lahat", "Image": "Larawan", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Simulan", "Stop": "Itigil", "Prev": "Nakaraan", "Next": "Susunod", "Download Current": "I-download ang Kasalukuyan", "Download All": "I-download Lahat", "Use Batch/Auto Batch if single fetch fails": "Gumamit ng Batch/Auto Batch kung nabigo ang single fetch", "Load from database": "Mag-load mula sa database", "Load database": "Mag-load ng database", "First Page": "Unang Pahina", "Last Page": "Huling Pahina", "Failed to load data": "Nabigong mag-load ng data", "Update": "I-update", "Updating...": "Nag-uupdate...", "Update will fetch the latest data and overwrite the database. Continue?": "Ang update ay kukuha ng pinakabagong data at i-overwrite ang database. Magpatuloy?", "Followers": "Mga Tagasunod", "Following": "Sinusundan", "Joined": "Sumali", "Open": "Buksan", "Preview": "Preview", "View Database": "Tingnan ang Database", "Converting...": "Kino-convert...", "Convert & Download": "I-convert at I-download", "Date Since": "Petsa Mula", "Date Until": "Petsa Hanggang", "Empty dates will fetch all available media": "Walang petsa ay kukuha ng lahat ng available na media", "Filter by Date Range": "I-filter ayon sa Hanay ng Petsa", "Include Retweets": "Isama ang mga Retweet", "Not supported with Media timeline": "Hindi suportado sa Media timeline", "No media found for date range {{since}} to {{until}}": "Walang nahanap na media para sa petsa {{since}} hanggang {{until}}", "No tweets found for this account": "Walang nahanap na tweets para sa account na ito", "No media found in {{count}} tweets": "Walang nahanap na media sa {{count}} tweets" } };
+  const fr = { "common": { "Settings": "Paramètres", "Server": "Serveur", "Choose the server closest to your location for best performance": "Choisissez le serveur le plus proche de votre emplacement pour de meilleures performances", "Theme": "Thème", "Change Theme": "Changer le thème", "Language": "Langue", "Change Language": "Changer la langue", "Font Family": "Famille de Police", "System Default": "Par Défaut du Système", "Date Time Format": "Format date et heure", "Sound Effects": "Effets Sonores", "Debug": "Débogage", "Global Settings": "Paramètres globaux", "Version": "Version", "Common Formats:": "Formats courants :", "Date Formats:": "Formats de date :", "Time Formats:": "Formats d'heure :", "Combined Examples:": "Exemples combinés :", "Localized": "Localisé", "Reset Settings": "Réinitialiser les paramètres", "Are you sure you want to reset settings to defaults?": "Êtes-vous sûr de vouloir réinitialiser les paramètres par défaut ?", "Reset": "Réinitialiser", "Cancel": "Annuler", "Chrome": "Chrome", "Userscript": "Script utilisateur", "Status": "Statut", "Home": "Accueil", "Patreon": "Patreon", "Dashboard": "Tableau de bord", "Database": "Base de données", "Auth": "Authentification", "Convert Animated GIFs": "Convertir des GIFs", "Convert GIFs (External)": "Convertir des GIFs (Externe)", "Concurrent Downloads": "Téléchargements simultanés", "Use 10+ only with fast internet": "Utilisez 10+ uniquement avec une connexion rapide", "Smaller size, same quality": "Taille plus petite, même qualité", "Larger size, same quality": "Taille plus grande, même qualité", "Back": "Retour", "Please visit a profile page for auto-detection": "Veuillez visiter une page de profil pour la détection automatique", "Please configure authentication in the Auth tab first": "Veuillez d'abord configurer l'authentification dans l'onglet Auth", "Invalid username format": "Format de nom d'utilisateur invalide", "Invalid auth token. Please check your settings.": "Token d'authentification invalide. Veuillez vérifier vos paramètres.", "Invalid Patreon auth. Please check your settings.": "Authentification Patreon invalide. Veuillez vérifier vos paramètres.", "Failed to fetch data": "Échec de récupération des données", "Failed to fetch data from all APIs": "Échec de récupération des données depuis toutes les API", "Failed to verify auth from all APIs": "Échec de vérification de l'authentification depuis toutes les API", "Failed to generate token from all APIs": "Échec de génération du jeton depuis toutes les API", "Generating token...": "Génération du jeton...", "Abort": "Abandonner", "Network error occurred": "Une erreur réseau s'est produite", "Request timeout - please try again": "Délai d’attente dépassé - veuillez réessayer", "Failed to parse API response": "Échec de l’analyse de la réponse de l’API", "Invalid API response structure": "Structure de réponse de l’API invalide", "Unknown error occurred": "Une erreur inconnue s'est produite", "HTTP error! status: {{status}}": "Erreur HTTP ! statut : {{status}}", "Download already in progress": "Téléchargement déjà en cours", "No media files found": "Aucun fichier multimédia trouvé", "Toggle visibility": "Afficher/masquer", "Close": "Fermer", "Converting GIFs...": "Conversion des GIFs...", "Downloading...": "Téléchargement...", "Download": "Télécharger", "Fetching...": "Récupération...", "Fetch All": "Tout récupérer", "Fetch Video": "Récupérer la vidéo", "Fetch Image": "Récupérer l'image", "Fetch GIF": "Récupérer le GIF", "Posts: {{posts}}": "Publications : {{posts}}", "Media: {{media}}": "Médias : {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Médias actuels : {{current}} • Médias totaux : {{total}}", "Failed to download media": "Échec de téléchargement des médias", "Demo mode is only available for @xbatchdemo": "Le mode démo est uniquement disponible pour @xbatchdemo", "Auth Token": "Token d'authentification", "Enter your auth token": "Entrez votre token d'authentification", "Your authentication token for API access": "Votre token d'authentification pour l'accès API", "Patreon Auth": "Authentification Patreon", "Enter your Patreon auth": "Entrez votre authentification Patreon", "Your Patreon authentication key": "Votre clé d'authentification Patreon", "Please enter Patreon auth first": "Veuillez d'abord saisir l'authentification Patreon", "Please verify Patreon auth first": "Veuillez d'abord vérifier l'authentification Patreon", "Patreon auth verified successfully": "Authentification Patreon vérifiée avec succès", "Invalid Patreon auth": "Authentification Patreon invalide", "Verification failed. Please try again": "Échec de vérification. Veuillez réessayer", "Generating": "Génération", "Generate": "Générer", "Verify": "Vérifier", "Token generated successfully": "Token généré avec succès ({{current}}/{{total}})", "Failed to generate token": "Échec de génération du token", "Token generation failed. Please try again": "Échec de génération du token. Veuillez réessayer", "Verifying": "Vérification", "Verified": "Vérifié", "Use code": "Utilisez le code", "for Patreon Auth, click Verify to unlock demo. Test at": "pour l’authentification Patreon, cliquez sur « Vérifier » pour déverrouiller la démo. Testez sur", "Need help with Auth Token? See": "Besoin d’aide avec le jeton d’authentification ? Voir", "the guide": "le guide", "Subscribe": "S’abonner", "to get your Patreon Auth code and start downloading with ease!": "pour obtenir votre code d’authentification Patreon et commencer à télécharger facilement !", "Report bugs or request features:": "Signalez des bugs ou demandez des fonctionnalités :", "Import": "Importer", "Importing...": "Importation...", "Supports JSON and ZIP formats": "Prend en charge les formats JSON et ZIP", "Export": "Exporter", "Export All Data": "Exporter toutes les données", "Exporting...": "Exportation...", "Clear": "Effacer", "Filter by Batch": "Filtrer par lot", "Are you sure to clear all data in the database?": "Êtes-vous sûr de vouloir effacer toutes les données de la base ?", "Delete Account Data": "Supprimer les données du compte", "Are you sure you want to delete account data? This action cannot be undone": "Êtes-vous sûr de vouloir supprimer les données de {{username}} ? Cette action ne peut pas être annulée.", "Delete": "Supprimer", "Deleting...": "Suppression...", "Overwrite": "Écraser", "Overwrite Existing Data?": "Écraser les données existantes ?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Les données du compte @{{username}} existent déjà dans la base de données. Voulez-vous les écraser ?", "No accounts yet": "Aucun compte pour le moment", "Use Dashboard to fetch data.": "Utilisez le Tableau de bord pour récupérer les données.", "Something went wrong.": "Quelque chose s'est mal passé.", "Error:": "Erreur :", "Fetch": "Récupérer", "Single": "Unique", "Batch": "Lot", "Auto Batch": "Lot automatique", "Timeline": "Chronologie", "Media": "Médias", "Batch Size": "Taille du lot", "Starting Batch": "Lot de départ", "Posts": "Publications", "Tweets": "Tweets", "Replies": "Réponses", "All": "Tout", "Image": "Image", "Video": "Vidéo", "GIF": "GIF", "Batch: {{page}}": "Lot : {{page}}", "Start": "Démarrer", "Stop": "Arrêter", "Prev": "Précédent", "Next": "Suivant", "Download Current": "Télécharger l'actuel", "Download All": "Tout télécharger", "Use Batch/Auto Batch if single fetch fails": "Utilisez Lot/Lot automatique si la récupération unique échoue", "Load from database": "Charger depuis la base de données", "Load database": "Charger la base de données", "First Page": "Première Page", "Last Page": "Dernière Page", "Failed to load data": "Échec du chargement des données", "Update": "Mettre à jour", "Updating...": "Mise à jour en cours...", "Update will fetch the latest data and overwrite the database. Continue?": "La mise à jour récupérera les dernières données et écrasera la base de données. Continuer ?", "Followers": "Abonnés", "Following": "Abonnements", "Joined": "Inscrit", "Open": "Ouvrir", "Preview": "Aperçu", "View Database": "Voir la base de données", "Converting...": "Conversion...", "Convert & Download": "Convertir et télécharger", "Date Since": "Date Depuis", "Date Until": "Date Jusqu'à", "Empty dates will fetch all available media": "Dates vides récupéreront tous les médias disponibles", "Filter by Date Range": "Filtrer par plage de dates", "Include Retweets": "Inclure les retweets", "Not supported with Media timeline": "Non pris en charge avec la chronologie des médias", "No media found for date range {{since}} to {{until}}": "Aucun média trouvé pour la période du {{since}} au {{until}}", "No tweets found for this account": "Aucun tweet trouvé pour ce compte", "No media found in {{count}} tweets": "Aucun média trouvé dans {{count}} tweets" } };
+  const hi = { "common": { "Settings": "सेटिंग्स", "Server": "सर्वर", "Choose the server closest to your location for best performance": "सर्वोत्तम प्रदर्शन के लिए अपने स्थान के निकटतम सर्वर चुनें", "Theme": "थीम", "Change Theme": "थीम बदलें", "Language": "भाषा", "Change Language": "भाषा बदलें", "Font Family": "फ़ॉन्ट परिवार", "System Default": "सिस्टम डिफ़ॉल्ट", "Date Time Format": "दिनांक समय प्रारूप", "Sound Effects": "ध्वनि प्रभाव", "Debug": "डिबग", "Global Settings": "वैश्विक सेटिंग्स", "Version": "संस्करण", "Common Formats:": "सामान्य प्रारूप:", "Date Formats:": "दिनांक प्रारूप:", "Time Formats:": "समय प्रारूप:", "Combined Examples:": "संयुक्त उदाहरण:", "Localized": "स्थानीयकृत", "Reset Settings": "सेटिंग्स रीसेट करें", "Are you sure you want to reset settings to defaults?": "क्या आप वाकई सेटिंग्स को डिफ़ॉल्ट पर रीसेट करना चाहते हैं?", "Reset": "रीसेट करें", "Cancel": "रद्द करें", "Chrome": "Chrome", "Userscript": "यूज़रस्क्रिप्ट", "Status": "स्थिति", "Home": "होम", "Patreon": "Patreon", "Dashboard": "डैशबोर्ड", "Database": "डेटाबेस", "Auth": "प्रमाणीकरण", "Convert Animated GIFs": "GIFs कन्वर्ट करें", "Convert GIFs (External)": "GIFs कन्वर्ट करें (बाहरी)", "Concurrent Downloads": "समकालिक डाउनलोड", "Use 10+ only with fast internet": "10+ का उपयोग केवल तेज़ इंटरनेट पर करें", "Smaller size, same quality": "आकार छोटा, गुणवत्ता समान", "Larger size, same quality": "आकार बड़ा, गुणवत्ता समान", "Back": "वापस", "Please visit a profile page for auto-detection": "कृपया ऑटो-डिटेक्शन के लिए प्रोफ़ाइल पेज पर जाएं", "Please configure authentication in the Auth tab first": "कृपया पहले ऑथ टैब में प्रमाणीकरण कॉन्फ़िगर करें", "Invalid username format": "अमान्य उपयोगकर्ता नाम प्रारूप", "Invalid auth token. Please check your settings.": "अमान्य ऑथ टोकन। कृपया सेटिंग्स जाँचें।", "Invalid Patreon auth. Please check your settings.": "अमान्य Patreon ऑथ। कृपया अपनी सेटिंग्स जाँचें।", "Failed to fetch data": "डेटा लाना विफल", "Failed to fetch data from all APIs": "सभी API से डेटा प्राप्त करने में विफल", "Failed to verify auth from all APIs": "सभी API से ऑथ सत्यापित करने में विफल", "Failed to generate token from all APIs": "सभी API से टोकन जनरेट करने में विफल", "Generating token...": "टोकन जेनरेट किया जा रहा है...", "Abort": "रद्द करें", "Network error occurred": "नेटवर्क त्रुटि हुई", "Request timeout - please try again": "अनुरोध का समय समाप्त — कृपया पुनः प्रयास करें", "Failed to parse API response": "API प्रतिक्रिया पार्स करने में विफल", "Invalid API response structure": "API प्रतिक्रिया संरचना अमान्य है", "Unknown error occurred": "अज्ञात त्रुटि हुई", "HTTP error! status: {{status}}": "HTTP त्रुटि! स्थिति: {{status}}", "Download already in progress": "डाउनलोड पहले से चल रहा है", "No media files found": "कोई मीडिया फ़ाइलें नहीं मिलीं", "Toggle visibility": "दिखाएँ/छुपाएँ", "Close": "बंद करें", "Converting GIFs...": "GIFs कन्वर्ट हो रहे हैं...", "Downloading...": "डाउनलोड हो रहा है...", "Download": "डाउनलोड करें", "Fetching...": "प्राप्त किया जा रहा है...", "Fetch All": "सब कुछ प्राप्त करें", "Fetch Video": "वीडियो प्राप्त करें", "Fetch Image": "छवि प्राप्त करें", "Fetch GIF": "GIF प्राप्त करें", "Posts: {{posts}}": "पोस्ट: {{posts}}", "Media: {{media}}": "मीडिया: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "वर्तमान मीडिया: {{current}} • कुल मीडिया: {{total}}", "Failed to download media": "मीडिया डाउनलोड विफल", "Demo mode is only available for @xbatchdemo": "डेमो मोड केवल @xbatchdemo के लिए उपलब्ध है", "Auth Token": "ऑथ टोकन", "Enter your auth token": "अपना ऑथ टोकन दर्ज करें", "Your authentication token for API access": "API एक्सेस के लिए आपका ऑथेंटिकेशन टोकन", "Patreon Auth": "Patreon ऑथ", "Enter your Patreon auth": "अपना Patreon ऑथ दर्ज करें", "Your Patreon authentication key": "आपकी Patreon प्रमाणीकरण कुंजी", "Please enter Patreon auth first": "कृपया पहले Patreon ऑथ दर्ज करें", "Please verify Patreon auth first": "कृपया पहले Patreon ऑथ सत्यापित करें", "Patreon auth verified successfully": "Patreon ऑथ सफलतापूर्वक सत्यापित", "Invalid Patreon auth": "अमान्य Patreon ऑथ", "Verification failed. Please try again": "सत्यापन विफल। कृपया पुनः प्रयास करें", "Generating": "उत्पन्न किया जा रहा है", "Generate": "उत्पन्न करें", "Verify": "सत्यापित करें", "Token generated successfully": "टोकन सफलतापूर्वक जनरेट हुआ ({{current}}/{{total}})", "Failed to generate token": "टोकन जनरेट करना विफल", "Token generation failed. Please try again": "टोकन जनरेशन विफल। कृपया पुनः प्रयास करें", "Verifying": "सत्यापित किया जा रहा है", "Verified": "सत्यापित", "Use code": "कोड उपयोग करें", "for Patreon Auth, click Verify to unlock demo. Test at": 'Patreon प्रमाणीकरण के लिए, डेमो अनलॉक करने हेतु "सत्यापित करें" पर क्लिक करें। परीक्षण करें:', "Need help with Auth Token? See": "ऑथ टोकन में मदद चाहिए? देखें", "the guide": "मार्गदर्शिका", "Subscribe": "सदस्यता लें", "to get your Patreon Auth code and start downloading with ease!": "अपना Patreon ऑथ कोड प्राप्त करें और आसानी से डाउनलोड शुरू करें!", "Report bugs or request features:": "बग रिपोर्ट करें या फीचर का अनुरोध करें:", "Import": "आयात करें", "Importing...": "आयात हो रहा है...", "Supports JSON and ZIP formats": "JSON और ZIP प्रारूप समर्थित हैं", "Export": "निर्यात करें", "Export All Data": "सभी डेटा निर्यात करें", "Exporting...": "निर्यात हो रहा है...", "Clear": "साफ़ करें", "Filter by Batch": "बैच द्वारा फ़िल्टर करें", "Are you sure to clear all data in the database?": "क्या आप वाकई डेटाबेस का सारा डेटा साफ़ करना चाहते हैं?", "Delete Account Data": "खाता डेटा हटाएँ", "Are you sure you want to delete account data? This action cannot be undone": "क्या आप वाकई {{username}} का डेटा हटाना चाहते हैं? यह क्रिया वापस नहीं की जा सकती।", "Delete": "हटाएं", "Deleting...": "हटा रहे हैं...", "Overwrite": "ओवरराइट करें", "Overwrite Existing Data?": "मौजूदा डेटा ओवरराइट करें?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "@{{username}} के लिए खाता डेटा पहले से ही डेटाबेस में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?", "No accounts yet": "अभी तक कोई खाता नहीं", "Use Dashboard to fetch data.": "डेटा प्राप्त करने के लिए डैशबोर्ड का उपयोग करें।", "Something went wrong.": "कुछ गलत हो गया।", "Error:": "त्रुटि:", "Fetch": "प्राप्त करें", "Single": "एकल", "Batch": "बैच", "Auto Batch": "ऑटो बैच", "Timeline": "टाइमलाइन", "Media": "मीडिया", "Batch Size": "बैच आकार", "Starting Batch": "प्रारंभिक बैच", "Posts": "पोस्ट", "Tweets": "ट्वीट्स", "Replies": "जवाब", "All": "सभी", "Image": "छवि", "Video": "वीडियो", "GIF": "GIF", "Batch: {{page}}": "बैच: {{page}}", "Start": "प्रारंभ", "Stop": "रोकें", "Prev": "पिछला", "Next": "अगला", "Download Current": "वर्तमान डाउनलोड करें", "Download All": "सभी डाउनलोड करें", "Use Batch/Auto Batch if single fetch fails": "यदि एकल प्राप्ति विफल हो, तो बैच/ऑटो बैच का उपयोग करें", "Load from database": "डेटाबेस से लोड करें", "Load database": "डेटाबेस लोड करें", "First Page": "पहला पृष्ठ", "Last Page": "अंतिम पृष्ठ", "Failed to load data": "डेटा लोड करना विफल", "Update": "अपडेट करें", "Updating...": "अपडेट हो रहा है...", "Update will fetch the latest data and overwrite the database. Continue?": "अपडेट नवीनतम डेटा प्राप्त करेगा और डेटाबेस को ओवरराइट करेगा। जारी रखें?", "Followers": "फॉलोवर्स", "Following": "फॉलो कर रहे हैं", "Joined": "जुड़े", "Open": "खोलें", "Preview": "पूर्वावलोकन", "View Database": "डेटाबेस देखें", "Converting...": "कन्वर्ट हो रहा है...", "Convert & Download": "कन्वर्ट करें और डाउनलोड करें", "Date Since": "तारीख से", "Date Until": "तारीख तक", "Empty dates will fetch all available media": "खाली तिथियां सभी उपलब्ध मीडिया प्राप्त करेंगी", "Filter by Date Range": "दिनांक सीमा के अनुसार फ़िल्टर करें", "Include Retweets": "रीट्वीट शामिल करें", "Not supported with Media timeline": "मीडिया टाइमलाइन के साथ समर्थित नहीं", "No media found for date range {{since}} to {{until}}": "{{since}} से {{until}} की तारीख सीमा के लिए कोई मीडिया नहीं मिला", "No tweets found for this account": "इस खाते के लिए कोई ट्वीट नहीं मिला", "No media found in {{count}} tweets": "{{count}} ट्वीट में कोई मीडिया नहीं मिला" } };
+  const id = { "common": { "Settings": "Pengaturan", "Server": "Server", "Choose the server closest to your location for best performance": "Pilih server yang paling dekat dengan lokasi Anda untuk performa terbaik", "Theme": "Tema", "Change Theme": "Ubah Tema", "Language": "Bahasa", "Change Language": "Ubah Bahasa", "Font Family": "Jenis Font", "System Default": "Bawaan Sistem", "Date Time Format": "Format Tanggal Waktu", "Sound Effects": "Efek Suara", "Debug": "Debug", "Global Settings": "Pengaturan Global", "Version": "Versi", "Common Formats:": "Format Umum:", "Date Formats:": "Format Tanggal:", "Time Formats:": "Format Waktu:", "Combined Examples:": "Contoh Gabungan:", "Localized": "Terlokalisasi", "Reset Settings": "Reset Pengaturan", "Are you sure you want to reset settings to defaults?": "Apakah Anda yakin ingin mereset pengaturan ke default?", "Reset": "Reset", "Cancel": "Batal", "Chrome": "Chrome", "Userscript": "Userscript", "Status": "Status", "Home": "Beranda", "Patreon": "Patreon", "Dashboard": "Dasbor", "Database": "Database", "Auth": "Autentikasi", "Convert Animated GIFs": "Konversi GIF", "Convert GIFs (External)": "Konversi GIF (Eksternal)", "Concurrent Downloads": "Unduhan Bersamaan", "Use 10+ only with fast internet": "Gunakan 10+ hanya dengan internet cepat", "Smaller size, same quality": "Ukuran lebih kecil, kualitas sama", "Larger size, same quality": "Ukuran lebih besar, kualitas sama", "Back": "Kembali", "Please visit a profile page for auto-detection": "Silakan kunjungi halaman profil untuk deteksi otomatis", "Please configure authentication in the Auth tab first": "Silakan konfigurasi autentikasi di tab Auth terlebih dahulu", "Invalid username format": "Format username tidak valid", "Invalid auth token. Please check your settings.": "Token autentikasi tidak valid. Silakan periksa pengaturan Anda.", "Invalid Patreon auth. Please check your settings.": "Autentikasi Patreon tidak valid. Silakan periksa pengaturan Anda.", "Failed to fetch data": "Gagal mengambil data", "Failed to fetch data from all APIs": "Gagal mengambil data dari semua API", "Failed to verify auth from all APIs": "Gagal memverifikasi autentikasi dari semua API", "Failed to generate token from all APIs": "Gagal menghasilkan token dari semua API", "Generating token...": "Menghasilkan token...", "Abort": "Batalkan", "Network error occurred": "Terjadi kesalahan jaringan", "Request timeout - please try again": "Permintaan timeout - silakan coba lagi", "Failed to parse API response": "Gagal mem-parsing respons API", "Invalid API response structure": "Struktur respons API tidak valid", "Unknown error occurred": "Terjadi kesalahan yang tidak diketahui", "HTTP error! status: {{status}}": "Kesalahan HTTP! status: {{status}}", "Download already in progress": "Unduhan sudah berlangsung", "No media files found": "Tidak ada file media ditemukan", "Toggle visibility": "Alihkan visibilitas", "Close": "Tutup", "Converting GIFs...": "Mengonversi GIF...", "Downloading...": "Mengunduh...", "Download": "Unduh", "Fetching...": "Mengambil...", "Fetch All": "Ambil Semua", "Fetch Video": "Ambil Video", "Fetch Image": "Ambil Gambar", "Fetch GIF": "Ambil GIF", "Posts: {{posts}}": "Postingan: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Media Saat Ini: {{current}} • Total Media: {{total}}", "Failed to download media": "Gagal mengunduh media", "Demo mode is only available for @xbatchdemo": "Mode demo hanya tersedia untuk @xbatchdemo", "Auth Token": "Token Autentikasi", "Enter your auth token": "Masukkan token autentikasi Anda", "Your authentication token for API access": "Token autentikasi Anda untuk akses API", "Patreon Auth": "Autentikasi Patreon", "Enter your Patreon auth": "Masukkan autentikasi Patreon Anda", "Your Patreon authentication key": "Kunci autentikasi Patreon Anda", "Please enter Patreon auth first": "Silakan masukkan autentikasi Patreon terlebih dahulu", "Please verify Patreon auth first": "Silakan verifikasi autentikasi Patreon terlebih dahulu", "Patreon auth verified successfully": "Autentikasi Patreon berhasil diverifikasi", "Invalid Patreon auth": "Autentikasi Patreon tidak valid", "Verification failed. Please try again": "Verifikasi gagal. Silakan coba lagi", "Generating": "Menghasilkan", "Generate": "Hasilkan", "Verify": "Verifikasi", "Token generated successfully": "Token berhasil dihasilkan ({{current}}/{{total}})", "Failed to generate token": "Gagal menghasilkan token", "Token generation failed. Please try again": "Pembuatan token gagal. Silakan coba lagi", "Verifying": "Memverifikasi", "Verified": "Terverifikasi", "Use code": "Gunakan kode", "for Patreon Auth, click Verify to unlock demo. Test at": "untuk Autentikasi Patreon, klik Verifikasi untuk membuka demo. Tes di", "Need help with Auth Token? See": "Butuh bantuan dengan Token Autentikasi? Lihat", "the guide": "panduannya", "Subscribe": "Berlangganan", "to get your Patreon Auth code and start downloading with ease!": "untuk mendapatkan kode Autentikasi Patreon dan mulai mengunduh dengan mudah!", "Report bugs or request features:": "Laporkan bug atau minta fitur:", "Import": "Impor", "Importing...": "Mengimpor...", "Supports JSON and ZIP formats": "Mendukung format JSON dan ZIP", "Export": "Ekspor", "Export All Data": "Ekspor Semua Data", "Exporting...": "Mengekspor...", "Clear": "Hapus", "Filter by Batch": "Filter berdasarkan Batch", "Are you sure to clear all data in the database?": "Apakah Anda yakin ingin menghapus semua data di database?", "Delete Account Data": "Hapus Data Akun", "Are you sure you want to delete account data? This action cannot be undone": "Apakah Anda yakin ingin menghapus data {{username}}? Tindakan ini tidak dapat dibatalkan.", "Delete": "Hapus", "Deleting...": "Menghapus...", "Overwrite": "Timpa", "Overwrite Existing Data?": "Timpa Data yang Ada?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Data akun untuk @{{username}} sudah ada di database. Apakah Anda ingin menimpanya?", "No accounts yet": "Belum ada akun", "Use Dashboard to fetch data.": "Gunakan Dasbor untuk mengambil data.", "Something went wrong.": "Terjadi kesalahan.", "Error:": "Kesalahan:", "Fetch": "Ambil", "Single": "Tunggal", "Batch": "Batch", "Auto Batch": "Batch Otomatis", "Timeline": "Timeline", "Media": "Media", "Batch Size": "Ukuran Batch", "Starting Batch": "Batch Awal", "Posts": "Postingan", "Tweets": "Tweet", "Replies": "Balasan", "All": "Semua", "Image": "Gambar", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Mulai", "Stop": "Berhenti", "Prev": "Sebelumnya", "Next": "Selanjutnya", "Download Current": "Unduh Saat Ini", "Download All": "Unduh Semua", "Use Batch/Auto Batch if single fetch fails": "Gunakan Batch/Batch Otomatis jika pengambilan tunggal gagal", "Load from database": "Muat dari database", "Load database": "Muat database", "First Page": "Halaman Pertama", "Last Page": "Halaman Terakhir", "Failed to load data": "Gagal memuat data", "Update": "Perbarui", "Updating...": "Memperbarui...", "Update will fetch the latest data and overwrite the database. Continue?": "Pembaruan akan mengambil data terbaru dan menimpa database. Lanjutkan?", "Followers": "Pengikut", "Following": "Mengikuti", "Joined": "Bergabung", "Open": "Buka", "Preview": "Pratinjau", "View Database": "Lihat Database", "Converting...": "Mengonversi...", "Convert & Download": "Konversi & Unduh", "Date Since": "Tanggal Mulai", "Date Until": "Tanggal Sampai", "Empty dates will fetch all available media": "Tanggal kosong akan mengambil semua media yang tersedia", "Filter by Date Range": "Filter berdasarkan Rentang Tanggal", "Include Retweets": "Sertakan Retweet", "Not supported with Media timeline": "Tidak didukung dengan timeline Media", "No media found for date range {{since}} to {{until}}": "Tidak ada media ditemukan untuk rentang tanggal {{since}} sampai {{until}}", "No tweets found for this account": "Tidak ada tweet ditemukan untuk akun ini", "No media found in {{count}} tweets": "Tidak ada media ditemukan di {{count}} tweet" } };
+  const it = { "common": { "Settings": "Impostazioni", "Server": "Server", "Choose the server closest to your location for best performance": "Scegli il server più vicino alla tua posizione per le migliori prestazioni", "Theme": "Tema", "Change Theme": "Cambia Tema", "Language": "Lingua", "Change Language": "Cambia Lingua", "Font Family": "Famiglia di Font", "System Default": "Predefinito di Sistema", "Date Time Format": "Formato Data Ora", "Sound Effects": "Effetti Sonori", "Debug": "Debug", "Global Settings": "Impostazioni Globali", "Version": "Versione", "Common Formats:": "Formati Comuni:", "Date Formats:": "Formati Data:", "Time Formats:": "Formati Ora:", "Combined Examples:": "Esempi Combinati:", "Localized": "Localizzato", "Reset Settings": "Ripristina Impostazioni", "Are you sure you want to reset settings to defaults?": "Sei sicuro di voler ripristinare le impostazioni predefinite?", "Reset": "Ripristina", "Cancel": "Annulla", "Chrome": "Chrome", "Userscript": "Userscript", "Status": "Stato", "Home": "Home", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Database", "Auth": "Autenticazione", "Convert Animated GIFs": "Converti GIF", "Convert GIFs (External)": "Converti GIF (Esterno)", "Concurrent Downloads": "Download Simultanei", "Use 10+ only with fast internet": "Usa 10+ solo con internet veloce", "Smaller size, same quality": "Dimensione ridotta, stessa qualità", "Larger size, same quality": "Dimensione maggiore, stessa qualità", "Back": "Indietro", "Please visit a profile page for auto-detection": "Visita una pagina profilo per il rilevamento automatico", "Please configure authentication in the Auth tab first": "Configura prima l'autenticazione nella scheda Auth", "Invalid username format": "Formato nome utente non valido", "Invalid auth token. Please check your settings.": "Token di autenticazione non valido. Controlla le impostazioni.", "Invalid Patreon auth. Please check your settings.": "Autenticazione Patreon non valida. Controlla le impostazioni.", "Failed to fetch data": "Impossibile recuperare i dati", "Failed to fetch data from all APIs": "Impossibile recuperare i dati da tutte le API", "Failed to verify auth from all APIs": "Impossibile verificare l'autenticazione da tutte le API", "Failed to generate token from all APIs": "Impossibile generare il token da tutte le API", "Generating token...": "Generazione token...", "Abort": "Interrompi", "Network error occurred": "Si è verificato un errore di rete", "Request timeout - please try again": "Timeout della richiesta - riprova", "Failed to parse API response": "Impossibile analizzare la risposta API", "Invalid API response structure": "Struttura risposta API non valida", "Unknown error occurred": "Si è verificato un errore sconosciuto", "HTTP error! status: {{status}}": "Errore HTTP! stato: {{status}}", "Download already in progress": "Download già in corso", "No media files found": "Nessun file multimediale trovato", "Toggle visibility": "Attiva/disattiva visibilità", "Close": "Chiudi", "Converting GIFs...": "Conversione GIF...", "Downloading...": "Download in corso...", "Download": "Scarica", "Fetching...": "Recupero...", "Fetch All": "Recupera Tutto", "Fetch Video": "Recupera Video", "Fetch Image": "Recupera Immagine", "Fetch GIF": "Recupera GIF", "Posts: {{posts}}": "Post: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Media Corrente: {{current}} • Media Totale: {{total}}", "Failed to download media": "Impossibile scaricare i media", "Demo mode is only available for @xbatchdemo": "La modalità demo è disponibile solo per @xbatchdemo", "Auth Token": "Token di Autenticazione", "Enter your auth token": "Inserisci il tuo token di autenticazione", "Your authentication token for API access": "Il tuo token di autenticazione per l'accesso API", "Patreon Auth": "Autenticazione Patreon", "Enter your Patreon auth": "Inserisci la tua autenticazione Patreon", "Your Patreon authentication key": "La tua chiave di autenticazione Patreon", "Please enter Patreon auth first": "Inserisci prima l'autenticazione Patreon", "Please verify Patreon auth first": "Verifica prima l'autenticazione Patreon", "Patreon auth verified successfully": "Autenticazione Patreon verificata con successo", "Invalid Patreon auth": "Autenticazione Patreon non valida", "Verification failed. Please try again": "Verifica fallita. Riprova", "Generating": "Generazione", "Generate": "Genera", "Verify": "Verifica", "Token generated successfully": "Token generato con successo ({{current}}/{{total}})", "Failed to generate token": "Impossibile generare il token", "Token generation failed. Please try again": "Generazione token fallita. Riprova", "Verifying": "Verifica in corso", "Verified": "Verificato", "Use code": "Usa il codice", "for Patreon Auth, click Verify to unlock demo. Test at": "per l'autenticazione Patreon, clicca Verifica per sbloccare la demo. Testa su", "Need help with Auth Token? See": "Hai bisogno di aiuto con il Token di Autenticazione? Vedi", "the guide": "la guida", "Subscribe": "Abbonati", "to get your Patreon Auth code and start downloading with ease!": "per ottenere il tuo codice di autenticazione Patreon e iniziare a scaricare facilmente!", "Report bugs or request features:": "Segnala bug o richiedi funzionalità:", "Import": "Importa", "Importing...": "Importazione...", "Supports JSON and ZIP formats": "Supporta formati JSON e ZIP", "Export": "Esporta", "Export All Data": "Esporta Tutti i Dati", "Exporting...": "Esportazione...", "Clear": "Cancella", "Filter by Batch": "Filtra per Batch", "Are you sure to clear all data in the database?": "Sei sicuro di voler cancellare tutti i dati nel database?", "Delete Account Data": "Elimina Dati Account", "Are you sure you want to delete account data? This action cannot be undone": "Sei sicuro di voler eliminare i dati di {{username}}? Questa azione non può essere annullata.", "Delete": "Elimina", "Deleting...": "Eliminazione...", "Overwrite": "Sovrascrivi", "Overwrite Existing Data?": "Sovrascrivere i Dati Esistenti?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "I dati dell'account per @{{username}} esistono già nel database. Vuoi sovrascriverli?", "No accounts yet": "Nessun account ancora", "Use Dashboard to fetch data.": "Usa la Dashboard per recuperare i dati.", "Something went wrong.": "Qualcosa è andato storto.", "Error:": "Errore:", "Fetch": "Recupera", "Single": "Singolo", "Batch": "Batch", "Auto Batch": "Batch Automatico", "Timeline": "Timeline", "Media": "Media", "Batch Size": "Dimensione Batch", "Starting Batch": "Batch Iniziale", "Posts": "Post", "Tweets": "Tweet", "Replies": "Risposte", "All": "Tutto", "Image": "Immagine", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Avvia", "Stop": "Ferma", "Prev": "Prec", "Next": "Succ", "Download Current": "Scarica Corrente", "Download All": "Scarica Tutto", "Use Batch/Auto Batch if single fetch fails": "Usa Batch/Batch Automatico se il recupero singolo fallisce", "Load from database": "Carica dal database", "Load database": "Carica database", "First Page": "Prima Pagina", "Last Page": "Ultima Pagina", "Failed to load data": "Impossibile caricare i dati", "Update": "Aggiorna", "Updating...": "Aggiornamento...", "Update will fetch the latest data and overwrite the database. Continue?": "L'aggiornamento recupererà i dati più recenti e sovrascriverà il database. Continuare?", "Followers": "Follower", "Following": "Seguiti", "Joined": "Iscritto", "Open": "Apri", "Preview": "Anteprima", "View Database": "Visualizza Database", "Converting...": "Conversione...", "Convert & Download": "Converti e Scarica", "Date Since": "Data Da", "Date Until": "Data Fino", "Empty dates will fetch all available media": "Date vuote recupereranno tutti i media disponibili", "Filter by Date Range": "Filtra per intervallo di date", "Include Retweets": "Includi Retweet", "Not supported with Media timeline": "Non supportato con timeline Media", "No media found for date range {{since}} to {{until}}": "Nessun media trovato per il periodo dal {{since}} al {{until}}", "No tweets found for this account": "Nessun tweet trovato per questo account", "No media found in {{count}} tweets": "Nessun media trovato in {{count}} tweet" } };
+  const ja = { "common": { "Settings": "設定", "Server": "サーバー", "Choose the server closest to your location for best performance": "最高のパフォーマンスを得るために、お住まいの地域に最も近いサーバーを選択してください", "Theme": "テーマ", "Change Theme": "テーマを変更", "Language": "言語", "Change Language": "言語を変更", "Font Family": "フォントファミリー", "System Default": "システムデフォルト", "Date Time Format": "日時フォーマット", "Sound Effects": "サウンドエフェクト", "Debug": "デバッグ", "Global Settings": "グローバル設定", "Version": "バージョン", "Common Formats:": "一般的な形式:", "Date Formats:": "日付形式:", "Time Formats:": "時刻形式:", "Combined Examples:": "組み合わせ例:", "Localized": "ローカライズ済み", "Reset Settings": "設定のリセット", "Are you sure you want to reset settings to defaults?": "設定をデフォルトにリセットしてもよろしいですか？", "Reset": "リセット", "Cancel": "キャンセル", "Chrome": "Chrome", "Userscript": "ユーザースクリプト", "Status": "ステータス", "Home": "ホーム", "Patreon": "Patreon", "Dashboard": "ダッシュボード", "Database": "データベース", "Auth": "認証", "Convert Animated GIFs": "GIFを変換", "Convert GIFs (External)": "GIFを変換（外部）", "Concurrent Downloads": "同時ダウンロード数", "Use 10+ only with fast internet": "10以上は高速なインターネット環境でのみ使用してください", "Smaller size, same quality": "サイズは小さく、品質は同じです", "Larger size, same quality": "サイズは大きく、品質は同じです", "Back": "戻る", "Please visit a profile page for auto-detection": "プロフィールページを訪問して自動検出してください", "Please configure authentication in the Auth tab first": "最初に認証タブで認証を設定してください", "Invalid username format": "無効なユーザー名形式", "Invalid auth token. Please check your settings.": "無効な認証トークンです。設定を確認してください。", "Invalid Patreon auth. Please check your settings.": "無効なPatreon認証です。設定を確認してください。", "Failed to fetch data": "データ取得に失敗しました", "Failed to fetch data from all APIs": "すべてのAPIからデータ取得に失敗しました", "Failed to verify auth from all APIs": "すべてのAPIで認証の検証に失敗しました", "Failed to generate token from all APIs": "すべてのAPIでトークン生成に失敗しました", "Generating token...": "トークン生成中...", "Abort": "中止", "Network error occurred": "ネットワークエラーが発生しました", "Request timeout - please try again": "リクエストがタイムアウトしました。もう一度お試しください", "Failed to parse API response": "API 応答の解析に失敗しました", "Invalid API response structure": "無効な API 応答構造です", "Unknown error occurred": "不明なエラーが発生しました", "HTTP error! status: {{status}}": "HTTP エラー! ステータス: {{status}}", "Download already in progress": "ダウンロードはすでに進行中です", "No media files found": "メディアファイルが見つかりません", "Toggle visibility": "表示/非表示を切り替え", "Close": "閉じる", "Converting GIFs...": "GIF変換中...", "Downloading...": "ダウンロード中...", "Download": "ダウンロード", "Fetching...": "取得中...", "Fetch All": "すべて取得", "Fetch Video": "ビデオを取得", "Fetch Image": "画像を取得", "Fetch GIF": "GIFを取得", "Posts: {{posts}}": "投稿: {{posts}}", "Media: {{media}}": "メディア: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "現在のメディア: {{current}} • 合計メディア: {{total}}", "Failed to download media": "メディアダウンロードに失敗しました", "Demo mode is only available for @xbatchdemo": "デモモードは @xbatchdemo のみ利用できます", "Auth Token": "認証トークン", "Enter your auth token": "認証トークンを入力", "Your authentication token for API access": "APIアクセス用の認証トークン", "Patreon Auth": "Patreon認証", "Enter your Patreon auth": "Patreon認証を入力", "Your Patreon authentication key": "Patreon認証キー", "Please enter Patreon auth first": "最初にPatreon認証を入力してください", "Please verify Patreon auth first": "最初にPatreon認証を確認してください", "Patreon auth verified successfully": "Patreon認証が正常に確認されました", "Invalid Patreon auth": "無効なPatreon認証", "Verification failed. Please try again": "検証に失敗しました。再試行してください", "Generating": "生成中", "Generate": "生成", "Verify": "確認", "Token generated successfully": "トークンが正常に生成されました ({{current}}/{{total}})", "Failed to generate token": "トークン生成に失敗しました", "Token generation failed. Please try again": "トークン生成に失敗しました。再試行してください", "Verifying": "確認中", "Verified": "確認済み", "Use code": "コードを使用", "for Patreon Auth, click Verify to unlock demo. Test at": "Patreon 認証用。デモを有効にするには「確認」をクリック。テスト先:", "Need help with Auth Token? See": "認証トークンでお困りですか？こちらをご覧ください:", "the guide": "ガイド", "Subscribe": "購読する", "to get your Patreon Auth code and start downloading with ease!": "Patreon 認証コードを入手して、簡単にダウンロードを開始しましょう！", "Report bugs or request features:": "バグ報告や機能リクエストはこちら:", "Import": "インポート", "Importing...": "インポート中...", "Supports JSON and ZIP formats": "JSON および ZIP 形式をサポート", "Export": "エクスポート", "Export All Data": "すべてのデータをエクスポート", "Exporting...": "エクスポート中...", "Clear": "クリア", "Filter by Batch": "バッチでフィルター", "Are you sure to clear all data in the database?": "データベースのすべてのデータをクリアしてもよろしいですか？", "Delete Account Data": "アカウントデータの削除", "Are you sure you want to delete account data? This action cannot be undone": "{{username}}のデータを削除してもよろしいですか？この操作は元に戻せません。", "Delete": "削除", "Deleting...": "削除中...", "Overwrite": "上書き", "Overwrite Existing Data?": "既存のデータを上書きしますか？", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "@{{username}} のアカウントデータは既にデータベースに存在します。上書きしますか？", "No accounts yet": "まだアカウントがありません", "Use Dashboard to fetch data.": "ダッシュボードを使用してデータを取得してください。", "Something went wrong.": "何かが間違っています。", "Error:": "エラー:", "Fetch": "取得", "Single": "シングル", "Batch": "バッチ", "Auto Batch": "自動バッチ", "Timeline": "タイムライン", "Media": "メディア", "Batch Size": "バッチサイズ", "Starting Batch": "開始バッチ", "Posts": "投稿", "Tweets": "ツイート", "Replies": "返信", "All": "すべて", "Image": "画像", "Video": "ビデオ", "GIF": "GIF", "Batch: {{page}}": "バッチ: {{page}}", "Start": "開始", "Stop": "停止", "Prev": "前へ", "Next": "次へ", "Download Current": "現在をダウンロード", "Download All": "すべてダウンロード", "Use Batch/Auto Batch if single fetch fails": "単一取得が失敗した場合はバッチ/自動バッチを使用してください", "Load from database": "データベースから読み込む", "Load database": "データベースを読み込む", "First Page": "最初のページ", "Last Page": "最後のページ", "Failed to load data": "データの読み込みに失敗しました", "Update": "更新", "Updating...": "更新中...", "Update will fetch the latest data and overwrite the database. Continue?": "更新により最新データを取得し、データベースを上書きします。続行しますか？", "Followers": "フォロワー", "Following": "フォロー中", "Joined": "参加日", "Open": "開く", "Preview": "プレビュー", "View Database": "データベースを表示", "Converting...": "変換中...", "Convert & Download": "変換してダウンロード", "Date Since": "開始日", "Date Until": "終了日", "Empty dates will fetch all available media": "日付が空の場合、利用可能なすべてのメディアを取得します", "Filter by Date Range": "日付範囲でフィルター", "Include Retweets": "リツイートを含む", "Not supported with Media timeline": "メディアタイムラインではサポートされていません", "No media found for date range {{since}} to {{until}}": "{{since}}から{{until}}の期間にメディアが見つかりませんでした", "No tweets found for this account": "このアカウントのツイートが見つかりませんでした", "No media found in {{count}} tweets": "{{count}}件のツイートにメディアが見つかりませんでした" } };
+  const ko = { "common": { "Settings": "설정", "Server": "서버", "Choose the server closest to your location for best performance": "최상의 성능을 위해 가장 가까운 서버를 선택하세요", "Theme": "테마", "Change Theme": "테마 변경", "Language": "언어", "Change Language": "언어 변경", "Font Family": "글꼴 모음", "System Default": "시스템 기본값", "Date Time Format": "날짜 시간 형식", "Sound Effects": "사운드 효과", "Debug": "디버그", "Global Settings": "전역 설정", "Version": "버전", "Common Formats:": "일반 형식:", "Date Formats:": "날짜 형식:", "Time Formats:": "시간 형식:", "Combined Examples:": "결합 예시:", "Localized": "현지화됨", "Reset Settings": "설정 재설정", "Are you sure you want to reset settings to defaults?": "설정을 기본값으로 재설정하시겠습니까?", "Reset": "재설정", "Cancel": "취소", "Chrome": "Chrome", "Userscript": "유저스크립트", "Status": "상태", "Home": "홈", "Patreon": "Patreon", "Dashboard": "대시보드", "Database": "데이터베이스", "Auth": "인증", "Convert Animated GIFs": "GIF 변환", "Convert GIFs (External)": "GIF 변환 (외부)", "Concurrent Downloads": "동시 다운로드", "Use 10+ only with fast internet": "빠른 인터넷에서만 10+를 사용하세요", "Smaller size, same quality": "더 작은 용량, 동일한 품질", "Larger size, same quality": "더 큰 용량, 동일한 품질", "Back": "뒤로", "Please visit a profile page for auto-detection": "자동 감지를 위해 프로필 페이지를 방문해주세요", "Please configure authentication in the Auth tab first": "먼저 Auth 탭에서 인증을 구성해주세요", "Invalid username format": "잘못된 사용자명 형식", "Invalid auth token. Please check your settings.": "잘못된 인증 토큰입니다. 설정을 확인해주세요.", "Invalid Patreon auth. Please check your settings.": "잘못된 Patreon 인증입니다. 설정을 확인해주세요.", "Failed to fetch data": "데이터 가져오기 실패", "Failed to fetch data from all APIs": "모든 API에서 데이터를 가져오지 못했습니다", "Failed to verify auth from all APIs": "모든 API에서 인증 확인에 실패했습니다", "Failed to generate token from all APIs": "모든 API에서 토큰 생성에 실패했습니다", "Generating token...": "토큰 생성 중...", "Abort": "중단", "Network error occurred": "네트워크 오류가 발생했습니다", "Request timeout - please try again": "요청 시간 초과 - 다시 시도해 주세요", "Failed to parse API response": "API 응답을 파싱하지 못했습니다", "Invalid API response structure": "잘못된 API 응답 구조입니다", "Unknown error occurred": "알 수 없는 오류가 발생했습니다", "HTTP error! status: {{status}}": "HTTP 오류! 상태: {{status}}", "Download already in progress": "다운로드가 이미 진행 중입니다", "No media files found": "미디어 파일을 찾을 수 없습니다", "Toggle visibility": "표시/숨기기", "Close": "닫기", "Converting GIFs...": "GIF 변환 중...", "Downloading...": "다운로드 중...", "Download": "다운로드", "Fetching...": "가져오는 중...", "Fetch All": "전체 가져오기", "Fetch Video": "비디오 가져오기", "Fetch Image": "이미지 가져오기", "Fetch GIF": "GIF 가져오기", "Posts: {{posts}}": "게시물: {{posts}}", "Media: {{media}}": "미디어: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "현재 미디어: {{current}} • 전체 미디어: {{total}}", "Failed to download media": "미디어 다운로드 실패", "Demo mode is only available for @xbatchdemo": "데모 모드는 @xbatchdemo에게만 제공됩니다", "Auth Token": "인증 토큰", "Enter your auth token": "인증 토큰을 입력하세요", "Your authentication token for API access": "API 접근을 위한 인증 토큰", "Patreon Auth": "Patreon 인증", "Enter your Patreon auth": "Patreon 인증을 입력하세요", "Your Patreon authentication key": "Patreon 인증 키", "Please enter Patreon auth first": "먼저 Patreon 인증을 입력해주세요", "Please verify Patreon auth first": "먼저 Patreon 인증을 확인해주세요", "Patreon auth verified successfully": "Patreon 인증이 성공적으로 확인되었습니다", "Invalid Patreon auth": "잘못된 Patreon 인증", "Verification failed. Please try again": "확인 실패. 다시 시도해주세요", "Generating": "생성 중", "Generate": "생성", "Verify": "확인", "Token generated successfully": "토큰이 성공적으로 생성되었습니다 ({{current}}/{{total}})", "Failed to generate token": "토큰 생성 실패", "Token generation failed. Please try again": "토큰 생성 실패. 다시 시도해주세요", "Verifying": "확인 중", "Verified": "확인됨", "Use code": "코드를 사용", "for Patreon Auth, click Verify to unlock demo. Test at": "Patreon 인증용입니다. 데모를 해제하려면 ‘확인’을 클릭하세요. 테스트:", "Need help with Auth Token? See": "인증 토큰이 필요하신가요? 다음을 참조하세요:", "the guide": "가이드", "Subscribe": "구독하기", "to get your Patreon Auth code and start downloading with ease!": "Patreon 인증 코드를 받아 손쉽게 다운로드를 시작하세요!", "Report bugs or request features:": "버그 신고 또는 기능 요청:", "Import": "가져오기", "Importing...": "가져오는 중...", "Supports JSON and ZIP formats": "JSON 및 ZIP 형식 지원", "Export": "내보내기", "Export All Data": "모든 데이터 내보내기", "Exporting...": "내보내는 중...", "Clear": "삭제", "Filter by Batch": "배치별 필터", "Are you sure to clear all data in the database?": "데이터베이스의 모든 데이터를 삭제하시겠습니까?", "Delete Account Data": "계정 데이터 삭제", "Are you sure you want to delete account data? This action cannot be undone": "{{username}}의 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.", "Delete": "삭제", "Deleting...": "삭제 중...", "Overwrite": "덮어쓰기", "Overwrite Existing Data?": "기존 데이터를 덮어쓰시겠습니까?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "@{{username}}의 계정 데이터가 이미 데이터베이스에 존재합니다. 덮어쓰시겠습니까?", "No accounts yet": "아직 계정이 없습니다", "Use Dashboard to fetch data.": "대시보드를 사용하여 데이터를 가져와주세요.", "Something went wrong.": "문제가 발생했습니다.", "Error:": "오류:", "Fetch": "가져오기", "Single": "단일", "Batch": "배치", "Auto Batch": "자동 배치", "Timeline": "타임라인", "Media": "미디어", "Batch Size": "배치 크기", "Starting Batch": "시작 배치", "Posts": "게시물", "Tweets": "트윗", "Replies": "답글", "All": "전체", "Image": "이미지", "Video": "비디오", "GIF": "GIF", "Batch: {{page}}": "배치: {{page}}", "Start": "시작", "Stop": "중지", "Prev": "이전", "Next": "다음", "Download Current": "현재 다운로드", "Download All": "모두 다운로드", "Use Batch/Auto Batch if single fetch fails": "단일 가져오기가 실패하면 배치/자동 배치를 사용하세요", "Load from database": "데이터베이스에서 불러오기", "Load database": "데이터베이스 불러오기", "First Page": "첫 페이지", "Last Page": "마지막 페이지", "Failed to load data": "데이터 불러오기 실패", "Update": "업데이트", "Updating...": "업데이트 중...", "Update will fetch the latest data and overwrite the database. Continue?": "업데이트는 최신 데이터를 가져와 데이터베이스를 덮어씁니다. 계속하시겠습니까?", "Followers": "팔로워", "Following": "팔로잉", "Joined": "가입일", "Open": "열기", "Preview": "미리보기", "View Database": "데이터베이스 보기", "Converting...": "변환 중...", "Convert & Download": "변환 및 다운로드", "Date Since": "시작 날짜", "Date Until": "종료 날짜", "Empty dates will fetch all available media": "날짜가 비어있으면 사용 가능한 모든 미디어를 가져옵니다", "Filter by Date Range": "날짜 범위로 필터링", "Include Retweets": "리트윗 포함", "Not supported with Media timeline": "미디어 타임라인에서는 지원되지 않음", "No media found for date range {{since}} to {{until}}": "{{since}}부터 {{until}}까지의 기간에 미디어를 찾을 수 없습니다", "No tweets found for this account": "이 계정의 트윗을 찾을 수 없습니다", "No media found in {{count}} tweets": "{{count}}개의 트윗에서 미디어를 찾을 수 없습니다" } };
+  const nl = { "common": { "Settings": "Instellingen", "Server": "Server", "Choose the server closest to your location for best performance": "Kies de server die het dichtst bij uw locatie ligt voor de beste prestaties", "Theme": "Thema", "Change Theme": "Verander Thema", "Language": "Taal", "Change Language": "Verander Taal", "Font Family": "Lettertypefamilie", "System Default": "Systeemstandaard", "Date Time Format": "Datum Tijd Formaat", "Sound Effects": "Geluidseffecten", "Debug": "Debug", "Global Settings": "Algemene Instellingen", "Version": "Versie", "Common Formats:": "Veelgebruikte Formaten:", "Date Formats:": "Datumformaten:", "Time Formats:": "Tijdformaten:", "Combined Examples:": "Gecombineerde Voorbeelden:", "Localized": "Gelokaliseerd", "Reset Settings": "Reset Instellingen", "Are you sure you want to reset settings to defaults?": "Weet je zeker dat je de instellingen wilt resetten naar standaard?", "Reset": "Reset", "Cancel": "Annuleren", "Chrome": "Chrome", "Userscript": "Userscript", "Status": "Status", "Home": "Home", "Patreon": "Patreon", "Dashboard": "Dashboard", "Database": "Database", "Auth": "Authenticatie", "Convert Animated GIFs": "Converteer GIF's", "Convert GIFs (External)": "Converteer GIF's (Extern)", "Concurrent Downloads": "Gelijktijdige Downloads", "Use 10+ only with fast internet": "Gebruik 10+ alleen met snel internet", "Smaller size, same quality": "Kleinere grootte, zelfde kwaliteit", "Larger size, same quality": "Grotere grootte, zelfde kwaliteit", "Back": "Terug", "Please visit a profile page for auto-detection": "Bezoek een profielpagina voor automatische detectie", "Please configure authentication in the Auth tab first": "Configureer eerst de authenticatie in het Auth-tabblad", "Invalid username format": "Ongeldige gebruikersnaam", "Invalid auth token. Please check your settings.": "Ongeldig authenticatietoken. Controleer je instellingen.", "Invalid Patreon auth. Please check your settings.": "Ongeldige Patreon-authenticatie. Controleer je instellingen.", "Failed to fetch data": "Kan gegevens niet ophalen", "Failed to fetch data from all APIs": "Kan gegevens niet ophalen van alle API's", "Failed to verify auth from all APIs": "Kan authenticatie niet verifiëren van alle API's", "Failed to generate token from all APIs": "Kan token niet genereren van alle API's", "Generating token...": "Token genereren...", "Abort": "Afbreken", "Network error occurred": "Netwerkfout opgetreden", "Request timeout - please try again": "Time-out verzoek - probeer opnieuw", "Failed to parse API response": "Kan API-reactie niet parseren", "Invalid API response structure": "Ongeldige API-reactiestructuur", "Unknown error occurred": "Onbekende fout opgetreden", "HTTP error! status: {{status}}": "HTTP-fout! status: {{status}}", "Download already in progress": "Download al bezig", "No media files found": "Geen mediabestanden gevonden", "Toggle visibility": "Schakel zichtbaarheid", "Close": "Sluiten", "Converting GIFs...": "GIF's converteren...", "Downloading...": "Downloaden...", "Download": "Downloaden", "Fetching...": "Ophalen...", "Fetch All": "Alles Ophalen", "Fetch Video": "Video Ophalen", "Fetch Image": "Afbeelding Ophalen", "Fetch GIF": "GIF Ophalen", "Posts: {{posts}}": "Berichten: {{posts}}", "Media: {{media}}": "Media: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Huidige Media: {{current}} • Totale Media: {{total}}", "Failed to download media": "Kan media niet downloaden", "Demo mode is only available for @xbatchdemo": "Demomodus is alleen beschikbaar voor @xbatchdemo", "Auth Token": "Authenticatietoken", "Enter your auth token": "Voer je authenticatietoken in", "Your authentication token for API access": "Je authenticatietoken voor API-toegang", "Patreon Auth": "Patreon Authenticatie", "Enter your Patreon auth": "Voer je Patreon-authenticatie in", "Your Patreon authentication key": "Je Patreon-authenticatiesleutel", "Please enter Patreon auth first": "Voer eerst Patreon-authenticatie in", "Please verify Patreon auth first": "Verifieer eerst Patreon-authenticatie", "Patreon auth verified successfully": "Patreon-authenticatie succesvol geverifieerd", "Invalid Patreon auth": "Ongeldige Patreon-authenticatie", "Verification failed. Please try again": "Verificatie mislukt. Probeer opnieuw", "Generating": "Genereren", "Generate": "Genereren", "Verify": "Verifiëren", "Token generated successfully": "Token succesvol gegenereerd ({{current}}/{{total}})", "Failed to generate token": "Kan token niet genereren", "Token generation failed. Please try again": "Tokengeneratie mislukt. Probeer opnieuw", "Verifying": "Verifiëren", "Verified": "Geverifieerd", "Use code": "Gebruik code", "for Patreon Auth, click Verify to unlock demo. Test at": "voor Patreon Auth, klik op Verifiëren om demo te ontgrendelen. Test op", "Need help with Auth Token? See": "Hulp nodig met Authenticatietoken? Zie", "the guide": "de handleiding", "Subscribe": "Abonneren", "to get your Patreon Auth code and start downloading with ease!": "om je Patreon Auth-code te krijgen en gemakkelijk te beginnen met downloaden!", "Report bugs or request features:": "Rapporteer bugs of vraag functies aan:", "Import": "Importeren", "Importing...": "Importeren...", "Supports JSON and ZIP formats": "Ondersteunt JSON en ZIP formaten", "Export": "Exporteren", "Export All Data": "Alle Gegevens Exporteren", "Exporting...": "Exporteren...", "Clear": "Wissen", "Filter by Batch": "Filter op Batch", "Are you sure to clear all data in the database?": "Weet je zeker dat je alle gegevens in de database wilt wissen?", "Delete Account Data": "Accountgegevens Verwijderen", "Are you sure you want to delete account data? This action cannot be undone": "Weet je zeker dat je de gegevens van {{username}} wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.", "Delete": "Verwijderen", "Deleting...": "Verwijderen...", "Overwrite": "Overschrijven", "Overwrite Existing Data?": "Bestaande Gegevens Overschrijven?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Accountgegevens voor @{{username}} bestaan al in de database. Wil je deze overschrijven?", "No accounts yet": "Nog geen accounts", "Use Dashboard to fetch data.": "Gebruik Dashboard om gegevens op te halen.", "Something went wrong.": "Er is iets misgegaan.", "Error:": "Fout:", "Fetch": "Ophalen", "Single": "Enkel", "Batch": "Batch", "Auto Batch": "Auto Batch", "Timeline": "Tijdlijn", "Media": "Media", "Batch Size": "Batch Grootte", "Starting Batch": "Start Batch", "Posts": "Berichten", "Tweets": "Tweets", "Replies": "Antwoorden", "All": "Alles", "Image": "Afbeelding", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Batch: {{page}}", "Start": "Start", "Stop": "Stop", "Prev": "Vorige", "Next": "Volgende", "Download Current": "Huidige Downloaden", "Download All": "Alles Downloaden", "Use Batch/Auto Batch if single fetch fails": "Gebruik Batch/Auto Batch als enkele ophaal mislukt", "Load from database": "Laden vanuit database", "Load database": "Database laden", "First Page": "Eerste Pagina", "Last Page": "Laatste Pagina", "Failed to load data": "Kan gegevens niet laden", "Update": "Bijwerken", "Updating...": "Bijwerken...", "Update will fetch the latest data and overwrite the database. Continue?": "Bijwerken haalt de laatste gegevens op en overschrijft de database. Doorgaan?", "Followers": "Volgers", "Following": "Volgend", "Joined": "Lid sinds", "Open": "Openen", "Preview": "Voorbeeld", "View Database": "Database Bekijken", "Converting...": "Converteren...", "Convert & Download": "Converteren & Downloaden", "Date Since": "Datum Vanaf", "Date Until": "Datum Tot", "Empty dates will fetch all available media": "Lege datums halen alle beschikbare media op", "Filter by Date Range": "Filteren op datumbereik", "Include Retweets": "Retweets opnemen", "Not supported with Media timeline": "Niet ondersteund met mediatijdlijn", "No media found for date range {{since}} to {{until}}": "Geen media gevonden voor de periode {{since}} tot {{until}}", "No tweets found for this account": "Geen tweets gevonden voor dit account", "No media found in {{count}} tweets": "Geen media gevonden in {{count}} tweets" } };
+  const pt = { "common": { "Settings": "Configurações", "Server": "Servidor", "Choose the server closest to your location for best performance": "Escolha o servidor mais próximo da sua localização para melhor desempenho", "Theme": "Tema", "Change Theme": "Alterar Tema", "Language": "Idioma", "Change Language": "Alterar Idioma", "Font Family": "Família de Fonte", "System Default": "Padrão do Sistema", "Date Time Format": "Formato de Data e Hora", "Sound Effects": "Efeitos Sonoros", "Debug": "Depurar", "Global Settings": "Configurações Globais", "Version": "Versão", "Common Formats:": "Formatos Comuns:", "Date Formats:": "Formatos de Data:", "Time Formats:": "Formatos de Hora:", "Combined Examples:": "Exemplos Combinados:", "Localized": "Localizado", "Reset Settings": "Redefinir configurações", "Are you sure you want to reset settings to defaults?": "Tem certeza de que deseja redefinir as configurações para o padrão?", "Reset": "Redefinir", "Cancel": "Cancelar", "Chrome": "Chrome", "Userscript": "Script de usuário", "Status": "Status", "Home": "Início", "Patreon": "Patreon", "Dashboard": "Painel", "Database": "Banco de Dados", "Auth": "Autenticação", "Convert Animated GIFs": "Converter GIFs", "Convert GIFs (External)": "Converter GIFs (Externo)", "Concurrent Downloads": "Downloads simultâneos", "Use 10+ only with fast internet": "Use 10+ apenas com internet rápida", "Smaller size, same quality": "Tamanho menor, mesma qualidade", "Larger size, same quality": "Tamanho maior, mesma qualidade", "Back": "Voltar", "Please visit a profile page for auto-detection": "Visite uma página de perfil para detecção automática", "Please configure authentication in the Auth tab first": "Configure a autenticação na aba Auth primeiro", "Invalid username format": "Formato de nome de usuário inválido", "Invalid auth token. Please check your settings.": "Token de autenticação inválido. Verifique suas configurações.", "Invalid Patreon auth. Please check your settings.": "Autenticação do Patreon inválida. Verifique suas configurações.", "Failed to fetch data": "Falha ao buscar os dados", "Failed to fetch data from all APIs": "Falha ao buscar os dados em todas as APIs", "Failed to verify auth from all APIs": "Falha ao verificar a autenticação em todas as APIs", "Failed to generate token from all APIs": "Falha ao gerar o token em todas as APIs", "Generating token...": "Gerando token...", "Abort": "Abortar", "Network error occurred": "Ocorreu um erro de rede", "Request timeout - please try again": "Tempo de requisição esgotado - tente novamente", "Failed to parse API response": "Falha ao analisar a resposta da API", "Invalid API response structure": "Estrutura de resposta da API inválida", "Unknown error occurred": "Ocorreu um erro desconhecido", "HTTP error! status: {{status}}": "Erro HTTP! status: {{status}}", "Download already in progress": "Download já em andamento", "No media files found": "Nenhum arquivo de mídia encontrado", "Toggle visibility": "Mostrar/ocultar", "Close": "Fechar", "Converting GIFs...": "Convertendo GIFs...", "Downloading...": "Baixando...", "Download": "Baixar", "Fetching...": "Obtendo...", "Fetch All": "Obter tudo", "Fetch Video": "Obter vídeo", "Fetch Image": "Obter imagem", "Fetch GIF": "Obter GIF", "Posts: {{posts}}": "Publicações: {{posts}}", "Media: {{media}}": "Mídia: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Mídia atual: {{current}} • Mídia total: {{total}}", "Failed to download media": "Falha ao baixar a mídia", "Demo mode is only available for @xbatchdemo": "O modo demonstração está disponível apenas para @xbatchdemo", "Auth Token": "Token de autenticação", "Enter your auth token": "Insira seu token de autenticação", "Your authentication token for API access": "Seu token de autenticação para acesso à API", "Patreon Auth": "Autenticação do Patreon", "Enter your Patreon auth": "Insira sua autenticação do Patreon", "Your Patreon authentication key": "Sua chave de autenticação do Patreon", "Please enter Patreon auth first": "Insira primeiro a autenticação do Patreon", "Please verify Patreon auth first": "Verifique primeiro a autenticação do Patreon", "Patreon auth verified successfully": "Autenticação do Patreon verificada com sucesso", "Invalid Patreon auth": "Autenticação do Patreon inválida", "Verification failed. Please try again": "Falha na verificação. Tente novamente", "Generating": "Gerando", "Generate": "Gerar", "Verify": "Verificar", "Token generated successfully": "Token gerado com sucesso ({{current}}/{{total}})", "Failed to generate token": "Falha ao gerar o token", "Token generation failed. Please try again": "Falha na geração do token. Tente novamente", "Verifying": "Verificando", "Verified": "Verificado", "Use code": "Use o código", "for Patreon Auth, click Verify to unlock demo. Test at": 'para Autenticação do Patreon, clique em "Verificar" para desbloquear a demonstração. Teste em', "Need help with Auth Token? See": "Precisa de ajuda com o token de autenticação? Veja", "the guide": "o guia", "Subscribe": "Assine", "to get your Patreon Auth code and start downloading with ease!": "para obter seu código de autenticação do Patreon e começar a baixar com facilidade!", "Report bugs or request features:": "Relate bugs ou solicite recursos:", "Import": "Importar", "Importing...": "Importando...", "Supports JSON and ZIP formats": "Suporta formatos JSON e ZIP", "Export": "Exportar", "Export All Data": "Exportar todos os dados", "Exporting...": "Exportando...", "Clear": "Limpar", "Filter by Batch": "Filtrar por lote", "Are you sure to clear all data in the database?": "Tem certeza de que deseja limpar todos os dados do banco de dados?", "Delete Account Data": "Excluir dados da conta", "Are you sure you want to delete account data? This action cannot be undone": "Tem certeza de que deseja excluir os dados de {{username}}? Esta ação não pode ser desfeita.", "Delete": "Excluir", "Deleting...": "Excluindo...", "Overwrite": "Substituir", "Overwrite Existing Data?": "Substituir dados existentes?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Os dados da conta @{{username}} já existem no banco de dados. Deseja substituí-los?", "No accounts yet": "Ainda não há contas", "Use Dashboard to fetch data.": "Use o Painel para buscar os dados.", "Something went wrong.": "Algo deu errado.", "Error:": "Erro:", "Fetch": "Buscar", "Single": "Único", "Batch": "Lote", "Auto Batch": "Lote automático", "Timeline": "Linha do tempo", "Media": "Mídia", "Batch Size": "Tamanho do lote", "Starting Batch": "Lote inicial", "Posts": "Publicações", "Tweets": "Tweets", "Replies": "Respostas", "All": "Tudo", "Image": "Imagem", "Video": "Vídeo", "GIF": "GIF", "Batch: {{page}}": "Lote: {{page}}", "Start": "Iniciar", "Stop": "Parar", "Prev": "Anterior", "Next": "Próximo", "Download Current": "Baixar atual", "Download All": "Baixar tudo", "Use Batch/Auto Batch if single fetch fails": "Use Lote/Lote automático se a busca única falhar", "Load from database": "Carregar do banco de dados", "Load database": "Carregar banco de dados", "First Page": "Primeira Página", "Last Page": "Última Página", "Failed to load data": "Falha ao carregar os dados", "Update": "Atualizar", "Updating...": "Atualizando...", "Update will fetch the latest data and overwrite the database. Continue?": "A atualização buscará os dados mais recentes e sobrescreverá o banco de dados. Continuar?", "Followers": "Seguidores", "Following": "Seguindo", "Joined": "Entrou em", "Open": "Abrir", "Preview": "Visualizar", "View Database": "Ver banco de dados", "Converting...": "Convertendo...", "Convert & Download": "Converter e baixar", "Date Since": "Data Desde", "Date Until": "Data Até", "Empty dates will fetch all available media": "Datas vazias buscarão todas as mídias disponíveis", "Filter by Date Range": "Filtrar por intervalo de datas", "Include Retweets": "Incluir Retweets", "Not supported with Media timeline": "Não suportado com linha do tempo de mídia", "No media found for date range {{since}} to {{until}}": "Nenhuma mídia encontrada para o período de {{since}} a {{until}}", "No tweets found for this account": "Nenhum tweet encontrado para esta conta", "No media found in {{count}} tweets": "Nenhuma mídia encontrada em {{count}} tweets" } };
+  const ru = { "common": { "Settings": "Настройки", "Server": "Сервер", "Choose the server closest to your location for best performance": "Выберите ближайший к вам сервер для лучшей производительности", "Theme": "Тема", "Change Theme": "Изменить тему", "Language": "Язык", "Change Language": "Изменить язык", "Font Family": "Семейство шрифтов", "System Default": "Системный по умолчанию", "Date Time Format": "Формат даты и времени", "Sound Effects": "Звуковые Эффекты", "Debug": "Отладка", "Global Settings": "Глобальные настройки", "Version": "Версия", "Common Formats:": "Общие форматы:", "Date Formats:": "Форматы дат:", "Time Formats:": "Форматы времени:", "Combined Examples:": "Комбинированные примеры:", "Localized": "Локализованный", "Reset Settings": "Сбросить настройки", "Are you sure you want to reset settings to defaults?": "Вы уверены, что хотите сбросить настройки к значениям по умолчанию?", "Reset": "Сброс", "Cancel": "Отмена", "Chrome": "Chrome", "Userscript": "Пользовательский скрипт", "Status": "Статус", "Home": "Главная", "Patreon": "Patreon", "Dashboard": "Панель управления", "Database": "База данных", "Auth": "Аутентификация", "Convert Animated GIFs": "Конвертировать GIF", "Convert GIFs (External)": "Конвертировать GIF (внешний)", "Concurrent Downloads": "Одновременные загрузки", "Use 10+ only with fast internet": "Используйте 10+ только при быстром интернете", "Smaller size, same quality": "Меньший размер, то же качество", "Larger size, same quality": "Больший размер, то же качество", "Back": "Назад", "Please visit a profile page for auto-detection": "Посетите страницу профиля для автоопределения", "Please configure authentication in the Auth tab first": "Сначала настройте аутентификацию на вкладке Auth", "Invalid username format": "Недопустимый формат имени пользователя", "Invalid auth token. Please check your settings.": "Недействительный токен аутентификации. Проверьте настройки.", "Invalid Patreon auth. Please check your settings.": "Недействительная авторизация Patreon. Проверьте настройки.", "Failed to fetch data": "Не удалось получить данные", "Failed to fetch data from all APIs": "Не удалось получить данные со всех API", "Failed to verify auth from all APIs": "Не удалось проверить авторизацию через все API", "Failed to generate token from all APIs": "Не удалось сгенерировать токен через все API", "Generating token...": "Генерация токена...", "Abort": "Отменить", "Network error occurred": "Произошла сетевая ошибка", "Request timeout - please try again": "Время ожидания запроса истекло — попробуйте снова", "Failed to parse API response": "Не удалось разобрать ответ API", "Invalid API response structure": "Недопустимая структура ответа API", "Unknown error occurred": "Произошла неизвестная ошибка", "HTTP error! status: {{status}}": "Ошибка HTTP! статус: {{status}}", "Download already in progress": "Загрузка уже выполняется", "No media files found": "Медиафайлы не найдены", "Toggle visibility": "Показать/скрыть", "Close": "Закрыть", "Converting GIFs...": "Конвертация GIF...", "Downloading...": "Загрузка...", "Download": "Скачать", "Fetching...": "Получение...", "Fetch All": "Получить всё", "Fetch Video": "Получить видео", "Fetch Image": "Получить изображение", "Fetch GIF": "Получить GIF", "Posts: {{posts}}": "Публикации: {{posts}}", "Media: {{media}}": "Медиа: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Текущая медиа: {{current}} • Всего медиа: {{total}}", "Failed to download media": "Не удалось скачать медиа", "Demo mode is only available for @xbatchdemo": "Демо-режим доступен только для @xbatchdemo", "Auth Token": "Токен аутентификации", "Enter your auth token": "Введите токен аутентификации", "Your authentication token for API access": "Ваш токен аутентификации для доступа к API", "Patreon Auth": "Авторизация Patreon", "Enter your Patreon auth": "Введите авторизацию Patreon", "Your Patreon authentication key": "Ваш ключ аутентификации Patreon", "Please enter Patreon auth first": "Сначала введите авторизацию Patreon", "Please verify Patreon auth first": "Сначала подтвердите авторизацию Patreon", "Patreon auth verified successfully": "Авторизация Patreon успешно проверена", "Invalid Patreon auth": "Недействительная авторизация Patreon", "Verification failed. Please try again": "Не удалось выполнить проверку. Попробуйте ещё раз", "Generating": "Генерация...", "Generate": "Создать", "Verify": "Проверить", "Token generated successfully": "Токен успешно сгенерирован ({{current}}/{{total}})", "Failed to generate token": "Не удалось сгенерировать токен", "Token generation failed. Please try again": "Не удалось сгенерировать токен. Попробуйте ещё раз", "Verifying": "Проверка...", "Verified": "Проверено", "Use code": "Используйте код", "for Patreon Auth, click Verify to unlock demo. Test at": "для аутентификации Patreon, нажмите «Проверить», чтобы разблокировать демо. Тест:", "Need help with Auth Token? See": "Нужна помощь с токеном аутентификации? См.", "the guide": "руководство", "Subscribe": "Подписаться", "to get your Patreon Auth code and start downloading with ease!": "чтобы получить код аутентификации Patreon и с лёгкостью начать скачивание!", "Report bugs or request features:": "Сообщить об ошибках или запросить функции:", "Import": "Импорт", "Importing...": "Импорт...", "Supports JSON and ZIP formats": "Поддерживает форматы JSON и ZIP", "Export": "Экспорт", "Export All Data": "Экспортировать все данные", "Exporting...": "Экспорт...", "Clear": "Очистить", "Filter by Batch": "Фильтр по пакетам", "Are you sure to clear all data in the database?": "Вы уверены, что хотите очистить все данные в базе данных?", "Delete Account Data": "Удалить данные аккаунта", "Are you sure you want to delete account data? This action cannot be undone": "Вы уверены, что хотите удалить данные {{username}}? Это действие нельзя отменить.", "Delete": "Удалить", "Deleting...": "Удаление...", "Overwrite": "Перезаписать", "Overwrite Existing Data?": "Перезаписать существующие данные?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Данные аккаунта @{{username}} уже существуют в базе данных. Перезаписать их?", "No accounts yet": "Пока нет аккаунтов", "Use Dashboard to fetch data.": "Используйте панель, чтобы получить данные.", "Something went wrong.": "Что-то пошло не так.", "Error:": "Ошибка:", "Fetch": "Получить", "Single": "Одиночный", "Batch": "Пакет", "Auto Batch": "Автопакет", "Timeline": "Лента", "Media": "Медиа", "Batch Size": "Размер пакета", "Starting Batch": "Начальный пакет", "Posts": "Публикации", "Tweets": "Твиты", "Replies": "Ответы", "All": "Все", "Image": "Изображение", "Video": "Видео", "GIF": "GIF", "Batch: {{page}}": "Пакет: {{page}}", "Start": "Старт", "Stop": "Стоп", "Prev": "Назад", "Next": "Далее", "Download Current": "Скачать текущее", "Download All": "Скачать всё", "Use Batch/Auto Batch if single fetch fails": "Используйте пакет/автопакет, если одиночное получение не удалось", "Load from database": "Загрузить из базы данных", "Load database": "Загрузить базу данных", "First Page": "Первая Страница", "Last Page": "Последняя Страница", "Failed to load data": "Не удалось загрузить данные", "Update": "Обновить", "Updating...": "Обновление...", "Update will fetch the latest data and overwrite the database. Continue?": "Обновление получит последние данные и перезапишет базу данных. Продолжить?", "Followers": "Подписчики", "Following": "Подписки", "Joined": "Дата регистрации", "Open": "Открыть", "Preview": "Предпросмотр", "View Database": "Просмотреть базу данных", "Converting...": "Конвертация...", "Convert & Download": "Конвертировать и скачать", "Date Since": "Дата С", "Date Until": "Дата По", "Empty dates will fetch all available media": "Пустые даты загрузят все доступные медиа", "Filter by Date Range": "Фильтр по диапазону дат", "Include Retweets": "Включить ретвиты", "Not supported with Media timeline": "Не поддерживается с медиа-лентой", "No media found for date range {{since}} to {{until}}": "Медиа не найдено за период с {{since}} по {{until}}", "No tweets found for this account": "Твиты для этого аккаунта не найдены", "No media found in {{count}} tweets": "Медиа не найдено в {{count}} твитах" } };
+  const th = { "common": { "Settings": "การตั้งค่า", "Server": "เซิร์ฟเวอร์", "Choose the server closest to your location for best performance": "เลือกเซิร์ฟเวอร์ที่ใกล้ที่สุดกับตำแหน่งของคุณเพื่อประสิทธิภาพที่ดีที่สุด", "Theme": "ธีม", "Change Theme": "เปลี่ยนธีม", "Language": "ภาษา", "Change Language": "เปลี่ยนภาษา", "Font Family": "ตระกูลฟอนต์", "System Default": "ค่าเริ่มต้นของระบบ", "Date Time Format": "รูปแบบวันที่และเวลา", "Sound Effects": "เอฟเฟกต์เสียง", "Debug": "ดีบัก", "Global Settings": "การตั้งค่าทั่วไป", "Version": "เวอร์ชัน", "Common Formats:": "รูปแบบทั่วไป:", "Date Formats:": "รูปแบบวันที่:", "Time Formats:": "รูปแบบเวลา:", "Combined Examples:": "ตัวอย่างรวม:", "Localized": "แปลเป็นภาษาท้องถิ่น", "Reset Settings": "รีเซ็ตการตั้งค่า", "Are you sure you want to reset settings to defaults?": "คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตการตั้งค่าเป็นค่าเริ่มต้น?", "Reset": "รีเซ็ต", "Cancel": "ยกเลิก", "Chrome": "Chrome", "Userscript": "Userscript", "Status": "สถานะ", "Home": "หน้าแรก", "Patreon": "Patreon", "Dashboard": "แดชบอร์ด", "Database": "ฐานข้อมูล", "Auth": "การยืนยันตัวตน", "Convert Animated GIFs": "แปลง GIF", "Convert GIFs (External)": "แปลง GIF (ภายนอก)", "Concurrent Downloads": "ดาวน์โหลดพร้อมกัน", "Use 10+ only with fast internet": "ใช้ 10+ เฉพาะกับอินเทอร์เน็ตเร็วเท่านั้น", "Smaller size, same quality": "ขนาดเล็กลง คุณภาพเท่าเดิม", "Larger size, same quality": "ขนาดใหญ่ขึ้น คุณภาพเท่าเดิม", "Back": "กลับ", "Please visit a profile page for auto-detection": "โปรดไปที่หน้าโปรไฟล์สำหรับการตรวจจับอัตโนมัติ", "Please configure authentication in the Auth tab first": "โปรดกำหนดค่าการยืนยันตัวตนในแท็บ Auth ก่อน", "Invalid username format": "รูปแบบชื่อผู้ใช้ไม่ถูกต้อง", "Invalid auth token. Please check your settings.": "โทเค็นการยืนยันตัวตนไม่ถูกต้อง โปรดตรวจสอบการตั้งค่าของคุณ", "Invalid Patreon auth. Please check your settings.": "การยืนยันตัวตน Patreon ไม่ถูกต้อง โปรดตรวจสอบการตั้งค่าของคุณ", "Failed to fetch data": "ไม่สามารถดึงข้อมูล", "Failed to fetch data from all APIs": "ไม่สามารถดึงข้อมูลจาก API ทั้งหมด", "Failed to verify auth from all APIs": "ไม่สามารถยืนยันตัวตนจาก API ทั้งหมด", "Failed to generate token from all APIs": "ไม่สามารถสร้างโทเค็นจาก API ทั้งหมด", "Generating token...": "กำลังสร้างโทเค็น...", "Abort": "ยกเลิก", "Network error occurred": "เกิดข้อผิดพลาดเครือข่าย", "Request timeout - please try again": "คำขอหมดเวลา - โปรดลองอีกครั้ง", "Failed to parse API response": "ไม่สามารถแยกวิเคราะห์การตอบกลับของ API", "Invalid API response structure": "โครงสร้างการตอบกลับของ API ไม่ถูกต้อง", "Unknown error occurred": "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ", "HTTP error! status: {{status}}": "ข้อผิดพลาด HTTP! สถานะ: {{status}}", "Download already in progress": "กำลังดาวน์โหลดอยู่แล้ว", "No media files found": "ไม่พบไฟล์สื่อ", "Toggle visibility": "สลับการมองเห็น", "Close": "ปิด", "Converting GIFs...": "กำลังแปลง GIF...", "Downloading...": "กำลังดาวน์โหลด...", "Download": "ดาวน์โหลด", "Fetching...": "กำลังดึงข้อมูล...", "Fetch All": "ดึงทั้งหมด", "Fetch Video": "ดึงวิดีโอ", "Fetch Image": "ดึงรูปภาพ", "Fetch GIF": "ดึง GIF", "Posts: {{posts}}": "โพสต์: {{posts}}", "Media: {{media}}": "สื่อ: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "สื่อปัจจุบัน: {{current}} • สื่อทั้งหมด: {{total}}", "Failed to download media": "ไม่สามารถดาวน์โหลดสื่อ", "Demo mode is only available for @xbatchdemo": "โหมดสาธิตใช้ได้เฉพาะสำหรับ @xbatchdemo เท่านั้น", "Auth Token": "โทเค็นการยืนยันตัวตน", "Enter your auth token": "ป้อนโทเค็นการยืนยันตัวตนของคุณ", "Your authentication token for API access": "โทเค็นการยืนยันตัวตนของคุณสำหรับการเข้าถึง API", "Patreon Auth": "การยืนยันตัวตน Patreon", "Enter your Patreon auth": "ป้อนการยืนยันตัวตน Patreon ของคุณ", "Your Patreon authentication key": "คีย์การยืนยันตัวตน Patreon ของคุณ", "Please enter Patreon auth first": "โปรดป้อนการยืนยันตัวตน Patreon ก่อน", "Please verify Patreon auth first": "โปรดยืนยันการยืนยันตัวตน Patreon ก่อน", "Patreon auth verified successfully": "ยืนยันการยืนยันตัวตน Patreon สำเร็จ", "Invalid Patreon auth": "การยืนยันตัวตน Patreon ไม่ถูกต้อง", "Verification failed. Please try again": "การยืนยันล้มเหลว โปรดลองอีกครั้ง", "Generating": "กำลังสร้าง", "Generate": "สร้าง", "Verify": "ยืนยัน", "Token generated successfully": "สร้างโทเค็นสำเร็จ ({{current}}/{{total}})", "Failed to generate token": "ไม่สามารถสร้างโทเค็น", "Token generation failed. Please try again": "การสร้างโทเค็นล้มเหลว โปรดลองอีกครั้ง", "Verifying": "กำลังยืนยัน", "Verified": "ยืนยันแล้ว", "Use code": "ใช้รหัส", "for Patreon Auth, click Verify to unlock demo. Test at": "สำหรับการยืนยันตัวตน Patreon คลิกยืนยันเพื่อปลดล็อกสาธิต ทดสอบที่", "Need help with Auth Token? See": "ต้องการความช่วยเหลือเกี่ยวกับโทเค็นการยืนยันตัวตนหรือไม่? ดู", "the guide": "คู่มือ", "Subscribe": "สมัครสมาชิก", "to get your Patreon Auth code and start downloading with ease!": "เพื่อรับรหัสการยืนยันตัวตน Patreon และเริ่มดาวน์โหลดได้อย่างง่ายดาย!", "Report bugs or request features:": "รายงานบั๊กหรือขอฟีเจอร์:", "Import": "นำเข้า", "Importing...": "กำลังนำเข้า...", "Supports JSON and ZIP formats": "รองรับรูปแบบ JSON และ ZIP", "Export": "ส่งออก", "Export All Data": "ส่งออกข้อมูลทั้งหมด", "Exporting...": "กำลังส่งออก...", "Clear": "ล้าง", "Filter by Batch": "กรองตามแบทช์", "Are you sure to clear all data in the database?": "คุณแน่ใจหรือไม่ที่จะล้างข้อมูลทั้งหมดในฐานข้อมูล?", "Delete Account Data": "ลบข้อมูลบัญชี", "Are you sure you want to delete account data? This action cannot be undone": "คุณแน่ใจหรือไม่ที่จะลบข้อมูล {{username}}? การกระทำนี้ไม่สามารถยกเลิกได้", "Delete": "ลบ", "Deleting...": "กำลังลบ...", "Overwrite": "เขียนทับ", "Overwrite Existing Data?": "เขียนทับข้อมูลที่มีอยู่?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "ข้อมูลบัญชีสำหรับ @{{username}} มีอยู่แล้วในฐานข้อมูล คุณต้องการเขียนทับหรือไม่?", "No accounts yet": "ยังไม่มีบัญชี", "Use Dashboard to fetch data.": "ใช้แดชบอร์ดเพื่อดึงข้อมูล", "Something went wrong.": "เกิดข้อผิดพลาดบางอย่าง", "Error:": "ข้อผิดพลาด:", "Fetch": "ดึง", "Single": "เดี่ยว", "Batch": "แบทช์", "Auto Batch": "แบทช์อัตโนมัติ", "Timeline": "ไทม์ไลน์", "Media": "สื่อ", "Batch Size": "ขนาดแบทช์", "Starting Batch": "แบทช์เริ่มต้น", "Posts": "โพสต์", "Tweets": "ทวีต", "Replies": "ตอบกลับ", "All": "ทั้งหมด", "Image": "รูปภาพ", "Video": "วิดีโอ", "GIF": "GIF", "Batch: {{page}}": "แบทช์: {{page}}", "Start": "เริ่ม", "Stop": "หยุด", "Prev": "ก่อนหน้า", "Next": "ถัดไป", "Download Current": "ดาวน์โหลดปัจจุบัน", "Download All": "ดาวน์โหลดทั้งหมด", "Use Batch/Auto Batch if single fetch fails": "ใช้แบทช์/แบทช์อัตโนมัติหากการดึงเดี่ยวล้มเหลว", "Load from database": "โหลดจากฐานข้อมูล", "Load database": "โหลดฐานข้อมูล", "First Page": "หน้าแรก", "Last Page": "หน้าสุดท้าย", "Failed to load data": "ไม่สามารถโหลดข้อมูล", "Update": "อัปเดต", "Updating...": "กำลังอัปเดต...", "Update will fetch the latest data and overwrite the database. Continue?": "การอัปเดตจะดึงข้อมูลล่าสุดและเขียนทับฐานข้อมูล ดำเนินการต่อหรือไม่?", "Followers": "ผู้ติดตาม", "Following": "กำลังติดตาม", "Joined": "เข้าร่วม", "Open": "เปิด", "Preview": "ดูตัวอย่าง", "View Database": "ดูฐานข้อมูล", "Converting...": "กำลังแปลง...", "Convert & Download": "แปลงและดาวน์โหลด", "Date Since": "วันที่เริ่มต้น", "Date Until": "วันที่สิ้นสุด", "Empty dates will fetch all available media": "วันที่ว่างจะดึงสื่อทั้งหมดที่มี", "Filter by Date Range": "กรองตามช่วงวันที่", "Include Retweets": "รวมรีทวีต", "Not supported with Media timeline": "ไม่รองรับกับไทม์ไลน์สื่อ", "No media found for date range {{since}} to {{until}}": "ไม่พบสื่อสำหรับช่วงวันที่ {{since}} ถึง {{until}}", "No tweets found for this account": "ไม่พบทวีตสำหรับบัญชีนี้", "No media found in {{count}} tweets": "ไม่พบสื่อใน {{count}} ทวีต" } };
+  const tr = { "common": { "Settings": "Ayarlar", "Server": "Sunucu", "Choose the server closest to your location for best performance": "En iyi performans için konumunuza en yakın sunucuyu seçin", "Theme": "Tema", "Change Theme": "Tema Değiştir", "Language": "Dil", "Change Language": "Dil Değiştir", "Font Family": "Yazı Tipi Ailesi", "System Default": "Sistem Varsayılanı", "Date Time Format": "Tarih Saat Formatı", "Sound Effects": "Ses Efektleri", "Debug": "Hata Ayıklama", "Global Settings": "Genel Ayarlar", "Version": "Sürüm", "Common Formats:": "Yaygın Formatlar:", "Date Formats:": "Tarih Formatları:", "Time Formats:": "Saat Formatları:", "Combined Examples:": "Birleşik Örnekler:", "Localized": "Yerelleştirilmiş", "Reset Settings": "Ayarları Sıfırla", "Are you sure you want to reset settings to defaults?": "Ayarları varsayılanlara sıfırlamak istediğinizden emin misiniz?", "Reset": "Sıfırla", "Cancel": "İptal", "Chrome": "Chrome", "Userscript": "Kullanıcı Betiği", "Status": "Durum", "Home": "Ana Sayfa", "Patreon": "Patreon", "Dashboard": "Kontrol Paneli", "Database": "Veritabanı", "Auth": "Kimlik Doğrulama", "Convert Animated GIFs": "GIF Dönüştür", "Convert GIFs (External)": "GIF Dönüştür (Harici)", "Concurrent Downloads": "Eşzamanlı İndirmeler", "Use 10+ only with fast internet": "10+'ı yalnızca hızlı internetle kullanın", "Smaller size, same quality": "Daha küçük boyut, aynı kalite", "Larger size, same quality": "Daha büyük boyut, aynı kalite", "Back": "Geri", "Please visit a profile page for auto-detection": "Otomatik algılama için lütfen bir profil sayfasını ziyaret edin", "Please configure authentication in the Auth tab first": "Lütfen önce Kimlik Doğrulama sekmesinde kimlik doğrulamayı yapılandırın", "Invalid username format": "Geçersiz kullanıcı adı formatı", "Invalid auth token. Please check your settings.": "Geçersiz kimlik doğrulama jetonu. Lütfen ayarlarınızı kontrol edin.", "Invalid Patreon auth. Please check your settings.": "Geçersiz Patreon kimlik doğrulaması. Lütfen ayarlarınızı kontrol edin.", "Failed to fetch data": "Veri alınamadı", "Failed to fetch data from all APIs": "Tüm API'lerden veri alınamadı", "Failed to verify auth from all APIs": "Tüm API'lerden kimlik doğrulama doğrulanamadı", "Failed to generate token from all APIs": "Tüm API'lerden jeton oluşturulamadı", "Generating token...": "Jeton oluşturuluyor...", "Abort": "İptal Et", "Network error occurred": "Ağ hatası oluştu", "Request timeout - please try again": "İstek zaman aşımına uğradı - lütfen tekrar deneyin", "Failed to parse API response": "API yanıtı ayrıştırılamadı", "Invalid API response structure": "Geçersiz API yanıt yapısı", "Unknown error occurred": "Bilinmeyen bir hata oluştu", "HTTP error! status: {{status}}": "HTTP hatası! durum: {{status}}", "Download already in progress": "İndirme zaten devam ediyor", "No media files found": "Medya dosyası bulunamadı", "Toggle visibility": "Görünürlüğü değiştir", "Close": "Kapat", "Converting GIFs...": "GIF'ler dönüştürülüyor...", "Downloading...": "İndiriliyor...", "Download": "İndir", "Fetching...": "Alınıyor...", "Fetch All": "Tümünü Al", "Fetch Video": "Video Al", "Fetch Image": "Resim Al", "Fetch GIF": "GIF Al", "Posts: {{posts}}": "Gönderiler: {{posts}}", "Media: {{media}}": "Medya: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Mevcut Medya: {{current}} • Toplam Medya: {{total}}", "Failed to download media": "Medya indirilemedi", "Demo mode is only available for @xbatchdemo": "Demo modu yalnızca @xbatchdemo için kullanılabilir", "Auth Token": "Kimlik Doğrulama Jetonu", "Enter your auth token": "Kimlik doğrulama jetonunuzu girin", "Your authentication token for API access": "API erişimi için kimlik doğrulama jetonunuz", "Patreon Auth": "Patreon Kimlik Doğrulaması", "Enter your Patreon auth": "Patreon kimlik doğrulamanızı girin", "Your Patreon authentication key": "Patreon kimlik doğrulama anahtarınız", "Please enter Patreon auth first": "Lütfen önce Patreon kimlik doğrulamasını girin", "Please verify Patreon auth first": "Lütfen önce Patreon kimlik doğrulamasını doğrulayın", "Patreon auth verified successfully": "Patreon kimlik doğrulaması başarıyla doğrulandı", "Invalid Patreon auth": "Geçersiz Patreon kimlik doğrulaması", "Verification failed. Please try again": "Doğrulama başarısız. Lütfen tekrar deneyin", "Generating": "Oluşturuluyor", "Generate": "Oluştur", "Verify": "Doğrula", "Token generated successfully": "Jeton başarıyla oluşturuldu ({{current}}/{{total}})", "Failed to generate token": "Jeton oluşturulamadı", "Token generation failed. Please try again": "Jeton oluşturma başarısız. Lütfen tekrar deneyin", "Verifying": "Doğrulanıyor", "Verified": "Doğrulandı", "Use code": "Kodu kullan", "for Patreon Auth, click Verify to unlock demo. Test at": "Patreon Kimlik Doğrulaması için, demoyu açmak için Doğrula'ya tıklayın. Test edin:", "Need help with Auth Token? See": "Kimlik Doğrulama Jetonu için yardıma mı ihtiyacınız var? Bakın:", "the guide": "kılavuz", "Subscribe": "Abone Ol", "to get your Patreon Auth code and start downloading with ease!": "Patreon Kimlik Doğrulama kodunuzu almak ve kolayca indirmeye başlamak için!", "Report bugs or request features:": "Hata bildirin veya özellik isteyin:", "Import": "İçe Aktar", "Importing...": "İçe aktarılıyor...", "Supports JSON and ZIP formats": "JSON ve ZIP formatlarını destekler", "Export": "Dışa Aktar", "Export All Data": "Tüm Verileri Dışa Aktar", "Exporting...": "Dışa aktarılıyor...", "Clear": "Temizle", "Filter by Batch": "Toplu İşleme Göre Filtrele", "Are you sure to clear all data in the database?": "Veritabanındaki tüm verileri temizlemek istediğinizden emin misiniz?", "Delete Account Data": "Hesap Verilerini Sil", "Are you sure you want to delete account data? This action cannot be undone": "{{username}} verilerini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.", "Delete": "Sil", "Deleting...": "Siliniyor...", "Overwrite": "Üzerine Yaz", "Overwrite Existing Data?": "Mevcut Verilerin Üzerine Yazılsın mı?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "@{{username}} için hesap verileri veritabanında zaten mevcut. Üzerine yazmak istiyor musunuz?", "No accounts yet": "Henüz hesap yok", "Use Dashboard to fetch data.": "Veri almak için Kontrol Panelini kullanın.", "Something went wrong.": "Bir şeyler ters gitti.", "Error:": "Hata:", "Fetch": "Al", "Single": "Tekil", "Batch": "Toplu İşlem", "Auto Batch": "Otomatik Toplu İşlem", "Timeline": "Zaman Çizelgesi", "Media": "Medya", "Batch Size": "Toplu İşlem Boyutu", "Starting Batch": "Başlangıç Toplu İşlemi", "Posts": "Gönderiler", "Tweets": "Tweet'ler", "Replies": "Yanıtlar", "All": "Tümü", "Image": "Resim", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Toplu İşlem: {{page}}", "Start": "Başlat", "Stop": "Durdur", "Prev": "Önceki", "Next": "Sonraki", "Download Current": "Mevcut'u İndir", "Download All": "Tümünü İndir", "Use Batch/Auto Batch if single fetch fails": "Tekil alma başarısız olursa Toplu İşlem/Otomatik Toplu İşlem kullanın", "Load from database": "Veritabanından yükle", "Load database": "Veritabanını yükle", "First Page": "İlk Sayfa", "Last Page": "Son Sayfa", "Failed to load data": "Veri yüklenemedi", "Update": "Güncelle", "Updating...": "Güncelleniyor...", "Update will fetch the latest data and overwrite the database. Continue?": "Güncelleme en son verileri alacak ve veritabanının üzerine yazacak. Devam edilsin mi?", "Followers": "Takipçiler", "Following": "Takip Edilenler", "Joined": "Katıldı", "Open": "Aç", "Preview": "Önizleme", "View Database": "Veritabanını Görüntüle", "Converting...": "Dönüştürülüyor...", "Convert & Download": "Dönüştür ve İndir", "Date Since": "Başlangıç Tarihi", "Date Until": "Bitiş Tarihi", "Empty dates will fetch all available media": "Boş tarihler mevcut tüm medyayı getirecek", "Filter by Date Range": "Tarih aralığına göre filtrele", "Include Retweets": "Retweetleri Dahil Et", "Not supported with Media timeline": "Medya zaman çizelgesi ile desteklenmez", "No media found for date range {{since}} to {{until}}": "{{since}} ile {{until}} tarihleri arasında medya bulunamadı", "No tweets found for this account": "Bu hesap için tweet bulunamadı", "No media found in {{count}} tweets": "{{count}} tweet içinde medya bulunamadı" } };
+  const vi = { "common": { "Settings": "Cài đặt", "Server": "Máy chủ", "Choose the server closest to your location for best performance": "Chọn máy chủ gần vị trí của bạn nhất để có hiệu suất tốt nhất", "Theme": "Giao diện", "Change Theme": "Đổi giao diện", "Language": "Ngôn ngữ", "Change Language": "Đổi ngôn ngữ", "Font Family": "Họ Phông Chữ", "System Default": "Mặc Định Hệ Thống", "Date Time Format": "Định dạng ngày giờ", "Sound Effects": "Hiệu Ứng Âm Thanh", "Debug": "Gỡ lỗi", "Global Settings": "Cài đặt chung", "Version": "Phiên bản", "Common Formats:": "Định dạng phổ biến:", "Date Formats:": "Định dạng ngày:", "Time Formats:": "Định dạng giờ:", "Combined Examples:": "Ví dụ kết hợp:", "Localized": "Đã bản địa hóa", "Reset Settings": "Đặt lại cài đặt", "Are you sure you want to reset settings to defaults?": "Bạn có chắc muốn đặt lại cài đặt về mặc định không?", "Reset": "Đặt lại", "Cancel": "Hủy", "Chrome": "Chrome", "Userscript": "Userscript", "Status": "Trạng thái", "Home": "Trang chủ", "Patreon": "Patreon", "Dashboard": "Bảng điều khiển", "Database": "Cơ sở dữ liệu", "Auth": "Xác thực", "Convert Animated GIFs": "Chuyển đổi GIF", "Convert GIFs (External)": "Chuyển đổi GIF (Bên ngoài)", "Concurrent Downloads": "Tải xuống đồng thời", "Use 10+ only with fast internet": "Chỉ sử dụng 10+ với internet nhanh", "Smaller size, same quality": "Kích thước nhỏ hơn, chất lượng tương tự", "Larger size, same quality": "Kích thước lớn hơn, chất lượng tương tự", "Back": "Quay lại", "Please visit a profile page for auto-detection": "Vui lòng truy cập trang hồ sơ để tự động phát hiện", "Please configure authentication in the Auth tab first": "Vui lòng cấu hình xác thực trong tab Xác thực trước", "Invalid username format": "Định dạng tên người dùng không hợp lệ", "Invalid auth token. Please check your settings.": "Token xác thực không hợp lệ. Vui lòng kiểm tra cài đặt của bạn.", "Invalid Patreon auth. Please check your settings.": "Xác thực Patreon không hợp lệ. Vui lòng kiểm tra cài đặt của bạn.", "Failed to fetch data": "Không thể lấy dữ liệu", "Failed to fetch data from all APIs": "Không thể lấy dữ liệu từ tất cả các API", "Failed to verify auth from all APIs": "Không thể xác minh xác thực từ tất cả các API", "Failed to generate token from all APIs": "Không thể tạo token từ tất cả các API", "Generating token...": "Đang tạo token...", "Abort": "Hủy bỏ", "Network error occurred": "Đã xảy ra lỗi mạng", "Request timeout - please try again": "Yêu cầu hết thời gian - vui lòng thử lại", "Failed to parse API response": "Không thể phân tích phản hồi API", "Invalid API response structure": "Cấu trúc phản hồi API không hợp lệ", "Unknown error occurred": "Đã xảy ra lỗi không xác định", "HTTP error! status: {{status}}": "Lỗi HTTP! trạng thái: {{status}}", "Download already in progress": "Đang tải xuống", "No media files found": "Không tìm thấy tệp phương tiện", "Toggle visibility": "Chuyển đổi hiển thị", "Close": "Đóng", "Converting GIFs...": "Đang chuyển đổi GIF...", "Downloading...": "Đang tải xuống...", "Download": "Tải xuống", "Fetching...": "Đang lấy...", "Fetch All": "Lấy tất cả", "Fetch Video": "Lấy video", "Fetch Image": "Lấy hình ảnh", "Fetch GIF": "Lấy GIF", "Posts: {{posts}}": "Bài viết: {{posts}}", "Media: {{media}}": "Phương tiện: {{media}}", "Current Media: {{current}} • Total Media: {{total}}": "Phương tiện hiện tại: {{current}} • Tổng phương tiện: {{total}}", "Failed to download media": "Không thể tải xuống phương tiện", "Demo mode is only available for @xbatchdemo": "Chế độ demo chỉ khả dụng cho @xbatchdemo", "Auth Token": "Token xác thực", "Enter your auth token": "Nhập token xác thực của bạn", "Your authentication token for API access": "Token xác thực của bạn để truy cập API", "Patreon Auth": "Xác thực Patreon", "Enter your Patreon auth": "Nhập xác thực Patreon của bạn", "Your Patreon authentication key": "Khóa xác thực Patreon của bạn", "Please enter Patreon auth first": "Vui lòng nhập xác thực Patreon trước", "Please verify Patreon auth first": "Vui lòng xác minh xác thực Patreon trước", "Patreon auth verified successfully": "Xác thực Patreon thành công", "Invalid Patreon auth": "Xác thực Patreon không hợp lệ", "Verification failed. Please try again": "Xác minh thất bại. Vui lòng thử lại", "Generating": "Đang tạo", "Generate": "Tạo", "Verify": "Xác minh", "Token generated successfully": "Tạo token thành công ({{current}}/{{total}})", "Failed to generate token": "Không thể tạo token", "Token generation failed. Please try again": "Tạo token thất bại. Vui lòng thử lại", "Verifying": "Đang xác minh", "Verified": "Đã xác minh", "Use code": "Sử dụng mã", "for Patreon Auth, click Verify to unlock demo. Test at": "cho Xác thực Patreon, nhấp Xác minh để mở khóa demo. Thử nghiệm tại", "Need help with Auth Token? See": "Cần trợ giúp với Token xác thực? Xem", "the guide": "hướng dẫn", "Subscribe": "Đăng ký", "to get your Patreon Auth code and start downloading with ease!": "để nhận mã Xác thực Patreon và bắt đầu tải xuống dễ dàng!", "Report bugs or request features:": "Báo cáo lỗi hoặc yêu cầu tính năng:", "Import": "Nhập", "Importing...": "Đang nhập...", "Supports JSON and ZIP formats": "Hỗ trợ định dạng JSON và ZIP", "Export": "Xuất", "Export All Data": "Xuất tất cả dữ liệu", "Exporting...": "Đang xuất...", "Clear": "Xóa", "Filter by Batch": "Lọc theo đợt", "Are you sure to clear all data in the database?": "Bạn có chắc muốn xóa tất cả dữ liệu trong cơ sở dữ liệu không?", "Delete Account Data": "Xóa dữ liệu tài khoản", "Are you sure you want to delete account data? This action cannot be undone": "Bạn có chắc muốn xóa dữ liệu của {{username}} không? Hành động này không thể hoàn tác.", "Delete": "Xóa", "Deleting...": "Đang xóa...", "Overwrite": "Ghi đè", "Overwrite Existing Data?": "Ghi đè dữ liệu hiện có?", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "Dữ liệu tài khoản cho @{{username}} đã tồn tại trong cơ sở dữ liệu. Bạn có muốn ghi đè không?", "No accounts yet": "Chưa có tài khoản", "Use Dashboard to fetch data.": "Sử dụng Bảng điều khiển để lấy dữ liệu.", "Something went wrong.": "Đã xảy ra lỗi.", "Error:": "Lỗi:", "Fetch": "Lấy", "Single": "Đơn lẻ", "Batch": "Đợt", "Auto Batch": "Đợt tự động", "Timeline": "Dòng thời gian", "Media": "Phương tiện", "Batch Size": "Kích thước đợt", "Starting Batch": "Đợt bắt đầu", "Posts": "Bài viết", "Tweets": "Tweet", "Replies": "Phản hồi", "All": "Tất cả", "Image": "Hình ảnh", "Video": "Video", "GIF": "GIF", "Batch: {{page}}": "Đợt: {{page}}", "Start": "Bắt đầu", "Stop": "Dừng", "Prev": "Trước", "Next": "Tiếp", "Download Current": "Tải xuống hiện tại", "Download All": "Tải xuống tất cả", "Use Batch/Auto Batch if single fetch fails": "Sử dụng Đợt/Đợt tự động nếu lấy đơn lẻ thất bại", "Load from database": "Tải từ cơ sở dữ liệu", "Load database": "Tải cơ sở dữ liệu", "First Page": "Trang Đầu", "Last Page": "Trang Cuối", "Failed to load data": "Không thể tải dữ liệu", "Update": "Cập nhật", "Updating...": "Đang cập nhật...", "Update will fetch the latest data and overwrite the database. Continue?": "Cập nhật sẽ lấy dữ liệu mới nhất và ghi đè cơ sở dữ liệu. Tiếp tục?", "Followers": "Người theo dõi", "Following": "Đang theo dõi", "Joined": "Đã tham gia", "Open": "Mở", "Preview": "Xem trước", "View Database": "Xem cơ sở dữ liệu", "Converting...": "Đang chuyển đổi...", "Convert & Download": "Chuyển đổi và Tải xuống", "Date Since": "Ngày Từ", "Date Until": "Ngày Đến", "Empty dates will fetch all available media": "Ngày trống sẽ tải tất cả phương tiện có sẵn", "Filter by Date Range": "Lọc theo khoảng ngày", "Include Retweets": "Bao gồm Retweet", "Not supported with Media timeline": "Không được hỗ trợ với dòng thời gian phương tiện", "No media found for date range {{since}} to {{until}}": "Không tìm thấy phương tiện cho khoảng thời gian từ {{since}} đến {{until}}", "No tweets found for this account": "Không tìm thấy tweet cho tài khoản này", "No media found in {{count}} tweets": "Không tìm thấy phương tiện trong {{count}} tweet" } };
+  const zh_Hans = { "common": { "Settings": "设置", "Server": "服务器", "Choose the server closest to your location for best performance": "选择离您最近的服务器以获得最佳性能", "Theme": "主题", "Change Theme": "更改主题", "Language": "语言", "Change Language": "更改语言", "Font Family": "字体系列", "System Default": "系统默认", "Date Time Format": "日期时间格式", "Sound Effects": "音效", "Debug": "调试开关", "Global Settings": "全局设置", "Version": "版本", "Common Formats:": "常用格式：", "Date Formats:": "日期格式：", "Time Formats:": "时间格式：", "Combined Examples:": "组合示例：", "Localized": "本地化", "Reset Settings": "重置设置", "Are you sure you want to reset settings to defaults?": "确定要将设置重置为默认值吗？", "Reset": "重置", "Cancel": "取消", "Chrome": "Chrome", "Userscript": "用户脚本", "Status": "状态", "Home": "主页", "Patreon": "Patreon", "Dashboard": "仪表板", "Database": "数据库", "Auth": "认证", "Convert Animated GIFs": "转换 GIF", "Convert GIFs (External)": "转换 GIF（外部）", "Concurrent Downloads": "并发下载", "Use 10+ only with fast internet": "仅在网络快速时使用 10+", "Smaller size, same quality": "体积更小，质量相同", "Larger size, same quality": "体积更大，质量相同", "Back": "返回", "Please visit a profile page for auto-detection": "请访问个人资料页面进行自动检测", "Please configure authentication in the Auth tab first": "请先在认证选项卡中配置身份验证", "Invalid username format": "无效的用户名格式", "Invalid auth token. Please check your settings.": "无效的认证令牌，请检查您的设置。", "Invalid Patreon auth. Please check your settings.": "无效的 Patreon 认证，请检查您的设置。", "Failed to fetch data": "获取数据失败", "Failed to fetch data from all APIs": "所有 API 均无法获取数据", "Failed to verify auth from all APIs": "所有 API 均无法验证认证", "Failed to generate token from all APIs": "所有 API 均无法生成令牌", "Generating token...": "正在生成令牌...", "Abort": "中止", "Network error occurred": "发生网络错误", "Request timeout - please try again": "请求超时 - 请重试", "Failed to parse API response": "解析 API 响应失败", "Invalid API response structure": "无效的 API 响应结构", "Unknown error occurred": "发生未知错误", "HTTP error! status: {{status}}": "HTTP 错误！状态：{{status}}", "Download already in progress": "下载已在进行中", "No media files found": "未找到媒体文件", "Toggle visibility": "显示/隐藏", "Close": "关闭", "Converting GIFs...": "正在转换 GIF...", "Downloading...": "正在下载...", "Download": "下载", "Fetching...": "正在获取...", "Fetch All": "获取全部", "Fetch Video": "获取视频", "Fetch Image": "获取图片", "Fetch GIF": "获取 GIF", "Posts: {{posts}}": "帖子：{{posts}}", "Media: {{media}}": "媒体：{{media}}", "Current Media: {{current}} • Total Media: {{total}}": "当前媒体：{{current}} • 总媒体：{{total}}", "Failed to download media": "下载媒体失败", "Demo mode is only available for @xbatchdemo": "演示模式仅适用于 @xbatchdemo", "Auth Token": "认证令牌", "Enter your auth token": "输入您的认证令牌", "Your authentication token for API access": "用于 API 访问的身份验证令牌", "Patreon Auth": "Patreon 认证", "Enter your Patreon auth": "输入您的 Patreon 认证", "Your Patreon authentication key": "您的 Patreon 身份验证密钥", "Please enter Patreon auth first": "请先输入 Patreon 认证", "Please verify Patreon auth first": "请先验证 Patreon 认证", "Patreon auth verified successfully": "Patreon 认证验证成功", "Invalid Patreon auth": "无效的 Patreon 认证", "Verification failed. Please try again": "验证失败，请重试", "Generating": "正在生成", "Generate": "生成", "Verify": "验证", "Token generated successfully": "令牌生成成功 ({{current}}/{{total}})", "Failed to generate token": "生成令牌失败", "Token generation failed. Please try again": "令牌生成失败，请重试", "Verifying": "正在验证", "Verified": "已验证", "Use code": "使用代码", "for Patreon Auth, click Verify to unlock demo. Test at": "用于 Patreon 认证，点击“验证”以解锁演示。测试地址：", "Need help with Auth Token? See": "需要获取认证令牌的帮助？请查看", "the guide": "指南", "Subscribe": "订阅", "to get your Patreon Auth code and start downloading with ease!": "即可获取您的 Patreon 认证码，轻松开始下载！", "Report bugs or request features:": "报告问题或请求功能：", "Import": "导入", "Importing...": "正在导入...", "Supports JSON and ZIP formats": "支持 JSON 和 ZIP 格式", "Export": "导出", "Export All Data": "导出全部数据", "Exporting...": "正在导出...", "Clear": "清空", "Filter by Batch": "按批次过滤", "Are you sure to clear all data in the database?": "确定要清空数据库中的所有数据吗？", "Delete Account Data": "删除账户数据", "Are you sure you want to delete account data? This action cannot be undone": "您确定要删除 {{username}} 的数据吗？此操作无法撤销。", "Delete": "删除", "Deleting...": "正在删除...", "Overwrite": "覆盖", "Overwrite Existing Data?": "覆盖现有数据？", "Account data for @{{username}} already exists in the database. Do you want to overwrite it?": "账户 @{{username}} 的数据已存在于数据库中。您要覆盖吗？", "No accounts yet": "尚未有账户", "Use Dashboard to fetch data.": "使用仪表板获取数据。", "Something went wrong.": "出错了。", "Error:": "错误:", "Fetch": "获取", "Single": "单次", "Batch": "批量", "Auto Batch": "自动批量", "Timeline": "时间线", "Media": "媒体", "Batch Size": "批量大小", "Starting Batch": "起始批次", "Posts": "帖子", "Tweets": "推文", "Replies": "回复", "All": "全部", "Image": "图片", "Video": "视频", "GIF": "GIF", "Batch: {{page}}": "批次：{{page}}", "Start": "开始", "Stop": "停止", "Prev": "上一页", "Next": "下一页", "Download Current": "下载当前", "Download All": "下载全部", "Use Batch/Auto Batch if single fetch fails": "若单次获取失败，请使用批量/自动批量", "Load from database": "从数据库加载", "Load database": "加载数据库", "First Page": "第一页", "Last Page": "最后一页", "Failed to load data": "加载数据失败", "Update": "更新", "Updating...": "更新中...", "Update will fetch the latest data and overwrite the database. Continue?": "更新将获取最新数据并覆盖数据库。继续吗？", "Followers": "粉丝", "Following": "正在关注", "Joined": "加入时间", "Open": "打开", "Preview": "预览", "View Database": "查看数据库", "Converting...": "转换中...", "Convert & Download": "转换并下载", "Date Since": "开始日期", "Date Until": "结束日期", "Empty dates will fetch all available media": "空日期将获取所有可用媒体", "Filter by Date Range": "按日期范围过滤", "Include Retweets": "包含转推", "Not supported with Media timeline": "媒体时间线不支持", "No media found for date range {{since}} to {{until}}": "未找到日期范围 {{since}} 至 {{until}} 的媒体", "No tweets found for this account": "未找到此账户的推文", "No media found in {{count}} tweets": "在 {{count}} 条推文中未找到媒体" } };
   const resources = {
     "ar": ar,
     "de": de,
@@ -506,7 +264,7 @@
   function sanitizeFilename(name) {
     return name.replace(/[\\/:*?"<>|]/g, "-").replace(/\s+/g, "_").replace(/_+/g, "_").replace(/^_+|_+$/g, "");
   }
-  const version = "1.0.9";
+  const version = "1.1.0";
   const pkg = {
     version
   };
@@ -524,15 +282,18 @@
     dateTimeFormat: "YYYY-MM-DD HH:mm:ss Z",
     filenamePattern: "{screen_name}_{id}_{type}_{num}_{date}.{ext}",
     language: "",
+    fontFamily: "system",
     version: pkg.version,
     convertAnimatedGifs: true,
     convertGifsExternal: false,
     downloadConcurrency: 1,
     fetchMode: "single",
-    timelineType: "media",
+    timelineType: "timeline",
     mediaType: "all",
     batchSize: 100,
-    startingBatch: 0
+    startingBatch: 0,
+    includeRetweets: false,
+    apiServer: "oregon"
   };
   const THEMES = [
     "abyss",
@@ -757,7 +518,7 @@
       defaultNS: "common",
       fallbackLng: "en",
       nsSeparator: "::",
-      debug: appOptionsManager.get("debug"),
+      debug: false,
       resources
     });
     return i18next;
@@ -818,11 +579,18 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
       return this.props.children;
     }
   }
+  const API_SERVERS = {
+    oregon: "https://oregon.exyezed.cc",
+    frankfurt: "https://frankfurt.exyezed.cc",
+    singapore: "https://singapore.exyezed.cc"
+  };
   const API_CONFIG = {
-    primary: "https://oregon.exyezed.cc",
-    alternate: "https://frankfurt.exyezed.cc",
     timeout: 6e4
   };
+  function getSelectedServer() {
+    const server = appOptionsManager.get("apiServer") ?? "oregon";
+    return API_SERVERS[server] || API_SERVERS.oregon;
+  }
   const mediaDownloaderAPI = {
     async fetchMediaData(username, authToken, patreonAuth, params) {
       const timelineType = params?.timelineType ?? "media";
@@ -830,27 +598,144 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
       const startingBatch = params?.startingBatch ?? 0;
       const mediaType = params?.mediaType ?? "all";
       const fetchMode = params?.fetchMode;
+      const dateSince = params?.dateSince;
+      const dateUntil = params?.dateUntil;
+      const includeRetweets = params?.includeRetweets ?? false;
+      const supportsRetweets = timelineType !== "media";
+      const retweetParam = supportsRetweets && includeRetweets ? "1" : "0";
+      const shouldAppendRetweet = supportsRetweets && includeRetweets;
       let endpoint;
+      if (appOptionsManager.get("debug")) {
+        console.group("[API Request Debug]");
+        console.log("Parameters:", {
+          fetchMode,
+          dateSince,
+          dateUntil,
+          batchSize,
+          startingBatch,
+          mediaType,
+          timelineType,
+          username,
+          includeRetweets
+        });
+        console.log("Conditions:", {
+          "Is Demo Mode": patreonAuth === "xbatchdemo",
+          "Is Single Mode": fetchMode === "single",
+          "Has Date Range": !!(dateSince || dateUntil),
+          "Is Batch Mode": fetchMode === "batch" || fetchMode === "auto",
+          "Will Include Batch Params": fetchMode !== "single" && !(dateSince || dateUntil)
+        });
+      }
       if (patreonAuth === "xbatchdemo") {
-        endpoint = `/demo/media/all/xbatchdemo/${authToken}/xbatchdemo`;
+        if (fetchMode === "single") {
+          if (dateSince || dateUntil) {
+            const since = dateSince || "none";
+            const until = dateUntil || "none";
+            endpoint = `/demo/${encodeURIComponent(timelineType)}/${encodeURIComponent(mediaType)}/xbatchdemo/${authToken}/xbatchdemo/${since}/${until}`;
+            if (shouldAppendRetweet) {
+              endpoint += `/${retweetParam}`;
+            }
+          } else {
+            endpoint = `/demo/${encodeURIComponent(timelineType)}/${encodeURIComponent(mediaType)}/xbatchdemo/${authToken}/xbatchdemo`;
+            if (shouldAppendRetweet) {
+              endpoint += `/${retweetParam}`;
+            }
+          }
+        } else if (fetchMode === "date_range" || dateSince || dateUntil) {
+          const since = dateSince || "none";
+          const until = dateUntil || "none";
+          if (batchSize > 0 && startingBatch >= 0) {
+            endpoint = `/demo/${encodeURIComponent(timelineType)}/${encodeURIComponent(String(batchSize))}/${encodeURIComponent(String(startingBatch))}/${encodeURIComponent(mediaType)}/xbatchdemo/${authToken}/xbatchdemo/${since}/${until}`;
+            if (shouldAppendRetweet) {
+              endpoint += `/${retweetParam}`;
+            }
+          } else {
+            endpoint = `/demo/${encodeURIComponent(timelineType)}/${encodeURIComponent(mediaType)}/xbatchdemo/${authToken}/xbatchdemo/${since}/${until}`;
+            if (shouldAppendRetweet) {
+              endpoint += `/${retweetParam}`;
+            }
+          }
+        } else {
+          endpoint = `/demo/${encodeURIComponent(timelineType)}/${encodeURIComponent(String(batchSize))}/${encodeURIComponent(String(startingBatch))}/${encodeURIComponent(mediaType)}/xbatchdemo/${authToken}/xbatchdemo`;
+          if (shouldAppendRetweet) {
+            endpoint += `/${retweetParam}`;
+          }
+        }
       } else if (fetchMode === "single") {
-        endpoint = `/metadata/${encodeURIComponent(timelineType)}/${encodeURIComponent(mediaType)}/${encodeURIComponent(username)}/${encodeURIComponent(authToken)}/${encodeURIComponent(patreonAuth)}`;
+        if (dateSince || dateUntil) {
+          const since = dateSince || "none";
+          const until = dateUntil || "none";
+          endpoint = `/metadata/${encodeURIComponent(timelineType)}/${encodeURIComponent(mediaType)}/${encodeURIComponent(username)}/${encodeURIComponent(authToken)}/${encodeURIComponent(patreonAuth)}/${since}/${until}`;
+          if (shouldAppendRetweet) {
+            endpoint += `/${retweetParam}`;
+          }
+        } else {
+          endpoint = `/metadata/${encodeURIComponent(timelineType)}/${encodeURIComponent(mediaType)}/${encodeURIComponent(username)}/${encodeURIComponent(authToken)}/${encodeURIComponent(patreonAuth)}`;
+          if (shouldAppendRetweet) {
+            endpoint += `/${retweetParam}`;
+          }
+        }
+      } else if (fetchMode === "date_range" || dateSince || dateUntil) {
+        const since = dateSince || "none";
+        const until = dateUntil || "none";
+        if (batchSize > 0 && startingBatch >= 0) {
+          endpoint = `/metadata/${encodeURIComponent(timelineType)}/${encodeURIComponent(String(batchSize))}/${encodeURIComponent(String(startingBatch))}/${encodeURIComponent(mediaType)}/${encodeURIComponent(username)}/${encodeURIComponent(authToken)}/${encodeURIComponent(patreonAuth)}/${since}/${until}`;
+          if (shouldAppendRetweet) {
+            endpoint += `/${retweetParam}`;
+          }
+        } else {
+          endpoint = `/metadata/${encodeURIComponent(timelineType)}/${encodeURIComponent(mediaType)}/${encodeURIComponent(username)}/${encodeURIComponent(authToken)}/${encodeURIComponent(patreonAuth)}/${since}/${until}`;
+          if (shouldAppendRetweet) {
+            endpoint += `/${retweetParam}`;
+          }
+        }
       } else {
         endpoint = `/metadata/${encodeURIComponent(timelineType)}/${encodeURIComponent(String(batchSize))}/${encodeURIComponent(String(startingBatch))}/${encodeURIComponent(mediaType)}/${encodeURIComponent(username)}/${encodeURIComponent(authToken)}/${encodeURIComponent(patreonAuth)}`;
-      }
-      try {
-        const response = await this.makeRequest(API_CONFIG.primary + endpoint);
-        return response;
-      } catch (primaryError) {
-        console.warn("Primary API failed, trying alternate:", primaryError);
-        try {
-          const response = await this.makeRequest(API_CONFIG.alternate + endpoint);
-          return response;
-        } catch (alternateError) {
-          console.error("All APIs failed:", { primaryError, alternateError });
-          throw new Error("Failed to fetch data from all APIs");
+        if (shouldAppendRetweet) {
+          endpoint += `/${retweetParam}`;
         }
       }
+      const selectedServer = getSelectedServer();
+      if (appOptionsManager.get("debug")) {
+        console.log("URL Construction:", {
+          "Selected Server": selectedServer,
+          "Full URL": selectedServer + endpoint,
+          "Endpoint": endpoint,
+          "Has Batch Params (100/0)": endpoint.includes("/100/0/") || /\/\d+\/\d+\//.test(endpoint),
+          "Has Date Range": endpoint.includes(dateSince || "") || endpoint.includes(dateUntil || ""),
+          "Pattern": endpoint.split("/").slice(0, 6).join("/")
+        });
+        console.groupEnd();
+      }
+      try {
+        const response = await this.makeRequest(selectedServer + endpoint);
+        this.validateNonEmptyResult(response);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
+    createAPIError(message, status) {
+      let type = "unknown";
+      let isRetryable = false;
+      if (status === 400) {
+        type = "validation";
+        isRetryable = false;
+      } else if (status === 401) {
+        type = "authentication";
+        isRetryable = false;
+      } else if (status === 500) {
+        type = "server";
+        if (message.includes("Could not authenticate you") || message.includes("401") || message.includes("Unauthorized")) {
+          isRetryable = true;
+        } else {
+          isRetryable = true;
+        }
+      } else if (message.includes("Network error") || message.includes("timeout")) {
+        type = "network";
+        isRetryable = true;
+      }
+      return { message, status, type, isRetryable };
     },
     async makeRequest(url) {
       return new Promise((resolve, reject) => {
@@ -865,25 +750,71 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
             },
             onload: (response) => {
               try {
+                if (response.status === 400) {
+                  const errorData = JSON.parse(response.responseText);
+                  const errorMsg = errorData.error || `HTTP error! status: ${response.status}`;
+                  const apiError = this.createAPIError(errorMsg, 400);
+                  const error = new Error(apiError.message);
+                  error.apiError = apiError;
+                  reject(error);
+                  return;
+                }
+                if (response.status === 401) {
+                  const errorData = JSON.parse(response.responseText);
+                  const errorMsg = errorData.error || `HTTP error! status: ${response.status}`;
+                  const apiError = this.createAPIError(errorMsg, 401);
+                  const error = new Error(apiError.message);
+                  error.apiError = apiError;
+                  reject(error);
+                  return;
+                }
+                if (response.status === 500) {
+                  const errorData = JSON.parse(response.responseText);
+                  const errorMsg = errorData.error || `HTTP error! status: ${response.status}`;
+                  const apiError = this.createAPIError(errorMsg, 500);
+                  const error = new Error(apiError.message);
+                  error.apiError = apiError;
+                  reject(error);
+                  return;
+                }
                 if (response.status !== 200) {
-                  reject(new Error(`HTTP error! status: ${response.status}`));
+                  const apiError = this.createAPIError(`HTTP error! status: ${response.status}`, response.status);
+                  const error = new Error(apiError.message);
+                  error.apiError = apiError;
+                  reject(error);
                   return;
                 }
                 const data = JSON.parse(response.responseText);
                 if (!this.validateResponse(data)) {
-                  reject(new Error("Invalid API response structure"));
+                  const apiError = this.createAPIError("Invalid API response structure");
+                  const error = new Error(apiError.message);
+                  error.apiError = apiError;
+                  reject(error);
                   return;
                 }
                 resolve(data);
               } catch (parseError) {
-                reject(new Error("Failed to parse API response"));
+                if (parseError instanceof Error && parseError.message.startsWith("Invalid")) {
+                  reject(parseError);
+                } else {
+                  const apiError = this.createAPIError("Failed to parse API response");
+                  const error = new Error(apiError.message);
+                  error.apiError = apiError;
+                  reject(error);
+                }
               }
             },
             onerror: () => {
-              reject(new Error("Network error occurred"));
+              const apiError = this.createAPIError("Network error occurred");
+              const error = new Error(apiError.message);
+              error.apiError = apiError;
+              reject(error);
             },
             ontimeout: () => {
-              reject(new Error("Request timeout - please try again"));
+              const apiError = this.createAPIError("Request timeout - please try again");
+              const error = new Error(apiError.message);
+              error.apiError = apiError;
+              reject(error);
             }
           });
         } else {
@@ -904,23 +835,59 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
           }
         });
         clearTimeout(timeoutId);
+        if (response.status === 400) {
+          const errorData = await response.json();
+          const errorMsg = errorData.error || `HTTP error! status: ${response.status}`;
+          const apiError = this.createAPIError(errorMsg, 400);
+          const error = new Error(apiError.message);
+          error.apiError = apiError;
+          throw error;
+        }
+        if (response.status === 401) {
+          const errorData = await response.json();
+          const errorMsg = errorData.error || `HTTP error! status: ${response.status}`;
+          const apiError = this.createAPIError(errorMsg, 401);
+          const error = new Error(apiError.message);
+          error.apiError = apiError;
+          throw error;
+        }
+        if (response.status === 500) {
+          const errorData = await response.json();
+          const errorMsg = errorData.error || `HTTP error! status: ${response.status}`;
+          const apiError = this.createAPIError(errorMsg, 500);
+          const error = new Error(apiError.message);
+          error.apiError = apiError;
+          throw error;
+        }
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          const apiError = this.createAPIError(`HTTP error! status: ${response.status}`, response.status);
+          const error = new Error(apiError.message);
+          error.apiError = apiError;
+          throw error;
         }
         const data = await response.json();
         if (!this.validateResponse(data)) {
-          throw new Error("Invalid API response structure");
+          const apiError = this.createAPIError("Invalid API response structure");
+          const error = new Error(apiError.message);
+          error.apiError = apiError;
+          throw error;
         }
         return data;
       } catch (error) {
         clearTimeout(timeoutId);
         if (error instanceof Error) {
           if (error.name === "AbortError") {
-            throw new Error("Request timeout - please try again");
+            const apiError2 = this.createAPIError("Request timeout - please try again");
+            const err2 = new Error(apiError2.message);
+            err2.apiError = apiError2;
+            throw err2;
           }
           throw error;
         }
-        throw new Error("Unknown error occurred");
+        const apiError = this.createAPIError("Unknown error occurred");
+        const err = new Error(apiError.message);
+        err.apiError = apiError;
+        throw err;
       }
     },
     validateResponse(data) {
@@ -933,6 +900,31 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
       const cleanUsername = this.formatUsername(username);
       return /^[a-zA-Z0-9_]{1,15}$/.test(cleanUsername);
     },
+validateNonEmptyResult(data) {
+      const isEmpty = data.timeline.length === 0 && (data.metadata.items_processed === 0 || data.metadata.new_entries === 0);
+      if (isEmpty) {
+        const isDateRangeSearch = !!data.metadata.date_range;
+        let errorMsg = "";
+        let errorData = void 0;
+        if (isDateRangeSearch) {
+          const { since, until } = data.metadata.date_range;
+          errorMsg = "No media found for date range {{since}} to {{until}}";
+          errorData = { since, until };
+        } else if (data.metadata.items_processed === 0) {
+          errorMsg = "No tweets found for this account";
+        } else {
+          errorMsg = "No media found in {{count}} tweets";
+          errorData = { count: data.metadata.items_processed };
+        }
+        const apiError = this.createAPIError(errorMsg, 404);
+        apiError.type = "validation";
+        apiError.isRetryable = false;
+        const error = new Error(errorMsg);
+        error.apiError = apiError;
+        error.errorData = errorData;
+        throw error;
+      }
+    },
     validateAuthToken(token) {
       return token.trim().length > 10;
     },
@@ -944,34 +936,22 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
         return { valid: true };
       }
       const endpoint = `/verify/${patreonAuth}`;
+      const selectedServer = getSelectedServer();
       try {
-        const response = await this.makeAuthRequest(API_CONFIG.primary + endpoint);
+        const response = await this.makeAuthRequest(selectedServer + endpoint);
         return response;
-      } catch (primaryError) {
-        console.warn("Primary API failed, trying alternate:", primaryError);
-        try {
-          const response = await this.makeAuthRequest(API_CONFIG.alternate + endpoint);
-          return response;
-        } catch (alternateError) {
-          console.error("All APIs failed:", { primaryError, alternateError });
-          throw new Error("Failed to verify auth from all APIs");
-        }
+      } catch (error) {
+        throw new Error("Failed to verify auth");
       }
     },
     async generateAuthToken(patreonAuth) {
       const endpoint = `/token/${patreonAuth}`;
+      const selectedServer = getSelectedServer();
       try {
-        const response = await this.makeAuthRequest(API_CONFIG.primary + endpoint);
+        const response = await this.makeAuthRequest(selectedServer + endpoint);
         return response;
-      } catch (primaryError) {
-        console.warn("Primary API failed, trying alternate:", primaryError);
-        try {
-          const response = await this.makeAuthRequest(API_CONFIG.alternate + endpoint);
-          return response;
-        } catch (alternateError) {
-          console.error("All APIs failed:", { primaryError, alternateError });
-          throw new Error("Failed to generate token from all APIs");
-        }
+      } catch (error) {
+        throw new Error("Failed to generate token");
       }
     },
     async makeAuthRequest(url) {
@@ -1052,6 +1032,10 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
         accounts: "++id, username, cached_at, batch_identifier",
         auth_settings: "++id"
       });
+      this.version(3).stores({
+        accounts: "++id, username, cached_at, batch_identifier, batch_mode",
+        auth_settings: "++id"
+      });
     }
   }
   const mediaDB = new MediaDownloaderDB();
@@ -1072,8 +1056,24 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
         cached_at: Date.now()
       };
       let existing;
-      if (account.batch_mode && account.batch_mode !== "single") {
-        const batchAccounts = await mediaDB.accounts.where("username").equals(data.username).filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single")).toArray();
+      if (account.batch_mode === "batch_date_range") {
+        const batchDateRangeAccounts = await mediaDB.accounts.where("username").equals(data.username).filter(
+          (acc) => acc.batch_mode === "batch_date_range" && acc.date_since === data.date_since && acc.date_until === data.date_until
+        ).toArray();
+        if (batchDateRangeAccounts.length > 0) {
+          batchDateRangeAccounts.sort((a, b) => b.cached_at - a.cached_at);
+          existing = batchDateRangeAccounts[0];
+        }
+      } else if (account.batch_mode === "date_range") {
+        const dateRangeAccounts = await mediaDB.accounts.where("username").equals(data.username).filter(
+          (acc) => acc.batch_mode === "date_range" && acc.date_since === data.date_since && acc.date_until === data.date_until
+        ).toArray();
+        if (dateRangeAccounts.length > 0) {
+          dateRangeAccounts.sort((a, b) => b.cached_at - a.cached_at);
+          existing = dateRangeAccounts[0];
+        }
+      } else if (account.batch_mode && account.batch_mode !== "single") {
+        const batchAccounts = await mediaDB.accounts.where("username").equals(data.username).filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single" && acc.batch_mode !== "date_range" && acc.batch_mode !== "batch_date_range")).toArray();
         if (batchAccounts.length > 0) {
           batchAccounts.sort((a, b) => b.cached_at - a.cached_at);
           existing = batchAccounts[0];
@@ -1098,17 +1098,25 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
       dbState.dbChangeSignal.value++;
       return id2;
     },
-    async getAccounts(page = 1, limit = 3, filterByBatch = false) {
+    async getAccounts(page = 1, limit = 3, filterByBatch = false, filterByDateRange = false, filterByBatchDateRange = false) {
       const offset = (page - 1) * limit;
       let collection = mediaDB.accounts.orderBy("cached_at").reverse();
-      if (filterByBatch) {
-        collection = collection.filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single"));
+      if (filterByBatchDateRange) {
+        collection = collection.filter((acc) => acc.batch_mode === "batch_date_range");
+      } else if (filterByDateRange) {
+        collection = collection.filter((acc) => acc.batch_mode === "date_range");
+      } else if (filterByBatch) {
+        collection = collection.filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single" && acc.batch_mode !== "date_range" && acc.batch_mode !== "batch_date_range"));
       }
       return await collection.offset(offset).limit(limit).toArray();
     },
-    async getAccountsCount(filterByBatch = false) {
-      if (filterByBatch) {
-        return await mediaDB.accounts.filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single")).count();
+    async getAccountsCount(filterByBatch = false, filterByDateRange = false, filterByBatchDateRange = false) {
+      if (filterByBatchDateRange) {
+        return await mediaDB.accounts.filter((acc) => acc.batch_mode === "batch_date_range").count();
+      } else if (filterByDateRange) {
+        return await mediaDB.accounts.filter((acc) => acc.batch_mode === "date_range").count();
+      } else if (filterByBatch) {
+        return await mediaDB.accounts.filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single" && acc.batch_mode !== "date_range" && acc.batch_mode !== "batch_date_range")).count();
       }
       return await mediaDB.accounts.count();
     },
@@ -1118,12 +1126,20 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
     async getAccountsByUsername(username) {
       return await mediaDB.accounts.where("username").equals(username).reverse().sortBy("cached_at");
     },
-    async getAccountsByUsernameAndMode(username, mode) {
+    async getAccountsByUsernameAndMode(username, mode, dateSince, dateUntil) {
       if (mode === "single") {
         const account = await mediaDB.accounts.where("username").equals(username).filter((acc) => !acc.batch_mode || acc.batch_mode === "single").first();
         return account ? [account] : [];
+      } else if (mode === "batch_date_range") {
+        return await mediaDB.accounts.where("username").equals(username).filter(
+          (acc) => acc.batch_mode === "batch_date_range" && acc.date_since === dateSince && acc.date_until === dateUntil
+        ).toArray();
+      } else if (mode === "date_range") {
+        return await mediaDB.accounts.where("username").equals(username).filter(
+          (acc) => acc.batch_mode === "date_range" && acc.date_since === dateSince && acc.date_until === dateUntil
+        ).toArray();
       } else {
-        return await mediaDB.accounts.where("username").equals(username).filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single")).toArray();
+        return await mediaDB.accounts.where("username").equals(username).filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single" && acc.batch_mode !== "date_range" && acc.batch_mode !== "batch_date_range")).toArray();
       }
     },
     async updateAccount(id2, data) {
@@ -1612,1903 +1628,6 @@ u(Trans, { ns: "common", i18nKey: "Error:" }),
       crossOrigin: "anonymous"
     };
   }
-  function getDefaultExportFromCjs(x) {
-    return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
-  }
-  var gifshot$1 = { exports: {} };
-  var hasRequiredGifshot;
-  function requireGifshot() {
-    if (hasRequiredGifshot) return gifshot$1.exports;
-    hasRequiredGifshot = 1;
-    (function(module, exports) {
-      (function(window2, document2, navigator, undefined$1) {
-        var utils = {
-          URL: window2.URL || window2.webkitURL || window2.mozURL || window2.msURL,
-          getUserMedia: (function() {
-            var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-            return getUserMedia ? getUserMedia.bind(navigator) : getUserMedia;
-          })(),
-          requestAnimFrame: window2.requestAnimationFrame || window2.webkitRequestAnimationFrame || window2.mozRequestAnimationFrame || window2.oRequestAnimationFrame || window2.msRequestAnimationFrame,
-          requestTimeout: function requestTimeout(callback, delay) {
-            callback = callback || utils.noop;
-            delay = delay || 0;
-            if (!utils.requestAnimFrame) {
-              return setTimeout(callback, delay);
-            }
-            var start = ( new Date()).getTime();
-            var handle = new Object();
-            var requestAnimFrame = utils.requestAnimFrame;
-            var loop = function loop2() {
-              var current = ( new Date()).getTime();
-              var delta = current - start;
-              delta >= delay ? callback.call() : handle.value = requestAnimFrame(loop2);
-            };
-            handle.value = requestAnimFrame(loop);
-            return handle;
-          },
-          Blob: window2.Blob || window2.BlobBuilder || window2.WebKitBlobBuilder || window2.MozBlobBuilder || window2.MSBlobBuilder,
-          btoa: (function() {
-            var btoa = window2.btoa || function(input) {
-              var output = "";
-              var i = 0;
-              var l = input.length;
-              var key = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-              var chr1 = void 0;
-              var chr2 = void 0;
-              var chr3 = void 0;
-              var enc1 = void 0;
-              var enc2 = void 0;
-              var enc3 = void 0;
-              var enc4 = void 0;
-              while (i < l) {
-                chr1 = input.charCodeAt(i++);
-                chr2 = input.charCodeAt(i++);
-                chr3 = input.charCodeAt(i++);
-                enc1 = chr1 >> 2;
-                enc2 = (chr1 & 3) << 4 | chr2 >> 4;
-                enc3 = (chr2 & 15) << 2 | chr3 >> 6;
-                enc4 = chr3 & 63;
-                if (isNaN(chr2)) {
-                  enc3 = enc4 = 64;
-                } else if (isNaN(chr3)) {
-                  enc4 = 64;
-                }
-                output = output + key.charAt(enc1) + key.charAt(enc2) + key.charAt(enc3) + key.charAt(enc4);
-              }
-              return output;
-            };
-            return btoa ? btoa.bind(window2) : utils.noop;
-          })(),
-          isObject: function isObject(obj) {
-            return obj && Object.prototype.toString.call(obj) === "[object Object]";
-          },
-          isEmptyObject: function isEmptyObject(obj) {
-            return utils.isObject(obj) && !Object.keys(obj).length;
-          },
-          isArray: function isArray(arr) {
-            return arr && Array.isArray(arr);
-          },
-          isFunction: function isFunction(func) {
-            return func && typeof func === "function";
-          },
-          isElement: function isElement(elem) {
-            return elem && elem.nodeType === 1;
-          },
-          isString: function isString(value) {
-            return typeof value === "string" || Object.prototype.toString.call(value) === "[object String]";
-          },
-          isSupported: {
-            canvas: function canvas() {
-              var el = document2.createElement("canvas");
-              return el && el.getContext && el.getContext("2d");
-            },
-            webworkers: function webworkers() {
-              return window2.Worker;
-            },
-            blob: function blob() {
-              return utils.Blob;
-            },
-            Uint8Array: function Uint8Array2() {
-              return window2.Uint8Array;
-            },
-            Uint32Array: function Uint32Array2() {
-              return window2.Uint32Array;
-            },
-            videoCodecs: (function() {
-              var testEl = document2.createElement("video");
-              var supportObj = {
-                "mp4": false,
-                "h264": false,
-                "ogv": false,
-                "ogg": false,
-                "webm": false
-              };
-              try {
-                if (testEl && testEl.canPlayType) {
-                  supportObj.mp4 = testEl.canPlayType('video/mp4; codecs="mp4v.20.8"') !== "";
-                  supportObj.h264 = (testEl.canPlayType('video/mp4; codecs="avc1.42E01E"') || testEl.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')) !== "";
-                  supportObj.ogv = testEl.canPlayType('video/ogg; codecs="theora"') !== "";
-                  supportObj.ogg = testEl.canPlayType('video/ogg; codecs="theora"') !== "";
-                  supportObj.webm = testEl.canPlayType('video/webm; codecs="vp8, vorbis"') !== -1;
-                }
-              } catch (e) {
-              }
-              return supportObj;
-            })()
-          },
-          noop: function noop2() {
-          },
-          each: function each(collection, callback) {
-            var x = void 0;
-            var len = void 0;
-            if (utils.isArray(collection)) {
-              x = -1;
-              len = collection.length;
-              while (++x < len) {
-                if (callback(x, collection[x]) === false) {
-                  break;
-                }
-              }
-            } else if (utils.isObject(collection)) {
-              for (x in collection) {
-                if (collection.hasOwnProperty(x)) {
-                  if (callback(x, collection[x]) === false) {
-                    break;
-                  }
-                }
-              }
-            }
-          },
-          mergeOptions: function mergeOptions(defaultOptions2, userOptions) {
-            if (!utils.isObject(defaultOptions2) || !utils.isObject(userOptions) || !Object.keys) {
-              return;
-            }
-            var newObj = {};
-            utils.each(defaultOptions2, function(key, val) {
-              newObj[key] = defaultOptions2[key];
-            });
-            utils.each(userOptions, function(key, val) {
-              var currentUserOption = userOptions[key];
-              if (!utils.isObject(currentUserOption)) {
-                newObj[key] = currentUserOption;
-              } else {
-                if (!defaultOptions2[key]) {
-                  newObj[key] = currentUserOption;
-                } else {
-                  newObj[key] = utils.mergeOptions(defaultOptions2[key], currentUserOption);
-                }
-              }
-            });
-            return newObj;
-          },
-          setCSSAttr: function setCSSAttr(elem, attr, val) {
-            if (!utils.isElement(elem)) {
-              return;
-            }
-            if (utils.isString(attr) && utils.isString(val)) {
-              elem.style[attr] = val;
-            } else if (utils.isObject(attr)) {
-              utils.each(attr, function(key, val2) {
-                elem.style[key] = val2;
-              });
-            }
-          },
-          removeElement: function removeElement(node) {
-            if (!utils.isElement(node)) {
-              return;
-            }
-            if (node.parentNode) {
-              node.parentNode.removeChild(node);
-            }
-          },
-          createWebWorker: function createWebWorker(content) {
-            if (!utils.isString(content)) {
-              return {};
-            }
-            try {
-              var blob = new utils.Blob([content], {
-                "type": "text/javascript"
-              });
-              var objectUrl = utils.URL.createObjectURL(blob);
-              var worker = new Worker(objectUrl);
-              return {
-                "objectUrl": objectUrl,
-                "worker": worker
-              };
-            } catch (e) {
-              return "" + e;
-            }
-          },
-          getExtension: function getExtension(src) {
-            return src.substr(src.lastIndexOf(".") + 1, src.length);
-          },
-          getFontSize: function getFontSize() {
-            var options2 = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-            if (!document2.body || options2.resizeFont === false) {
-              return options2.fontSize;
-            }
-            var text = options2.text;
-            var containerWidth = options2.gifWidth;
-            var fontSize = parseInt(options2.fontSize, 10);
-            var minFontSize = parseInt(options2.minFontSize, 10);
-            var div = document2.createElement("div");
-            var span = document2.createElement("span");
-            div.setAttribute("width", containerWidth);
-            div.appendChild(span);
-            span.innerHTML = text;
-            span.style.fontSize = fontSize + "px";
-            span.style.textIndent = "-9999px";
-            span.style.visibility = "hidden";
-            document2.body.appendChild(span);
-            while (span.offsetWidth > containerWidth && fontSize >= minFontSize) {
-              span.style.fontSize = --fontSize + "px";
-            }
-            document2.body.removeChild(span);
-            return fontSize + "px";
-          },
-          webWorkerError: false
-        };
-        var utils$2 = Object.freeze({
-          default: utils
-        });
-        var error = {
-          validate: function validate(skipObj) {
-            skipObj = utils.isObject(skipObj) ? skipObj : {};
-            var errorObj = {};
-            utils.each(error.validators, function(indece, currentValidator) {
-              var errorCode = currentValidator.errorCode;
-              if (!skipObj[errorCode] && !currentValidator.condition) {
-                errorObj = currentValidator;
-                errorObj.error = true;
-                return false;
-              }
-            });
-            delete errorObj.condition;
-            return errorObj;
-          },
-          isValid: function isValid(skipObj) {
-            var errorObj = error.validate(skipObj);
-            var isValid2 = errorObj.error !== true ? true : false;
-            return isValid2;
-          },
-          validators: [{
-            condition: utils.isFunction(utils.getUserMedia),
-            errorCode: "getUserMedia",
-            errorMsg: "The getUserMedia API is not supported in your browser"
-          }, {
-            condition: utils.isSupported.canvas(),
-            errorCode: "canvas",
-            errorMsg: "Canvas elements are not supported in your browser"
-          }, {
-            condition: utils.isSupported.webworkers(),
-            errorCode: "webworkers",
-            errorMsg: "The Web Workers API is not supported in your browser"
-          }, {
-            condition: utils.isFunction(utils.URL),
-            errorCode: "window.URL",
-            errorMsg: "The window.URL API is not supported in your browser"
-          }, {
-            condition: utils.isSupported.blob(),
-            errorCode: "window.Blob",
-            errorMsg: "The window.Blob File API is not supported in your browser"
-          }, {
-            condition: utils.isSupported.Uint8Array(),
-            errorCode: "window.Uint8Array",
-            errorMsg: "The window.Uint8Array function constructor is not supported in your browser"
-          }, {
-            condition: utils.isSupported.Uint32Array(),
-            errorCode: "window.Uint32Array",
-            errorMsg: "The window.Uint32Array function constructor is not supported in your browser"
-          }],
-          messages: {
-            videoCodecs: {
-              errorCode: "videocodec",
-              errorMsg: "The video codec you are trying to use is not supported in your browser"
-            }
-          }
-        };
-        var error$2 = Object.freeze({
-          default: error
-        });
-        var noop = function noop2() {
-        };
-        var defaultOptions = {
-          sampleInterval: 10,
-          numWorkers: 2,
-          filter: "",
-          gifWidth: 200,
-          gifHeight: 200,
-          interval: 0.1,
-          numFrames: 10,
-          frameDuration: 1,
-          keepCameraOn: false,
-          images: [],
-          video: null,
-          webcamVideoElement: null,
-          cameraStream: null,
-          text: "",
-          fontWeight: "normal",
-          fontSize: "16px",
-          minFontSize: "10px",
-          resizeFont: false,
-          fontFamily: "sans-serif",
-          fontColor: "#ffffff",
-          textAlign: "center",
-          textBaseline: "bottom",
-          textXCoordinate: null,
-          textYCoordinate: null,
-          progressCallback: noop,
-          completeCallback: noop,
-          saveRenderingContexts: false,
-          savedRenderingContexts: [],
-          crossOrigin: "Anonymous"
-        };
-        var defaultOptions$2 = Object.freeze({
-          default: defaultOptions
-        });
-        function isSupported() {
-          return error.isValid();
-        }
-        function isWebCamGIFSupported() {
-          return error.isValid();
-        }
-        function isSupported$1() {
-          var options2 = {
-            getUserMedia: true
-          };
-          return error.isValid(options2);
-        }
-        function isExistingVideoGIFSupported(codecs) {
-          var hasValidCodec = false;
-          if (utils.isArray(codecs) && codecs.length) {
-            utils.each(codecs, function(indece, currentCodec) {
-              if (utils.isSupported.videoCodecs[currentCodec]) {
-                hasValidCodec = true;
-              }
-            });
-            if (!hasValidCodec) {
-              return false;
-            }
-          } else if (utils.isString(codecs) && codecs.length) {
-            if (!utils.isSupported.videoCodecs[codecs]) {
-              return false;
-            }
-          }
-          return error.isValid({
-            "getUserMedia": true
-          });
-        }
-        function NeuQuant() {
-          var netsize = 256;
-          var prime1 = 499;
-          var prime2 = 491;
-          var prime3 = 487;
-          var prime4 = 503;
-          var minpicturebytes = 3 * prime4;
-          var maxnetpos = netsize - 1;
-          var netbiasshift = 4;
-          var ncycles = 100;
-          var intbiasshift = 16;
-          var intbias = 1 << intbiasshift;
-          var gammashift = 10;
-          var betashift = 10;
-          var beta = intbias >> betashift;
-          var betagamma = intbias << gammashift - betashift;
-          var initrad = netsize >> 3;
-          var radiusbiasshift = 6;
-          var radiusbias = 1 << radiusbiasshift;
-          var initradius = initrad * radiusbias;
-          var radiusdec = 30;
-          var alphabiasshift = 10;
-          var initalpha = 1 << alphabiasshift;
-          var alphadec;
-          var radbiasshift = 8;
-          var radbias = 1 << radbiasshift;
-          var alpharadbshift = alphabiasshift + radbiasshift;
-          var alpharadbias = 1 << alpharadbshift;
-          var thepicture;
-          var lengthcount;
-          var samplefac;
-          var network;
-          var netindex = [];
-          var bias = [];
-          var freq = [];
-          var radpower = [];
-          function NeuQuantConstructor(thepic, len, sample) {
-            var i;
-            var p;
-            thepicture = thepic;
-            lengthcount = len;
-            samplefac = sample;
-            network = new Array(netsize);
-            for (i = 0; i < netsize; i++) {
-              network[i] = new Array(4);
-              p = network[i];
-              p[0] = p[1] = p[2] = (i << netbiasshift + 8) / netsize | 0;
-              freq[i] = intbias / netsize | 0;
-              bias[i] = 0;
-            }
-          }
-          function colorMap() {
-            var map2 = [];
-            var index = new Array(netsize);
-            for (var i = 0; i < netsize; i++) {
-              index[network[i][3]] = i;
-            }
-            var k = 0;
-            for (var l = 0; l < netsize; l++) {
-              var j2 = index[l];
-              map2[k++] = network[j2][0];
-              map2[k++] = network[j2][1];
-              map2[k++] = network[j2][2];
-            }
-            return map2;
-          }
-          function inxbuild() {
-            var i;
-            var j2;
-            var smallpos;
-            var smallval;
-            var p;
-            var q2;
-            var previouscol;
-            var startpos;
-            previouscol = 0;
-            startpos = 0;
-            for (i = 0; i < netsize; i++) {
-              p = network[i];
-              smallpos = i;
-              smallval = p[1];
-              for (j2 = i + 1; j2 < netsize; j2++) {
-                q2 = network[j2];
-                if (q2[1] < smallval) {
-                  smallpos = j2;
-                  smallval = q2[1];
-                }
-              }
-              q2 = network[smallpos];
-              if (i != smallpos) {
-                j2 = q2[0];
-                q2[0] = p[0];
-                p[0] = j2;
-                j2 = q2[1];
-                q2[1] = p[1];
-                p[1] = j2;
-                j2 = q2[2];
-                q2[2] = p[2];
-                p[2] = j2;
-                j2 = q2[3];
-                q2[3] = p[3];
-                p[3] = j2;
-              }
-              if (smallval != previouscol) {
-                netindex[previouscol] = startpos + i >> 1;
-                for (j2 = previouscol + 1; j2 < smallval; j2++) {
-                  netindex[j2] = i;
-                }
-                previouscol = smallval;
-                startpos = i;
-              }
-            }
-            netindex[previouscol] = startpos + maxnetpos >> 1;
-            for (j2 = previouscol + 1; j2 < 256; j2++) {
-              netindex[j2] = maxnetpos;
-            }
-          }
-          function learn() {
-            var i;
-            var j2;
-            var b;
-            var g2;
-            var r;
-            var radius;
-            var rad;
-            var alpha;
-            var step;
-            var delta;
-            var samplepixels;
-            var p;
-            var pix;
-            var lim;
-            if (lengthcount < minpicturebytes) {
-              samplefac = 1;
-            }
-            alphadec = 30 + (samplefac - 1) / 3;
-            p = thepicture;
-            pix = 0;
-            lim = lengthcount;
-            samplepixels = lengthcount / (3 * samplefac);
-            delta = samplepixels / ncycles | 0;
-            alpha = initalpha;
-            radius = initradius;
-            rad = radius >> radiusbiasshift;
-            if (rad <= 1) {
-              rad = 0;
-            }
-            for (i = 0; i < rad; i++) {
-              radpower[i] = alpha * ((rad * rad - i * i) * radbias / (rad * rad));
-            }
-            if (lengthcount < minpicturebytes) {
-              step = 3;
-            } else if (lengthcount % prime1 !== 0) {
-              step = 3 * prime1;
-            } else {
-              if (lengthcount % prime2 !== 0) {
-                step = 3 * prime2;
-              } else {
-                if (lengthcount % prime3 !== 0) {
-                  step = 3 * prime3;
-                } else {
-                  step = 3 * prime4;
-                }
-              }
-            }
-            i = 0;
-            while (i < samplepixels) {
-              b = (p[pix + 0] & 255) << netbiasshift;
-              g2 = (p[pix + 1] & 255) << netbiasshift;
-              r = (p[pix + 2] & 255) << netbiasshift;
-              j2 = contest(b, g2, r);
-              altersingle(alpha, j2, b, g2, r);
-              if (rad !== 0) {
-                alterneigh(rad, j2, b, g2, r);
-              }
-              pix += step;
-              if (pix >= lim) {
-                pix -= lengthcount;
-              }
-              i++;
-              if (delta === 0) {
-                delta = 1;
-              }
-              if (i % delta === 0) {
-                alpha -= alpha / alphadec;
-                radius -= radius / radiusdec;
-                rad = radius >> radiusbiasshift;
-                if (rad <= 1) {
-                  rad = 0;
-                }
-                for (j2 = 0; j2 < rad; j2++) {
-                  radpower[j2] = alpha * ((rad * rad - j2 * j2) * radbias / (rad * rad));
-                }
-              }
-            }
-          }
-          function map(b, g2, r) {
-            var i;
-            var j2;
-            var dist;
-            var a;
-            var bestd;
-            var p;
-            var best;
-            bestd = 1e3;
-            best = -1;
-            i = netindex[g2];
-            j2 = i - 1;
-            while (i < netsize || j2 >= 0) {
-              if (i < netsize) {
-                p = network[i];
-                dist = p[1] - g2;
-                if (dist >= bestd) {
-                  i = netsize;
-                } else {
-                  i++;
-                  if (dist < 0) {
-                    dist = -dist;
-                  }
-                  a = p[0] - b;
-                  if (a < 0) {
-                    a = -a;
-                  }
-                  dist += a;
-                  if (dist < bestd) {
-                    a = p[2] - r;
-                    if (a < 0) {
-                      a = -a;
-                    }
-                    dist += a;
-                    if (dist < bestd) {
-                      bestd = dist;
-                      best = p[3];
-                    }
-                  }
-                }
-              }
-              if (j2 >= 0) {
-                p = network[j2];
-                dist = g2 - p[1];
-                if (dist >= bestd) {
-                  j2 = -1;
-                } else {
-                  j2--;
-                  if (dist < 0) {
-                    dist = -dist;
-                  }
-                  a = p[0] - b;
-                  if (a < 0) {
-                    a = -a;
-                  }
-                  dist += a;
-                  if (dist < bestd) {
-                    a = p[2] - r;
-                    if (a < 0) {
-                      a = -a;
-                    }
-                    dist += a;
-                    if (dist < bestd) {
-                      bestd = dist;
-                      best = p[3];
-                    }
-                  }
-                }
-              }
-            }
-            return best;
-          }
-          function process() {
-            learn();
-            unbiasnet();
-            inxbuild();
-            return colorMap();
-          }
-          function unbiasnet() {
-            var i;
-            for (i = 0; i < netsize; i++) {
-              network[i][0] >>= netbiasshift;
-              network[i][1] >>= netbiasshift;
-              network[i][2] >>= netbiasshift;
-              network[i][3] = i;
-            }
-          }
-          function alterneigh(rad, i, b, g2, r) {
-            var j2;
-            var k;
-            var lo;
-            var hi2;
-            var a;
-            var m;
-            var p;
-            lo = i - rad;
-            if (lo < -1) {
-              lo = -1;
-            }
-            hi2 = i + rad;
-            if (hi2 > netsize) {
-              hi2 = netsize;
-            }
-            j2 = i + 1;
-            k = i - 1;
-            m = 1;
-            while (j2 < hi2 || k > lo) {
-              a = radpower[m++];
-              if (j2 < hi2) {
-                p = network[j2++];
-                try {
-                  p[0] -= a * (p[0] - b) / alpharadbias | 0;
-                  p[1] -= a * (p[1] - g2) / alpharadbias | 0;
-                  p[2] -= a * (p[2] - r) / alpharadbias | 0;
-                } catch (e) {
-                }
-              }
-              if (k > lo) {
-                p = network[k--];
-                try {
-                  p[0] -= a * (p[0] - b) / alpharadbias | 0;
-                  p[1] -= a * (p[1] - g2) / alpharadbias | 0;
-                  p[2] -= a * (p[2] - r) / alpharadbias | 0;
-                } catch (e) {
-                }
-              }
-            }
-          }
-          function altersingle(alpha, i, b, g2, r) {
-            var n = network[i];
-            var alphaMult = alpha / initalpha;
-            n[0] -= alphaMult * (n[0] - b) | 0;
-            n[1] -= alphaMult * (n[1] - g2) | 0;
-            n[2] -= alphaMult * (n[2] - r) | 0;
-          }
-          function contest(b, g2, r) {
-            var i;
-            var dist;
-            var a;
-            var biasdist;
-            var betafreq;
-            var bestpos;
-            var bestbiaspos;
-            var bestd;
-            var bestbiasd;
-            var n;
-            bestd = 2147483647;
-            bestbiasd = bestd;
-            bestpos = -1;
-            bestbiaspos = bestpos;
-            for (i = 0; i < netsize; i++) {
-              n = network[i];
-              dist = n[0] - b;
-              if (dist < 0) {
-                dist = -dist;
-              }
-              a = n[1] - g2;
-              if (a < 0) {
-                a = -a;
-              }
-              dist += a;
-              a = n[2] - r;
-              if (a < 0) {
-                a = -a;
-              }
-              dist += a;
-              if (dist < bestd) {
-                bestd = dist;
-                bestpos = i;
-              }
-              biasdist = dist - (bias[i] >> intbiasshift - netbiasshift);
-              if (biasdist < bestbiasd) {
-                bestbiasd = biasdist;
-                bestbiaspos = i;
-              }
-              betafreq = freq[i] >> betashift;
-              freq[i] -= betafreq;
-              bias[i] += betafreq << gammashift;
-            }
-            freq[bestpos] += beta;
-            bias[bestpos] -= betagamma;
-            return bestbiaspos;
-          }
-          NeuQuantConstructor.apply(this, arguments);
-          var exports2 = {};
-          exports2.map = map;
-          exports2.process = process;
-          return exports2;
-        }
-        function workerCode() {
-          var self = this;
-          try {
-            self.onmessage = function(ev) {
-              var data = ev.data || {};
-              var response;
-              if (data.gifshot) {
-                response = workerMethods.run(data);
-                postMessage(response);
-              }
-            };
-          } catch (e) {
-          }
-          var workerMethods = {
-            dataToRGB: function dataToRGB(data, width, height) {
-              var length = width * height * 4;
-              var i = 0;
-              var rgb = [];
-              while (i < length) {
-                rgb.push(data[i++]);
-                rgb.push(data[i++]);
-                rgb.push(data[i++]);
-                i++;
-              }
-              return rgb;
-            },
-            componentizedPaletteToArray: function componentizedPaletteToArray(paletteRGB) {
-              paletteRGB = paletteRGB || [];
-              var paletteArray = [];
-              for (var i = 0; i < paletteRGB.length; i += 3) {
-                var r = paletteRGB[i];
-                var g2 = paletteRGB[i + 1];
-                var b = paletteRGB[i + 2];
-                paletteArray.push(r << 16 | g2 << 8 | b);
-              }
-              return paletteArray;
-            },
-"processFrameWithQuantizer": function processFrameWithQuantizer(imageData, width, height, sampleInterval) {
-              var rgbComponents = this.dataToRGB(imageData, width, height);
-              var nq = new NeuQuant(rgbComponents, rgbComponents.length, sampleInterval);
-              var paletteRGB = nq.process();
-              var paletteArray = new Uint32Array(this.componentizedPaletteToArray(paletteRGB));
-              var numberPixels = width * height;
-              var indexedPixels = new Uint8Array(numberPixels);
-              var k = 0;
-              for (var i = 0; i < numberPixels; i++) {
-                var r = rgbComponents[k++];
-                var g2 = rgbComponents[k++];
-                var b = rgbComponents[k++];
-                indexedPixels[i] = nq.map(r, g2, b);
-              }
-              return {
-                pixels: indexedPixels,
-                palette: paletteArray
-              };
-            },
-            "run": function run(frame) {
-              frame = frame || {};
-              var _frame = frame, height = _frame.height;
-              _frame.palette;
-              var sampleInterval = _frame.sampleInterval, width = _frame.width;
-              var imageData = frame.data;
-              return this.processFrameWithQuantizer(imageData, width, height, sampleInterval);
-            }
-          };
-          return workerMethods;
-        }
-        function gifWriter(buf, width, height, gopts) {
-          var p = 0;
-          gopts = gopts === undefined$1 ? {} : gopts;
-          var loop_count = gopts.loop === undefined$1 ? null : gopts.loop;
-          var global_palette = gopts.palette === undefined$1 ? null : gopts.palette;
-          if (width <= 0 || height <= 0 || width > 65535 || height > 65535) throw "Width/Height invalid.";
-          function check_palette_and_num_colors(palette) {
-            var num_colors = palette.length;
-            if (num_colors < 2 || num_colors > 256 || num_colors & num_colors - 1) throw "Invalid code/color length, must be power of 2 and 2 .. 256.";
-            return num_colors;
-          }
-          buf[p++] = 71;
-          buf[p++] = 73;
-          buf[p++] = 70;
-          buf[p++] = 56;
-          buf[p++] = 57;
-          buf[p++] = 97;
-          var gp_num_colors_pow2 = 0;
-          var background = 0;
-          buf[p++] = width & 255;
-          buf[p++] = width >> 8 & 255;
-          buf[p++] = height & 255;
-          buf[p++] = height >> 8 & 255;
-          buf[p++] = (global_palette !== null ? 128 : 0) |
-gp_num_colors_pow2;
-          buf[p++] = background;
-          buf[p++] = 0;
-          if (loop_count !== null) {
-            if (loop_count < 0 || loop_count > 65535) throw "Loop count invalid.";
-            buf[p++] = 33;
-            buf[p++] = 255;
-            buf[p++] = 11;
-            buf[p++] = 78;
-            buf[p++] = 69;
-            buf[p++] = 84;
-            buf[p++] = 83;
-            buf[p++] = 67;
-            buf[p++] = 65;
-            buf[p++] = 80;
-            buf[p++] = 69;
-            buf[p++] = 50;
-            buf[p++] = 46;
-            buf[p++] = 48;
-            buf[p++] = 3;
-            buf[p++] = 1;
-            buf[p++] = loop_count & 255;
-            buf[p++] = loop_count >> 8 & 255;
-            buf[p++] = 0;
-          }
-          var ended = false;
-          this.addFrame = function(x, y, w, h2, indexed_pixels, opts) {
-            if (ended === true) {
-              --p;
-              ended = false;
-            }
-            opts = opts === undefined$1 ? {} : opts;
-            if (x < 0 || y < 0 || x > 65535 || y > 65535) throw "x/y invalid.";
-            if (w <= 0 || h2 <= 0 || w > 65535 || h2 > 65535) throw "Width/Height invalid.";
-            if (indexed_pixels.length < w * h2) throw "Not enough pixels for the frame size.";
-            var using_local_palette = true;
-            var palette = opts.palette;
-            if (palette === undefined$1 || palette === null) {
-              using_local_palette = false;
-              palette = global_palette;
-            }
-            if (palette === undefined$1 || palette === null) throw "Must supply either a local or global palette.";
-            var num_colors = check_palette_and_num_colors(palette);
-            var min_code_size = 0;
-            while (num_colors >>= 1) {
-              ++min_code_size;
-            }
-            num_colors = 1 << min_code_size;
-            var delay = opts.delay === undefined$1 ? 0 : opts.delay;
-            var disposal = opts.disposal === undefined$1 ? 0 : opts.disposal;
-            if (disposal < 0 || disposal > 3)
-              throw "Disposal out of range.";
-            var use_transparency = false;
-            var transparent_index = 0;
-            if (opts.transparent !== undefined$1 && opts.transparent !== null) {
-              use_transparency = true;
-              transparent_index = opts.transparent;
-              if (transparent_index < 0 || transparent_index >= num_colors) throw "Transparent color index.";
-            }
-            if (disposal !== 0 || use_transparency || delay !== 0) {
-              buf[p++] = 33;
-              buf[p++] = 249;
-              buf[p++] = 4;
-              buf[p++] = disposal << 2 | (use_transparency === true ? 1 : 0);
-              buf[p++] = delay & 255;
-              buf[p++] = delay >> 8 & 255;
-              buf[p++] = transparent_index;
-              buf[p++] = 0;
-            }
-            buf[p++] = 44;
-            buf[p++] = x & 255;
-            buf[p++] = x >> 8 & 255;
-            buf[p++] = y & 255;
-            buf[p++] = y >> 8 & 255;
-            buf[p++] = w & 255;
-            buf[p++] = w >> 8 & 255;
-            buf[p++] = h2 & 255;
-            buf[p++] = h2 >> 8 & 255;
-            buf[p++] = using_local_palette === true ? 128 | min_code_size - 1 : 0;
-            if (using_local_palette === true) {
-              for (var i = 0, il = palette.length; i < il; ++i) {
-                var rgb = palette[i];
-                buf[p++] = rgb >> 16 & 255;
-                buf[p++] = rgb >> 8 & 255;
-                buf[p++] = rgb & 255;
-              }
-            }
-            p = GifWriterOutputLZWCodeStream(buf, p, min_code_size < 2 ? 2 : min_code_size, indexed_pixels);
-          };
-          this.end = function() {
-            if (ended === false) {
-              buf[p++] = 59;
-              ended = true;
-            }
-            return p;
-          };
-          function GifWriterOutputLZWCodeStream(buf2, p2, min_code_size, index_stream) {
-            buf2[p2++] = min_code_size;
-            var cur_subblock = p2++;
-            var clear_code = 1 << min_code_size;
-            var code_mask = clear_code - 1;
-            var eoi_code = clear_code + 1;
-            var next_code = eoi_code + 1;
-            var cur_code_size = min_code_size + 1;
-            var cur_shift = 0;
-            var cur = 0;
-            function emit_bytes_to_buffer(bit_block_size) {
-              while (cur_shift >= bit_block_size) {
-                buf2[p2++] = cur & 255;
-                cur >>= 8;
-                cur_shift -= 8;
-                if (p2 === cur_subblock + 256) {
-                  buf2[cur_subblock] = 255;
-                  cur_subblock = p2++;
-                }
-              }
-            }
-            function emit_code(c) {
-              cur |= c << cur_shift;
-              cur_shift += cur_code_size;
-              emit_bytes_to_buffer(8);
-            }
-            var ib_code = index_stream[0] & code_mask;
-            var code_table = {};
-            emit_code(clear_code);
-            for (var i = 1, il = index_stream.length; i < il; ++i) {
-              var k = index_stream[i] & code_mask;
-              var cur_key = ib_code << 8 | k;
-              var cur_code = code_table[cur_key];
-              if (cur_code === undefined$1) {
-                cur |= ib_code << cur_shift;
-                cur_shift += cur_code_size;
-                while (cur_shift >= 8) {
-                  buf2[p2++] = cur & 255;
-                  cur >>= 8;
-                  cur_shift -= 8;
-                  if (p2 === cur_subblock + 256) {
-                    buf2[cur_subblock] = 255;
-                    cur_subblock = p2++;
-                  }
-                }
-                if (next_code === 4096) {
-                  emit_code(clear_code);
-                  next_code = eoi_code + 1;
-                  cur_code_size = min_code_size + 1;
-                  code_table = {};
-                } else {
-                  if (next_code >= 1 << cur_code_size) ++cur_code_size;
-                  code_table[cur_key] = next_code++;
-                }
-                ib_code = k;
-              } else {
-                ib_code = cur_code;
-              }
-            }
-            emit_code(ib_code);
-            emit_code(eoi_code);
-            emit_bytes_to_buffer(1);
-            if (cur_subblock + 1 === p2) {
-              buf2[cur_subblock] = 0;
-            } else {
-              buf2[cur_subblock] = p2 - cur_subblock - 1;
-              buf2[p2++] = 0;
-            }
-            return p2;
-          }
-        }
-        var noop$2 = function noop2() {
-        };
-        var AnimatedGIF = function AnimatedGIF2(options2) {
-          this.canvas = null;
-          this.ctx = null;
-          this.repeat = 0;
-          this.frames = [];
-          this.numRenderedFrames = 0;
-          this.onRenderCompleteCallback = noop$2;
-          this.onRenderProgressCallback = noop$2;
-          this.workers = [];
-          this.availableWorkers = [];
-          this.generatingGIF = false;
-          this.options = options2;
-          this.initializeWebWorkers(options2);
-        };
-        AnimatedGIF.prototype = {
-          "workerMethods": workerCode(),
-          "initializeWebWorkers": function initializeWebWorkers(options2) {
-            var self = this;
-            var processFrameWorkerCode = NeuQuant.toString() + "(" + workerCode.toString() + "());";
-            var webWorkerObj = void 0;
-            var objectUrl = void 0;
-            var webWorker = void 0;
-            var numWorkers = void 0;
-            var x = -1;
-            var workerError = "";
-            numWorkers = options2.numWorkers;
-            while (++x < numWorkers) {
-              webWorkerObj = utils.createWebWorker(processFrameWorkerCode);
-              if (utils.isObject(webWorkerObj)) {
-                objectUrl = webWorkerObj.objectUrl;
-                webWorker = webWorkerObj.worker;
-                self.workers.push({
-                  worker: webWorker,
-                  objectUrl
-                });
-                self.availableWorkers.push(webWorker);
-              } else {
-                workerError = webWorkerObj;
-                utils.webWorkerError = !!webWorkerObj;
-              }
-            }
-            this.workerError = workerError;
-            this.canvas = document2.createElement("canvas");
-            this.canvas.width = options2.gifWidth;
-            this.canvas.height = options2.gifHeight;
-            this.ctx = this.canvas.getContext("2d");
-            this.frames = [];
-          },
-getWorker: function getWorker() {
-            return this.availableWorkers.pop();
-          },
-freeWorker: function freeWorker(worker) {
-            this.availableWorkers.push(worker);
-          },
-          byteMap: (function() {
-            var byteMap = [];
-            for (var i = 0; i < 256; i++) {
-              byteMap[i] = String.fromCharCode(i);
-            }
-            return byteMap;
-          })(),
-          bufferToString: function bufferToString(buffer) {
-            var numberValues = buffer.length;
-            var str = "";
-            var x = -1;
-            while (++x < numberValues) {
-              str += this.byteMap[buffer[x]];
-            }
-            return str;
-          },
-          onFrameFinished: function onFrameFinished(progressCallback) {
-            var self = this;
-            var frames = self.frames;
-            var options2 = self.options;
-            var hasExistingImages = !!(options2.images || []).length;
-            var allDone = frames.every(function(frame) {
-              return !frame.beingProcessed && frame.done;
-            });
-            self.numRenderedFrames++;
-            if (hasExistingImages) {
-              progressCallback(self.numRenderedFrames / frames.length);
-            }
-            self.onRenderProgressCallback(self.numRenderedFrames * 0.75 / frames.length);
-            if (allDone) {
-              if (!self.generatingGIF) {
-                self.generateGIF(frames, self.onRenderCompleteCallback);
-              }
-            } else {
-              utils.requestTimeout(function() {
-                self.processNextFrame();
-              }, 1);
-            }
-          },
-          processFrame: function processFrame(position) {
-            var AnimatedGifContext = this;
-            this.options;
-            var _options = this.options, progressCallback = _options.progressCallback, sampleInterval = _options.sampleInterval;
-            var frames = this.frames;
-            var frame = void 0;
-            var worker = void 0;
-            var done = function done2() {
-              var ev = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-              var data = ev.data;
-              delete frame.data;
-              frame.pixels = Array.prototype.slice.call(data.pixels);
-              frame.palette = Array.prototype.slice.call(data.palette);
-              frame.done = true;
-              frame.beingProcessed = false;
-              AnimatedGifContext.freeWorker(worker);
-              AnimatedGifContext.onFrameFinished(progressCallback);
-            };
-            frame = frames[position];
-            if (frame.beingProcessed || frame.done) {
-              this.onFrameFinished();
-              return;
-            }
-            frame.sampleInterval = sampleInterval;
-            frame.beingProcessed = true;
-            frame.gifshot = true;
-            worker = this.getWorker();
-            if (worker) {
-              worker.onmessage = done;
-              worker.postMessage(frame);
-            } else {
-              done({
-                "data": AnimatedGifContext.workerMethods.run(frame)
-              });
-            }
-          },
-          startRendering: function startRendering(completeCallback) {
-            this.onRenderCompleteCallback = completeCallback;
-            for (var i = 0; i < this.options.numWorkers && i < this.frames.length; i++) {
-              this.processFrame(i);
-            }
-          },
-          processNextFrame: function processNextFrame() {
-            var position = -1;
-            for (var i = 0; i < this.frames.length; i++) {
-              var frame = this.frames[i];
-              if (!frame.done && !frame.beingProcessed) {
-                position = i;
-                break;
-              }
-            }
-            if (position >= 0) {
-              this.processFrame(position);
-            }
-          },
-
-generateGIF: function generateGIF(frames, callback) {
-            var buffer = [];
-            var gifOptions = {
-              loop: this.repeat
-            };
-            var options2 = this.options;
-            var interval = options2.interval;
-            var frameDuration = options2.frameDuration;
-            var existingImages2 = options2.images;
-            var hasExistingImages = !!existingImages2.length;
-            var height = options2.gifHeight;
-            var width = options2.gifWidth;
-            var gifWriter$$1 = new gifWriter(buffer, width, height, gifOptions);
-            var onRenderProgressCallback = this.onRenderProgressCallback;
-            var delay = hasExistingImages ? interval * 100 : 0;
-            var bufferToString = void 0;
-            var gif = void 0;
-            this.generatingGIF = true;
-            utils.each(frames, function(iterator, frame) {
-              var framePalette = frame.palette;
-              onRenderProgressCallback(0.75 + 0.25 * frame.position * 1 / frames.length);
-              for (var i = 0; i < frameDuration; i++) {
-                gifWriter$$1.addFrame(0, 0, width, height, frame.pixels, {
-                  palette: framePalette,
-                  delay
-                });
-              }
-            });
-            gifWriter$$1.end();
-            onRenderProgressCallback(1);
-            this.frames = [];
-            this.generatingGIF = false;
-            if (utils.isFunction(callback)) {
-              bufferToString = this.bufferToString(buffer);
-              gif = "data:image/gif;base64," + utils.btoa(bufferToString);
-              callback(gif);
-            }
-          },
-setRepeat: function setRepeat(r) {
-            this.repeat = r;
-          },
-          addFrame: function addFrame(element, gifshotOptions) {
-            gifshotOptions = utils.isObject(gifshotOptions) ? gifshotOptions : {};
-            var self = this;
-            var ctx = self.ctx;
-            var options2 = self.options;
-            var width = options2.gifWidth;
-            var height = options2.gifHeight;
-            var fontSize = utils.getFontSize(gifshotOptions);
-            var _gifshotOptions = gifshotOptions, filter = _gifshotOptions.filter, fontColor = _gifshotOptions.fontColor, fontFamily = _gifshotOptions.fontFamily, fontWeight = _gifshotOptions.fontWeight;
-            _gifshotOptions.gifHeight;
-            _gifshotOptions.gifWidth;
-            var text = _gifshotOptions.text, textAlign = _gifshotOptions.textAlign, textBaseline = _gifshotOptions.textBaseline;
-            var textXCoordinate = gifshotOptions.textXCoordinate ? gifshotOptions.textXCoordinate : textAlign === "left" ? 1 : textAlign === "right" ? width : width / 2;
-            var textYCoordinate = gifshotOptions.textYCoordinate ? gifshotOptions.textYCoordinate : textBaseline === "top" ? 1 : textBaseline === "center" ? height / 2 : height;
-            var font = fontWeight + " " + fontSize + " " + fontFamily;
-            var imageData = void 0;
-            try {
-              ctx.filter = filter;
-              ctx.drawImage(element, 0, 0, width, height);
-              if (text) {
-                ctx.font = font;
-                ctx.fillStyle = fontColor;
-                ctx.textAlign = textAlign;
-                ctx.textBaseline = textBaseline;
-                ctx.fillText(text, textXCoordinate, textYCoordinate);
-              }
-              imageData = ctx.getImageData(0, 0, width, height);
-              self.addFrameImageData(imageData);
-            } catch (e) {
-              return "" + e;
-            }
-          },
-          addFrameImageData: function addFrameImageData() {
-            var imageData = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-            var frames = this.frames;
-            var imageDataArray = imageData.data;
-            this.frames.push({
-              "data": imageDataArray,
-              "width": imageData.width,
-              "height": imageData.height,
-              "palette": null,
-              "dithering": null,
-              "done": false,
-              "beingProcessed": false,
-              "position": frames.length
-            });
-          },
-          onRenderProgress: function onRenderProgress(callback) {
-            this.onRenderProgressCallback = callback;
-          },
-          isRendering: function isRendering() {
-            return this.generatingGIF;
-          },
-          getBase64GIF: function getBase64GIF2(completeCallback) {
-            var self = this;
-            var onRenderComplete = function onRenderComplete2(gif) {
-              self.destroyWorkers();
-              utils.requestTimeout(function() {
-                completeCallback(gif);
-              }, 0);
-            };
-            self.startRendering(onRenderComplete);
-          },
-          destroyWorkers: function destroyWorkers() {
-            if (this.workerError) {
-              return;
-            }
-            var workers = this.workers;
-            utils.each(workers, function(iterator, workerObj) {
-              var worker = workerObj.worker;
-              var objectUrl = workerObj.objectUrl;
-              worker.terminate();
-              utils.URL.revokeObjectURL(objectUrl);
-            });
-          }
-        };
-        function getBase64GIF(animatedGifInstance, callback) {
-          animatedGifInstance.getBase64GIF(function(image) {
-            callback({
-              error: false,
-              errorCode: "",
-              errorMsg: "",
-              image
-            });
-          });
-        }
-        function existingImages() {
-          var obj = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-          var callback = obj.callback, images = obj.images, options2 = obj.options;
-          var imagesLength = obj.imagesLength;
-          var skipObj = {
-            "getUserMedia": true,
-            "window.URL": true
-          };
-          var errorObj = error.validate(skipObj);
-          var loadedImages = [];
-          var loadedImagesLength = 0;
-          var tempImage = void 0;
-          var ag = void 0;
-          if (errorObj.error) {
-            return callback(errorObj);
-          }
-          ag = new AnimatedGIF(options2);
-          utils.each(images, function(index, image) {
-            var currentImage = image;
-            if (image.src) {
-              currentImage = currentImage.src;
-            }
-            if (utils.isElement(currentImage)) {
-              if (options2.crossOrigin) {
-                currentImage.crossOrigin = options2.crossOrigin;
-              }
-              loadedImages[index] = currentImage;
-              loadedImagesLength += 1;
-              if (loadedImagesLength === imagesLength) {
-                addLoadedImagesToGif();
-              }
-            } else if (utils.isString(currentImage)) {
-              tempImage = new Image();
-              if (options2.crossOrigin) {
-                tempImage.crossOrigin = options2.crossOrigin;
-              }
-              (function(tempImage2) {
-                if (image.text) {
-                  tempImage2.text = image.text;
-                }
-                tempImage2.onerror = function(e) {
-                  var obj2 = void 0;
-                  --imagesLength;
-                  if (imagesLength === 0) {
-                    obj2 = {};
-                    obj2.error = "None of the requested images was capable of being retrieved";
-                    return callback(obj2);
-                  }
-                };
-                tempImage2.onload = function(e) {
-                  if (image.text) {
-                    loadedImages[index] = {
-                      img: tempImage2,
-                      text: tempImage2.text
-                    };
-                  } else {
-                    loadedImages[index] = tempImage2;
-                  }
-                  loadedImagesLength += 1;
-                  if (loadedImagesLength === imagesLength) {
-                    addLoadedImagesToGif();
-                  }
-                  utils.removeElement(tempImage2);
-                };
-                tempImage2.src = currentImage;
-              })(tempImage);
-              utils.setCSSAttr(tempImage, {
-                position: "fixed",
-                opacity: "0"
-              });
-              document2.body.appendChild(tempImage);
-            }
-          });
-          function addLoadedImagesToGif() {
-            utils.each(loadedImages, function(index, loadedImage) {
-              if (loadedImage) {
-                if (loadedImage.text) {
-                  ag.addFrame(loadedImage.img, options2, loadedImage.text);
-                } else {
-                  ag.addFrame(loadedImage, options2);
-                }
-              }
-            });
-            getBase64GIF(ag, callback);
-          }
-        }
-        var noop$3 = function noop2() {
-        };
-        var screenShot = {
-          getGIF: function getGIF() {
-            var options2 = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-            var callback = arguments[1];
-            callback = utils.isFunction(callback) ? callback : noop$3;
-            var canvas = document2.createElement("canvas");
-            var context = void 0;
-            var existingImages2 = options2.images;
-            var hasExistingImages = !!existingImages2.length;
-            var cameraStream = options2.cameraStream, crop = options2.crop, filter = options2.filter, fontColor = options2.fontColor, fontFamily = options2.fontFamily, fontWeight = options2.fontWeight, keepCameraOn = options2.keepCameraOn;
-            options2.numWorkers;
-            var progressCallback = options2.progressCallback, saveRenderingContexts = options2.saveRenderingContexts, savedRenderingContexts = options2.savedRenderingContexts, text = options2.text, textAlign = options2.textAlign, textBaseline = options2.textBaseline, videoElement = options2.videoElement, videoHeight = options2.videoHeight, videoWidth = options2.videoWidth, webcamVideoElement = options2.webcamVideoElement;
-            var gifWidth = Number(options2.gifWidth);
-            var gifHeight = Number(options2.gifHeight);
-            var interval = Number(options2.interval);
-            Number(options2.sampleInterval);
-            var waitBetweenFrames = hasExistingImages ? 0 : interval * 1e3;
-            var renderingContextsToSave = [];
-            var numFrames = savedRenderingContexts.length ? savedRenderingContexts.length : options2.numFrames;
-            var pendingFrames = numFrames;
-            var ag = new AnimatedGIF(options2);
-            var fontSize = utils.getFontSize(options2);
-            var textXCoordinate = options2.textXCoordinate ? options2.textXCoordinate : textAlign === "left" ? 1 : textAlign === "right" ? gifWidth : gifWidth / 2;
-            var textYCoordinate = options2.textYCoordinate ? options2.textYCoordinate : textBaseline === "top" ? 1 : textBaseline === "center" ? gifHeight / 2 : gifHeight;
-            var font = fontWeight + " " + fontSize + " " + fontFamily;
-            var sourceX = crop ? Math.floor(crop.scaledWidth / 2) : 0;
-            var sourceWidth = crop ? videoWidth - crop.scaledWidth : 0;
-            var sourceY = crop ? Math.floor(crop.scaledHeight / 2) : 0;
-            var sourceHeight = crop ? videoHeight - crop.scaledHeight : 0;
-            var captureFrames = function captureSingleFrame() {
-              var framesLeft = pendingFrames - 1;
-              if (savedRenderingContexts.length) {
-                context.putImageData(savedRenderingContexts[numFrames - pendingFrames], 0, 0);
-                finishCapture();
-              } else {
-                drawVideo();
-              }
-              function drawVideo() {
-                try {
-                  if (sourceWidth > videoWidth) {
-                    sourceWidth = videoWidth;
-                  }
-                  if (sourceHeight > videoHeight) {
-                    sourceHeight = videoHeight;
-                  }
-                  if (sourceX < 0) {
-                    sourceX = 0;
-                  }
-                  if (sourceY < 0) {
-                    sourceY = 0;
-                  }
-                  context.filter = filter;
-                  context.drawImage(videoElement, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, gifWidth, gifHeight);
-                  finishCapture();
-                } catch (e) {
-                  if (e.name === "NS_ERROR_NOT_AVAILABLE") {
-                    utils.requestTimeout(drawVideo, 100);
-                  } else {
-                    throw e;
-                  }
-                }
-              }
-              function finishCapture() {
-                var imageData = void 0;
-                if (saveRenderingContexts) {
-                  renderingContextsToSave.push(context.getImageData(0, 0, gifWidth, gifHeight));
-                }
-                if (text) {
-                  context.font = font;
-                  context.fillStyle = fontColor;
-                  context.textAlign = textAlign;
-                  context.textBaseline = textBaseline;
-                  context.fillText(text, textXCoordinate, textYCoordinate);
-                }
-                imageData = context.getImageData(0, 0, gifWidth, gifHeight);
-                ag.addFrameImageData(imageData);
-                pendingFrames = framesLeft;
-                progressCallback((numFrames - pendingFrames) / numFrames);
-                if (framesLeft > 0) {
-                  utils.requestTimeout(captureSingleFrame, waitBetweenFrames);
-                }
-                if (!pendingFrames) {
-                  ag.getBase64GIF(function(image) {
-                    callback({
-                      "error": false,
-                      "errorCode": "",
-                      "errorMsg": "",
-                      "image": image,
-                      "cameraStream": cameraStream,
-                      "videoElement": videoElement,
-                      "webcamVideoElement": webcamVideoElement,
-                      "savedRenderingContexts": renderingContextsToSave,
-                      "keepCameraOn": keepCameraOn
-                    });
-                  });
-                }
-              }
-            };
-            numFrames = numFrames !== undefined$1 ? numFrames : 10;
-            interval = interval !== undefined$1 ? interval : 0.1;
-            canvas.width = gifWidth;
-            canvas.height = gifHeight;
-            context = canvas.getContext("2d");
-            (function capture() {
-              if (!savedRenderingContexts.length && videoElement.currentTime === 0) {
-                utils.requestTimeout(capture, 100);
-                return;
-              }
-              captureFrames();
-            })();
-          },
-          getCropDimensions: function getCropDimensions() {
-            var obj = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-            var width = obj.videoWidth;
-            var height = obj.videoHeight;
-            var gifWidth = obj.gifWidth;
-            var gifHeight = obj.gifHeight;
-            var result = {
-              width: 0,
-              height: 0,
-              scaledWidth: 0,
-              scaledHeight: 0
-            };
-            if (width > height) {
-              result.width = Math.round(width * (gifHeight / height)) - gifWidth;
-              result.scaledWidth = Math.round(result.width * (height / gifHeight));
-            } else {
-              result.height = Math.round(height * (gifWidth / width)) - gifHeight;
-              result.scaledHeight = Math.round(result.height * (width / gifWidth));
-            }
-            return result;
-          }
-        };
-        var videoStream = {
-          loadedData: false,
-          defaultVideoDimensions: {
-            width: 640,
-            height: 480
-          },
-          findVideoSize: function findVideoSizeMethod(obj) {
-            findVideoSizeMethod.attempts = findVideoSizeMethod.attempts || 0;
-            var cameraStream = obj.cameraStream, completedCallback = obj.completedCallback, videoElement = obj.videoElement;
-            if (!videoElement) {
-              return;
-            }
-            if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
-              videoElement.removeEventListener("loadeddata", videoStream.findVideoSize);
-              completedCallback({
-                videoElement,
-                cameraStream,
-                videoWidth: videoElement.videoWidth,
-                videoHeight: videoElement.videoHeight
-              });
-            } else {
-              if (findVideoSizeMethod.attempts < 10) {
-                findVideoSizeMethod.attempts += 1;
-                utils.requestTimeout(function() {
-                  videoStream.findVideoSize(obj);
-                }, 400);
-              } else {
-                completedCallback({
-                  videoElement,
-                  cameraStream,
-                  videoWidth: videoStream.defaultVideoDimensions.width,
-                  videoHeight: videoStream.defaultVideoDimensions.height
-                });
-              }
-            }
-          },
-          onStreamingTimeout: function onStreamingTimeout(callback) {
-            if (utils.isFunction(callback)) {
-              callback({
-                error: true,
-                errorCode: "getUserMedia",
-                errorMsg: "There was an issue with the getUserMedia API - Timed out while trying to start streaming",
-                image: null,
-                cameraStream: {}
-              });
-            }
-          },
-          stream: function stream(obj) {
-            var existingVideo2 = utils.isArray(obj.existingVideo) ? obj.existingVideo[0] : obj.existingVideo;
-            var cameraStream = obj.cameraStream, completedCallback = obj.completedCallback, streamedCallback = obj.streamedCallback, videoElement = obj.videoElement;
-            if (utils.isFunction(streamedCallback)) {
-              streamedCallback();
-            }
-            if (existingVideo2) {
-              if (utils.isString(existingVideo2)) {
-                videoElement.src = existingVideo2;
-                videoElement.innerHTML = '<source src="' + existingVideo2 + '" type="video/' + utils.getExtension(existingVideo2) + '" />';
-              } else if (existingVideo2 instanceof Blob) {
-                try {
-                  videoElement.src = utils.URL.createObjectURL(existingVideo2);
-                } catch (e) {
-                }
-                videoElement.innerHTML = '<source src="' + existingVideo2 + '" type="' + existingVideo2.type + '" />';
-              }
-            } else if (videoElement.mozSrcObject) {
-              videoElement.mozSrcObject = cameraStream;
-            } else if (utils.URL) {
-              try {
-                videoElement.srcObject = cameraStream;
-                videoElement.src = utils.URL.createObjectURL(cameraStream);
-              } catch (e) {
-                videoElement.srcObject = cameraStream;
-              }
-            }
-            videoElement.play();
-            utils.requestTimeout(function checkLoadedData() {
-              checkLoadedData.count = checkLoadedData.count || 0;
-              if (videoStream.loadedData === true) {
-                videoStream.findVideoSize({
-                  videoElement,
-                  cameraStream,
-                  completedCallback
-                });
-                videoStream.loadedData = false;
-              } else {
-                checkLoadedData.count += 1;
-                if (checkLoadedData.count > 10) {
-                  videoStream.findVideoSize({
-                    videoElement,
-                    cameraStream,
-                    completedCallback
-                  });
-                } else {
-                  checkLoadedData();
-                }
-              }
-            }, 0);
-          },
-          startStreaming: function startStreaming(obj) {
-            var errorCallback = utils.isFunction(obj.error) ? obj.error : utils.noop;
-            var streamedCallback = utils.isFunction(obj.streamed) ? obj.streamed : utils.noop;
-            var completedCallback = utils.isFunction(obj.completed) ? obj.completed : utils.noop;
-            var crossOrigin = obj.crossOrigin, existingVideo2 = obj.existingVideo, lastCameraStream = obj.lastCameraStream, options2 = obj.options, webcamVideoElement = obj.webcamVideoElement;
-            var videoElement = utils.isElement(existingVideo2) ? existingVideo2 : webcamVideoElement ? webcamVideoElement : document2.createElement("video");
-            if (crossOrigin) {
-              videoElement.crossOrigin = options2.crossOrigin;
-            }
-            videoElement.autoplay = true;
-            videoElement.loop = true;
-            videoElement.muted = true;
-            videoElement.addEventListener("loadeddata", function(event) {
-              videoStream.loadedData = true;
-              if (options2.offset) {
-                videoElement.currentTime = options2.offset;
-              }
-            });
-            if (existingVideo2) {
-              videoStream.stream({
-                videoElement,
-                existingVideo: existingVideo2,
-                completedCallback
-              });
-            } else if (lastCameraStream) {
-              videoStream.stream({
-                videoElement,
-                cameraStream: lastCameraStream,
-                streamedCallback,
-                completedCallback
-              });
-            } else {
-              utils.getUserMedia({
-                video: true
-              }, function(stream) {
-                videoStream.stream({
-                  videoElement,
-                  cameraStream: stream,
-                  streamedCallback,
-                  completedCallback
-                });
-              }, errorCallback);
-            }
-          },
-          startVideoStreaming: function startVideoStreaming(callback) {
-            var options2 = arguments.length > 1 && arguments[1] !== undefined$1 ? arguments[1] : {};
-            var timeoutLength = options2.timeout !== undefined$1 ? options2.timeout : 0;
-            var originalCallback = options2.callback;
-            var webcamVideoElement = options2.webcamVideoElement;
-            var noGetUserMediaSupportTimeout = void 0;
-            if (timeoutLength > 0) {
-              noGetUserMediaSupportTimeout = utils.requestTimeout(function() {
-                videoStream.onStreamingTimeout(originalCallback);
-              }, 1e4);
-            }
-            videoStream.startStreaming({
-              error: function error2() {
-                originalCallback({
-                  error: true,
-                  errorCode: "getUserMedia",
-                  errorMsg: "There was an issue with the getUserMedia API - the user probably denied permission",
-                  image: null,
-                  cameraStream: {}
-                });
-              },
-              streamed: function streamed() {
-                clearTimeout(noGetUserMediaSupportTimeout);
-              },
-              completed: function completed() {
-                var obj = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-                var cameraStream = obj.cameraStream, videoElement = obj.videoElement, videoHeight = obj.videoHeight, videoWidth = obj.videoWidth;
-                callback({
-                  cameraStream,
-                  videoElement,
-                  videoHeight,
-                  videoWidth
-                });
-              },
-              lastCameraStream: options2.lastCameraStream,
-              webcamVideoElement,
-              crossOrigin: options2.crossOrigin,
-              options: options2
-            });
-          },
-          stopVideoStreaming: function stopVideoStreaming2(obj) {
-            obj = utils.isObject(obj) ? obj : {};
-            var _obj = obj, keepCameraOn = _obj.keepCameraOn, videoElement = _obj.videoElement, webcamVideoElement = _obj.webcamVideoElement;
-            var cameraStream = obj.cameraStream || {};
-            var cameraStreamTracks = cameraStream.getTracks ? cameraStream.getTracks() || [] : [];
-            var hasCameraStreamTracks = !!cameraStreamTracks.length;
-            var firstCameraStreamTrack = cameraStreamTracks[0];
-            if (!keepCameraOn && hasCameraStreamTracks) {
-              if (utils.isFunction(firstCameraStreamTrack.stop)) {
-                firstCameraStreamTrack.stop();
-              }
-            }
-            if (utils.isElement(videoElement) && !webcamVideoElement) {
-              videoElement.pause();
-              if (utils.isFunction(utils.URL.revokeObjectURL) && !utils.webWorkerError) {
-                if (videoElement.src) {
-                  utils.URL.revokeObjectURL(videoElement.src);
-                }
-              }
-              utils.removeElement(videoElement);
-            }
-          }
-        };
-        function stopVideoStreaming(options2) {
-          options2 = utils.isObject(options2) ? options2 : {};
-          videoStream.stopVideoStreaming(options2);
-        }
-        function createAndGetGIF(obj, callback) {
-          var options2 = obj.options || {};
-          var images = options2.images, video = options2.video;
-          var gifWidth = Number(options2.gifWidth);
-          var gifHeight = Number(options2.gifHeight);
-          Number(options2.numFrames);
-          var cameraStream = obj.cameraStream, videoElement = obj.videoElement, videoWidth = obj.videoWidth, videoHeight = obj.videoHeight;
-          var cropDimensions = screenShot.getCropDimensions({
-            videoWidth,
-            videoHeight,
-            gifHeight,
-            gifWidth
-          });
-          var completeCallback = callback;
-          options2.crop = cropDimensions;
-          options2.videoElement = videoElement;
-          options2.videoWidth = videoWidth;
-          options2.videoHeight = videoHeight;
-          options2.cameraStream = cameraStream;
-          if (!utils.isElement(videoElement)) {
-            return;
-          }
-          videoElement.width = gifWidth + cropDimensions.width;
-          videoElement.height = gifHeight + cropDimensions.height;
-          if (!options2.webcamVideoElement) {
-            utils.setCSSAttr(videoElement, {
-              position: "fixed",
-              opacity: "0"
-            });
-            document2.body.appendChild(videoElement);
-          }
-          videoElement.play();
-          screenShot.getGIF(options2, function(obj2) {
-            if ((!images || !images.length) && (!video || !video.length)) {
-              stopVideoStreaming(obj2);
-            }
-            completeCallback(obj2);
-          });
-        }
-        function existingVideo() {
-          var obj = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-          var callback = obj.callback, existingVideo2 = obj.existingVideo, options2 = obj.options;
-          var skipObj = {
-            getUserMedia: true,
-            "window.URL": true
-          };
-          var errorObj = error.validate(skipObj);
-          var videoType = void 0;
-          var videoSrc = void 0;
-          if (errorObj.error) {
-            return callback(errorObj);
-          }
-          if (utils.isElement(existingVideo2) && existingVideo2.src) {
-            videoSrc = existingVideo2.src;
-            videoType = utils.getExtension(videoSrc);
-            if (!utils.isSupported.videoCodecs[videoType]) {
-              return callback(error.messages.videoCodecs);
-            }
-          } else if (utils.isArray(existingVideo2)) {
-            utils.each(existingVideo2, function(iterator, videoSrc2) {
-              if (videoSrc2 instanceof Blob) {
-                videoType = videoSrc2.type.substr(videoSrc2.type.lastIndexOf("/") + 1, videoSrc2.length);
-              } else {
-                videoType = videoSrc2.substr(videoSrc2.lastIndexOf(".") + 1, videoSrc2.length);
-              }
-              if (utils.isSupported.videoCodecs[videoType]) {
-                existingVideo2 = videoSrc2;
-                return false;
-              }
-            });
-          }
-          videoStream.startStreaming({
-            completed: function completed(obj2) {
-              obj2.options = options2 || {};
-              createAndGetGIF(obj2, callback);
-            },
-            existingVideo: existingVideo2,
-            crossOrigin: options2.crossOrigin,
-            options: options2
-          });
-        }
-        function existingWebcam() {
-          var obj = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-          var callback = obj.callback, lastCameraStream = obj.lastCameraStream, options2 = obj.options, webcamVideoElement = obj.webcamVideoElement;
-          if (!isWebCamGIFSupported()) {
-            return callback(error.validate());
-          }
-          if (options2.savedRenderingContexts.length) {
-            screenShot.getGIF(options2, function(obj2) {
-              callback(obj2);
-            });
-            return;
-          }
-          videoStream.startVideoStreaming(function() {
-            var obj2 = arguments.length > 0 && arguments[0] !== undefined$1 ? arguments[0] : {};
-            obj2.options = options2 || {};
-            createAndGetGIF(obj2, callback);
-          }, {
-            lastCameraStream,
-            callback,
-            webcamVideoElement,
-            crossOrigin: options2.crossOrigin
-          });
-        }
-        function createGIF(userOptions, callback) {
-          callback = utils.isFunction(userOptions) ? userOptions : callback;
-          userOptions = utils.isObject(userOptions) ? userOptions : {};
-          if (!utils.isFunction(callback)) {
-            return;
-          }
-          var options2 = utils.mergeOptions(defaultOptions, userOptions) || {};
-          var lastCameraStream = userOptions.cameraStream;
-          var images = options2.images;
-          var imagesLength = images ? images.length : 0;
-          var video = options2.video;
-          var webcamVideoElement = options2.webcamVideoElement;
-          options2 = utils.mergeOptions(options2, {
-            "gifWidth": Math.floor(options2.gifWidth),
-            "gifHeight": Math.floor(options2.gifHeight)
-          });
-          if (imagesLength) {
-            existingImages({
-              "images": images,
-              "imagesLength": imagesLength,
-              "callback": callback,
-              "options": options2
-            });
-          } else if (video) {
-            existingVideo({
-              "existingVideo": video,
-              callback,
-              options: options2
-            });
-          } else {
-            existingWebcam({
-              lastCameraStream,
-              callback,
-              webcamVideoElement,
-              options: options2
-            });
-          }
-        }
-        function takeSnapShot(userOptions, callback) {
-          callback = utils.isFunction(userOptions) ? userOptions : callback;
-          userOptions = utils.isObject(userOptions) ? userOptions : {};
-          if (!utils.isFunction(callback)) {
-            return;
-          }
-          var mergedOptions = utils.mergeOptions(defaultOptions, userOptions);
-          var options2 = utils.mergeOptions(mergedOptions, {
-            "interval": 0.1,
-            "numFrames": 1,
-            "gifWidth": Math.floor(mergedOptions.gifWidth),
-            "gifHeight": Math.floor(mergedOptions.gifHeight)
-          });
-          createGIF(options2, callback);
-        }
-        var API = {
-          "utils": utils$2,
-          "error": error$2,
-          "defaultOptions": defaultOptions$2,
-          "createGIF": createGIF,
-          "takeSnapShot": takeSnapShot,
-          "stopVideoStreaming": stopVideoStreaming,
-          "isSupported": isSupported,
-          "isWebCamGIFSupported": isWebCamGIFSupported,
-          "isExistingVideoGIFSupported": isExistingVideoGIFSupported,
-          "isExistingImagesGIFSupported": isSupported$1,
-          "VERSION": "0.4.5"
-        };
-        {
-          module.exports = API;
-        }
-      })(typeof window !== "undefined" ? window : {}, typeof document !== "undefined" ? document : { createElement: function() {
-      } }, typeof window !== "undefined" ? window.navigator : {});
-    })(gifshot$1);
-    return gifshot$1.exports;
-  }
-  var gifshotExports = requireGifshot();
-  const gifshot = getDefaultExportFromCjs(gifshotExports);
   class MediaDownloader {
     isDownloading = false;
     createdBlobUrls = [];
@@ -3524,12 +1643,21 @@ setRepeat: function setRepeat(r) {
         const username = account.username;
         const downloadDate = formatDateTime(Date.now(), "YYYYMMDD_HHmmss");
         let zipFilename;
-        if (batchInfo && (batchInfo.mode === "batch" || batchInfo.mode === "auto")) {
+        const dateRangeSuffix = account.date_since || account.date_until ? `_${(account.date_since || "none").replace(/-/g, "")}-${(account.date_until || "none").replace(/-/g, "")}` : "";
+        if (batchInfo?.mode === "batch_date_range") {
           if (batchInfo.page !== void 0) {
-            zipFilename = `${username}_${downloadDate}_Batch${batchInfo.page}.zip`;
+            zipFilename = `${username}_${downloadDate}_Batch${batchInfo.page}${dateRangeSuffix}.zip`;
           } else {
-            zipFilename = `${username}_${downloadDate}_Batch.zip`;
+            zipFilename = `${username}_${downloadDate}_Batch${dateRangeSuffix}.zip`;
           }
+        } else if (batchInfo && (batchInfo.mode === "batch" || batchInfo.mode === "auto")) {
+          if (batchInfo.page !== void 0) {
+            zipFilename = `${username}_${downloadDate}_Batch${batchInfo.page}${dateRangeSuffix}.zip`;
+          } else {
+            zipFilename = `${username}_${downloadDate}_Batch${dateRangeSuffix}.zip`;
+          }
+        } else if (batchInfo?.mode === "date_range" || dateRangeSuffix) {
+          zipFilename = `${username}_${downloadDate}${dateRangeSuffix}.zip`;
         } else {
           zipFilename = `${username}_${downloadDate}.zip`;
         }
@@ -3662,7 +1790,6 @@ setRepeat: function setRepeat(r) {
             gifFile.url = gifData;
           }
         } catch (error) {
-          console.warn("Failed to convert GIF:", error);
         }
       }
       const downloadProgressCallback = (current, total, file) => {
@@ -3687,7 +1814,6 @@ setRepeat: function setRepeat(r) {
     convertVideoToGif(videoUrl) {
       return new Promise((resolve) => {
         if (!gifshot.isExistingVideoGIFSupported()) {
-          console.warn("GIF conversion not supported in this browser");
           resolve(null);
           return;
         }
@@ -3703,7 +1829,6 @@ setRepeat: function setRepeat(r) {
               this.handleGifConversionResult(obj, resolve);
             });
           }).catch((error) => {
-            console.error("Failed to get video dimensions:", error);
             gifshot.createGIF({
               video: videoUrl,
               ...gifOptions
@@ -3716,7 +1841,6 @@ setRepeat: function setRepeat(r) {
     }
     handleGifConversionResult(obj, resolve) {
       if (obj.error) {
-        console.error("GIF conversion failed:", obj.errorMsg);
         resolve(null);
       } else if (obj.image) {
         try {
@@ -3737,7 +1861,6 @@ setRepeat: function setRepeat(r) {
           this.createdBlobUrls.push(blobUrl);
           resolve(blobUrl);
         } catch (error) {
-          console.error("Failed to create blob URL:", error);
           resolve(null);
         }
       } else {
@@ -3818,7 +1941,6 @@ setRepeat: function setRepeat(r) {
         }
         return null;
       } catch (error) {
-        console.error("Error parsing URL for username:", error);
         return null;
       }
     },
@@ -4164,7 +2286,19 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
     const portalTarget = document.getElementById("tmd-root")?.shadowRoot?.getElementById("tmd-portal-root") || document.getElementById("tmd-root")?.shadowRoot || document.body;
     return $(modalContent, portalTarget);
   }
+  const lastPlayTime = {};
+  const DEBOUNCE_MS = 150;
+  function canPlaySound(soundName) {
+    const now = Date.now();
+    const lastTime = lastPlayTime[soundName] || 0;
+    if (now - lastTime < DEBOUNCE_MS) {
+      return false;
+    }
+    lastPlayTime[soundName] = now;
+    return true;
+  }
   function playSuccessSound() {
+    if (!canPlaySound("success")) return;
     if (!appOptionsManager.get("soundEffects", true)) return;
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -4191,10 +2325,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
         oscillator2.stop(audioContext.currentTime + 0.3);
       }, 100);
     } catch (error) {
-      console.warn("Failed to play success sound:", error);
     }
   }
   function playErrorSound() {
+    if (!canPlaySound("error")) return;
     if (!appOptionsManager.get("soundEffects", true)) return;
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -4209,10 +2343,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.4);
     } catch (error) {
-      console.warn("Failed to play error sound:", error);
     }
   }
   function playToggleOnSound() {
+    if (!canPlaySound("toggleOn")) return;
     if (!appOptionsManager.get("soundEffects", true)) return;
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -4227,10 +2361,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.15);
     } catch (error) {
-      console.warn("Failed to play toggle on sound:", error);
     }
   }
   function playToggleOffSound() {
+    if (!canPlaySound("toggleOff")) return;
     if (!appOptionsManager.get("soundEffects", true)) return;
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -4245,10 +2379,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.15);
     } catch (error) {
-      console.warn("Failed to play toggle off sound:", error);
     }
   }
   function playTabClickSound() {
+    if (!canPlaySound("tabClick")) return;
     if (!appOptionsManager.get("soundEffects", true)) return;
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -4263,10 +2397,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.1);
     } catch (error) {
-      console.warn("Failed to play tab click sound:", error);
     }
   }
   function playRadioClickSound() {
+    if (!canPlaySound("radioClick")) return;
     if (!appOptionsManager.get("soundEffects", true)) return;
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -4281,10 +2415,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.08);
     } catch (error) {
-      console.warn("Failed to play radio click sound:", error);
     }
   }
   function playClickSound() {
+    if (!canPlaySound("click")) return;
     if (!appOptionsManager.get("soundEffects", true)) return;
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -4299,28 +2433,9 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.06);
     } catch (error) {
-      console.warn("Failed to play click sound:", error);
     }
   }
-  function playDeleteSound() {
-    if (!appOptionsManager.get("soundEffects", true)) return;
-    try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      oscillator.frequency.value = 300;
-      oscillator.type = "triangle";
-      gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.2);
-    } catch (error) {
-      console.warn("Failed to play delete sound:", error);
-    }
-  }
-  function Dashboard({ loadFromDatabaseUsername } = {}) {
+  function Dashboard({ loadFromDatabaseAccount } = {}) {
     const { t, i18n } = useTranslation();
     const isArabic = (i18n.language || "").startsWith("ar");
     const {
@@ -4353,6 +2468,13 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
     const retryAbortController = signals.useSignal(null);
     const retryTokenCurrent = signals.useSignal(0);
     const retryTokenTotal = signals.useSignal(0);
+    const dateSince = signals.useSignal("");
+    const dateUntil = signals.useSignal("");
+    hooks.useEffect(() => {
+      if (detectedUsername.value) {
+        checkDBData(detectedUsername.value);
+      }
+    }, [dateSince.value, dateUntil.value]);
     hooks.useEffect(() => {
       const updateUsernameFromUrl = () => {
         const profileInfo = urlParser.getProfileInfo();
@@ -4392,11 +2514,23 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
         const cleanUsername = mediaDownloaderAPI.formatUsername(username);
         const fetchMode2 = appOptionsManager.get("fetchMode") ?? "single";
         let count = 0;
-        if (fetchMode2 === "single") {
+        if (dateSince.value || dateUntil.value) {
+          if (fetchMode2 !== "single") {
+            const batchDateRangeAccounts = await mediaDB.accounts.where("username").equals(cleanUsername).filter(
+              (acc) => acc.batch_mode === "batch_date_range" && acc.date_since === dateSince.value && acc.date_until === dateUntil.value
+            ).count();
+            count = batchDateRangeAccounts;
+          } else {
+            const dateRangeAccounts = await mediaDB.accounts.where("username").equals(cleanUsername).filter(
+              (acc) => acc.batch_mode === "date_range" && acc.date_since === dateSince.value && acc.date_until === dateUntil.value
+            ).count();
+            count = dateRangeAccounts;
+          }
+        } else if (fetchMode2 === "single") {
           const singleAccount = await mediaDB.accounts.where("username").equals(cleanUsername).filter((acc) => !acc.batch_mode || acc.batch_mode === "single").count();
           count = singleAccount;
         } else {
-          const batchCount = await mediaDB.accounts.where("username").equals(cleanUsername).filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single")).count();
+          const batchCount = await mediaDB.accounts.where("username").equals(cleanUsername).filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single" && acc.batch_mode !== "date_range" && acc.batch_mode !== "batch_date_range")).count();
           count = batchCount;
         }
         hasDBData.value = count > 0;
@@ -4418,13 +2552,25 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
       }
     }, [dbState.dbChangeSignal.value]);
     hooks.useEffect(() => {
-      if (loadFromDatabaseUsername && loadFromDatabaseUsername.value) {
-        const username = loadFromDatabaseUsername.value;
-        loadFromDatabaseUsername.value = "";
-        detectedUsername.value = username;
+      if (!loadFromDatabaseAccount?.value) return;
+      const accountInfo = loadFromDatabaseAccount.value;
+      if (accountInfo.username) {
+        detectedUsername.value = accountInfo.username;
+        if (accountInfo.date_since || accountInfo.date_until) {
+          dateSince.value = accountInfo.date_since || "";
+          dateUntil.value = accountInfo.date_until || "";
+        } else {
+          dateSince.value = "";
+          dateUntil.value = "";
+        }
+        if (accountInfo.batch_mode) {
+          const targetMode = accountInfo.batch_mode === "date_range" ? "single" : accountInfo.batch_mode === "batch_date_range" ? "batch" : accountInfo.batch_mode;
+          appOptionsManager.set("fetchMode", targetMode);
+        }
         handleLoadFromDatabase();
+        loadFromDatabaseAccount.value = null;
       }
-    }, [loadFromDatabaseUsername?.value]);
+    }, [loadFromDatabaseAccount?.value]);
     const stopRetry = () => {
       isRetrying.value = false;
       isLoading.value = false;
@@ -4443,7 +2589,6 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
           break;
         }
         try {
-          console.log("Attempting to generate new token...");
           const tokenResult = await mediaDownloaderAPI.generateAuthToken(authSettings.patreon_auth);
           retryTokenCurrent.value = tokenResult.current_index || 0;
           retryTokenTotal.value = tokenResult.total_tokens || 0;
@@ -4463,17 +2608,14 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
           if (!isRetrying.value || controller.signal.aborted) {
             break;
           }
-          console.log("Attempting to fetch with new token...");
           isRetrying.value = false;
           await handleFetchMedia(true);
           retryAbortController.value = null;
           return;
         } catch (error) {
-          console.error("Retry attempt failed:", error);
           if (!isRetrying.value || controller.signal.aborted) {
             break;
           }
-          console.log("Waiting 2 seconds before next retry...");
           const waitCompleted = await new Promise((resolve) => {
             const timeoutId = setTimeout(() => {
               cleanup();
@@ -4491,13 +2633,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
             };
           });
           if (!waitCompleted) {
-            console.log("Wait interrupted, stopping retry");
             break;
           }
-          console.log("Retrying...");
         }
       }
-      console.log("Retry loop ended");
       isRetrying.value = false;
       retryAbortController.value = null;
     };
@@ -4544,7 +2683,13 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
       }
       const fetchMode2 = appOptionsManager.get("fetchMode") ?? "single";
       if (!skipOverwriteCheck) {
-        const existingAccounts = await mediaDownloaderDB.getAccountsByUsernameAndMode(cleanUsername, fetchMode2);
+        const actualFetchMode = dateSince.value || dateUntil.value ? fetchMode2 !== "single" ? "batch_date_range" : "date_range" : fetchMode2;
+        const existingAccounts = await mediaDownloaderDB.getAccountsByUsernameAndMode(
+          cleanUsername,
+          actualFetchMode,
+          dateSince.value || void 0,
+          dateUntil.value || void 0
+        );
         if (existingAccounts.length > 0) {
           pendingFetchUsername.value = cleanUsername;
           pendingFetchParams.value = { authSettings };
@@ -4580,7 +2725,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
               batchSize,
               startingBatch: page,
               mediaType: mediaType2,
-              fetchMode: fetchMode2
+              fetchMode: fetchMode2,
+              dateSince: dateSince.value || void 0,
+              dateUntil: dateUntil.value || void 0,
+              includeRetweets: appOptionsManager.get("includeRetweets") ?? false
             }
           );
           accountData.value = data;
@@ -4611,10 +2759,21 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
             showAccountInfo.value = true;
           }
         } catch (error) {
-          console.error("Fetch error:", error);
+          const apiError = error?.apiError;
+          const errorData = error?.errorData;
           const raw = error instanceof Error ? error.message : "";
-          const httpMatch = raw.match(/^HTTP error! status: (\d+)/);
-          const msg = httpMatch ? t("HTTP error! status: {{status}}", { status: httpMatch[1] }) : (raw ? t(raw) : "") || t("Failed to fetch data");
+          let msg = "";
+          if (apiError) {
+            if (errorData) {
+              const translated = i18n.t(raw, errorData);
+              msg = translated !== raw ? translated : raw;
+            } else {
+              msg = raw ? t(raw) || raw : t("Failed to fetch data");
+            }
+          } else {
+            const httpMatch = raw.match(/^HTTP error! status: (\d+)/);
+            msg = httpMatch ? t("HTTP error! status: {{status}}", { status: httpMatch[1] }) : (raw ? t(raw) : "") || t("Failed to fetch data");
+          }
           errorMessage.value = msg;
           playErrorSound();
           setTimeout(() => errorMessage.value = "", 2e3);
@@ -4637,33 +2796,49 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
         }
         if (accountData.value) {
           try {
-            const batchIdentifier = fetchMode2 !== "single" ? `${cleanUsername}_${fetchMode2}_${Date.now()}` : void 0;
-            const timelineToSave = fetchMode2 !== "single" && dashboardState.aggregatedTimeline.value.length > 0 ? dashboardState.aggregatedTimeline.value : accountData.value.timeline;
-            const metadataToSave = fetchMode2 !== "single" && dashboardState.aggregatedTimeline.value.length > 0 ? { ...accountData.value.metadata, new_entries: dashboardState.aggregatedCount.value } : accountData.value.metadata;
+            const actualFetchMode = dateSince.value || dateUntil.value ? fetchMode2 !== "single" ? "batch_date_range" : "date_range" : fetchMode2;
+            const batchIdentifier = actualFetchMode !== "single" ? `${cleanUsername}_${actualFetchMode}_${Date.now()}` : void 0;
+            const timelineToSave = actualFetchMode !== "single" && dashboardState.aggregatedTimeline.value.length > 0 ? dashboardState.aggregatedTimeline.value : accountData.value.timeline;
+            const metadataToSave = actualFetchMode !== "single" && dashboardState.aggregatedTimeline.value.length > 0 ? { ...accountData.value.metadata, new_entries: dashboardState.aggregatedCount.value } : accountData.value.metadata;
             await mediaDownloaderDB.saveAccount({
               username: cleanUsername,
               account_info: accountData.value.account_info,
               metadata: metadataToSave,
               timeline: timelineToSave,
-              batch_mode: fetchMode2,
+              batch_mode: actualFetchMode,
               batch_identifier: batchIdentifier,
               timeline_type: timelineType,
-              media_type: mediaType2
+              media_type: mediaType2,
+              date_since: dateSince.value || void 0,
+              date_until: dateUntil.value || void 0
             });
             await checkDBData(cleanUsername);
           } catch (error) {
-            console.error("Failed to save to database:", error);
           }
         }
       } catch (error) {
+        const apiError = error?.apiError;
+        const errorData = error?.errorData;
         const raw = error instanceof Error ? error.message : "";
         const isDemoMode = (authSettings.patreon_auth || "").trim() === "xbatchdemo";
-        if (raw === "Failed to fetch data from all APIs" && !isRetrying.value && !isDemoMode) {
+        const isGalleryDLAuthError = raw.includes("Could not authenticate you") || raw.includes("Failed to fetch data") && raw.includes("401");
+        const shouldRetry = apiError?.isRetryable === true || isGalleryDLAuthError;
+        if (shouldRetry && !isRetrying.value && !isDemoMode) {
           errorMessage.value = "";
           retryWithTokenGeneration(cleanUsername, authSettings);
-        } else if (isDemoMode && raw === "Failed to fetch data from all APIs") {
-          const httpMatch = raw.match(/^HTTP error! status: (\d+)/);
-          const msg = httpMatch ? t("HTTP error! status: {{status}}", { status: httpMatch[1] }) : (raw ? t(raw) : "") || t("Failed to fetch data");
+        } else {
+          let msg = "";
+          if (apiError) {
+            if (errorData) {
+              const translated = i18n.t(raw, errorData);
+              msg = translated !== raw ? translated : raw;
+            } else {
+              msg = raw ? t(raw) || raw : t("Failed to fetch data");
+            }
+          } else {
+            const httpMatch = raw.match(/^HTTP error! status: (\d+)/);
+            msg = httpMatch ? t("HTTP error! status: {{status}}", { status: httpMatch[1] }) : (raw ? t(raw) : "") || t("Failed to fetch data");
+          }
           errorMessage.value = msg;
           playErrorSound();
           setTimeout(() => errorMessage.value = "", 2e3);
@@ -4694,17 +2869,33 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
       try {
         const fetchMode2 = appOptionsManager.get("fetchMode") ?? "single";
         let accounts;
-        if (fetchMode2 === "single") {
+        if (dateSince.value || dateUntil.value) {
+          if (fetchMode2 !== "single") {
+            const batchDateRangeAccounts = await mediaDB.accounts.where("username").equals(cleanUsername).filter(
+              (acc) => acc.batch_mode === "batch_date_range" && acc.date_since === dateSince.value && acc.date_until === dateUntil.value
+            ).reverse().sortBy("cached_at");
+            accounts = batchDateRangeAccounts;
+          } else {
+            const dateRangeAccounts = await mediaDB.accounts.where("username").equals(cleanUsername).filter(
+              (acc) => acc.batch_mode === "date_range" && acc.date_since === dateSince.value && acc.date_until === dateUntil.value
+            ).reverse().sortBy("cached_at");
+            accounts = dateRangeAccounts;
+          }
+        } else if (fetchMode2 === "single") {
           const singleAccount = await mediaDB.accounts.where("username").equals(cleanUsername).filter((acc) => !acc.batch_mode || acc.batch_mode === "single").reverse().sortBy("cached_at");
           accounts = singleAccount;
         } else {
-          const batchAccounts = await mediaDB.accounts.where("username").equals(cleanUsername).filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single")).reverse().sortBy("cached_at");
+          const batchAccounts = await mediaDB.accounts.where("username").equals(cleanUsername).filter((acc) => !!(acc.batch_mode && acc.batch_mode !== "single" && acc.batch_mode !== "date_range" && acc.batch_mode !== "batch_date_range")).reverse().sortBy("cached_at");
           accounts = batchAccounts;
         }
         if (accounts.length === 0) {
           return;
         }
         const latestAccount = accounts[0];
+        if (latestAccount.date_since || latestAccount.date_until) {
+          dateSince.value = latestAccount.date_since || "";
+          dateUntil.value = latestAccount.date_until || "";
+        }
         accountData.value = {
           account_info: latestAccount.account_info,
           metadata: latestAccount.metadata,
@@ -4719,7 +2910,6 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
           await checkDBData(detectedUsername.value);
         }
       } catch (error) {
-        console.error("Failed to load from database:", error);
         errorMessage.value = t("Failed to load data");
         playErrorSound();
         setTimeout(() => errorMessage.value = "", 2e3);
@@ -4748,7 +2938,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
                 timelineType,
                 batchSize,
                 startingBatch: page,
-                mediaType: mediaType2
+                mediaType: mediaType2,
+                dateSince: dateSince.value || void 0,
+                dateUntil: dateUntil.value || void 0,
+                includeRetweets: appOptionsManager.get("includeRetweets") ?? false
               }
             );
             accountData.value = data;
@@ -4777,7 +2970,6 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
               await saveAggregatedData();
             }
           } catch (error) {
-            console.error("Auto batch error:", error);
             break;
           } finally {
             isLoading.value = false;
@@ -4796,20 +2988,22 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
           const cleanUsername = mediaDownloaderAPI.formatUsername(rawUsername);
           const timelineType = appOptionsManager.get("timelineType") ?? "media";
           const mediaType2 = appOptionsManager.get("mediaType") ?? "all";
-          const batchIdentifier = `${cleanUsername}_${fetchMode2}_${Date.now()}`;
+          const actualFetchMode = dateSince.value || dateUntil.value ? "batch_date_range" : fetchMode2;
+          const batchIdentifier = `${cleanUsername}_${actualFetchMode}_${Date.now()}`;
           await mediaDownloaderDB.saveAccount({
             username: cleanUsername,
             account_info: accountData.value.account_info,
             metadata: { ...accountData.value.metadata, new_entries: dashboardState.aggregatedCount.value },
             timeline: dashboardState.aggregatedTimeline.value,
-            batch_mode: fetchMode2,
+            batch_mode: actualFetchMode,
             batch_identifier: batchIdentifier,
             timeline_type: timelineType,
-            media_type: mediaType2
+            media_type: mediaType2,
+            date_since: dateSince.value || void 0,
+            date_until: dateUntil.value || void 0
           });
           await checkDBData(cleanUsername);
         } catch (error) {
-          console.error("Failed to save aggregated data:", error);
         }
       }
     };
@@ -4878,7 +3072,10 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
               batchSize,
               startingBatch: page,
               mediaType: mediaType2,
-              fetchMode: fetchMode2
+              fetchMode: fetchMode2,
+              dateSince: dateSince.value || void 0,
+              dateUntil: dateUntil.value || void 0,
+              includeRetweets: appOptionsManager.get("includeRetweets") ?? false
             }
           );
           accountData.value = data;
@@ -4909,22 +3106,24 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
             showAccountInfo.value = true;
           }
           try {
-            const batchIdentifier = fetchMode2 !== "single" ? `${cleanUsername}_${fetchMode2}_${Date.now()}` : void 0;
+            const actualFetchMode = dateSince.value || dateUntil.value ? fetchMode2 !== "single" ? "batch_date_range" : "date_range" : fetchMode2;
+            const batchIdentifier = actualFetchMode !== "single" ? `${cleanUsername}_${actualFetchMode}_${Date.now()}` : void 0;
             await mediaDownloaderDB.saveAccount({
               username: cleanUsername,
               account_info: data.account_info,
               metadata: data.metadata,
               timeline: data.timeline,
-              batch_mode: fetchMode2,
+              batch_mode: actualFetchMode,
               batch_identifier: batchIdentifier,
               timeline_type: timelineType,
-              media_type: mediaType2
+              media_type: mediaType2,
+              date_since: dateSince.value || void 0,
+              date_until: dateUntil.value || void 0
             });
             await checkDBData(cleanUsername);
           } catch {
           }
         } catch (error) {
-          console.error("Fetch error:", error);
           const raw = error instanceof Error ? error.message : "";
           const httpMatch = raw.match(/^HTTP error! status: (\d+)/);
           const msg = httpMatch ? t("HTTP error! status: {{status}}", { status: httpMatch[1] }) : (raw ? t(raw) : "") || t("Failed to fetch data");
@@ -4967,10 +3166,13 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
           account_info: accountData.value.account_info,
           metadata: accountData.value.metadata,
           timeline: aggregatedTimeline,
-          cached_at: Date.now()
+          cached_at: Date.now(),
+          date_since: dateSince.value || void 0,
+          date_until: dateUntil.value || void 0
         };
         const fetchMode2 = appOptionsManager.get("fetchMode") ?? "single";
-        const batchInfo = fetchMode2 !== "single" ? { mode: fetchMode2 } : void 0;
+        const actualMode = dateSince.value || dateUntil.value ? "date_range" : fetchMode2;
+        const batchInfo = actualMode !== "single" ? { mode: actualMode } : void 0;
         await mediaDownloader.downloadAccountMedia(account, (progress) => {
           downloadProgress.value = progress.percentage;
           isConverting.value = progress.converting || false;
@@ -4980,7 +3182,6 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
         }, batchInfo);
         playSuccessSound();
       } catch (error) {
-        console.error("Download error:", error);
         const raw = error instanceof Error ? error.message : "";
         const httpMatch = raw.match(/^HTTP error! status: (\d+)/);
         const msg = httpMatch ? t("HTTP error! status: {{status}}", { status: httpMatch[1] }) : (raw ? t(raw) : "") || t("Failed to download media");
@@ -5011,11 +3212,14 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
           account_info: accountData.value.account_info,
           metadata: accountData.value.metadata,
           timeline: currentTimeline,
-          cached_at: Date.now()
+          cached_at: Date.now(),
+          date_since: dateSince.value || void 0,
+          date_until: dateUntil.value || void 0
         };
         const fetchMode2 = appOptionsManager.get("fetchMode") ?? "single";
         const currentPage = dashboardState.currentPage.value;
-        const batchInfo = fetchMode2 !== "single" ? { mode: fetchMode2, page: currentPage } : void 0;
+        const actualMode = dateSince.value || dateUntil.value ? "date_range" : fetchMode2;
+        const batchInfo = actualMode !== "single" ? { mode: actualMode, page: currentPage } : void 0;
         await mediaDownloader.downloadAccountMedia(account, (progress) => {
           downloadProgress.value = progress.percentage;
           isConverting.value = progress.converting || false;
@@ -5025,7 +3229,6 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
         }, batchInfo);
         playSuccessSound();
       } catch (error) {
-        console.error("Download error:", error);
         const raw = error instanceof Error ? error.message : "";
         const httpMatch = raw.match(/^HTTP error! status: (\d+)/);
         const msg = httpMatch ? t("HTTP error! status: {{status}}", { status: httpMatch[1] }) : (raw ? t(raw) : "") || t("Failed to download media");
@@ -5070,7 +3273,9 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
             timelineType,
             batchSize,
             startingBatch: page,
-            mediaType: mediaType2
+            mediaType: mediaType2,
+            dateSince: dateSince.value || void 0,
+            dateUntil: dateUntil.value || void 0
           }
         );
         accountData.value = data;
@@ -5099,7 +3304,6 @@ u("form", { method: "dialog", class: "modal-backdrop", children: u("button", { "
           await saveAggregatedData();
         }
       } catch (error) {
-        console.error("Navigate batch error:", error);
       } finally {
         isLoading.value = false;
         dashboardState.loadingDirection.value = null;
@@ -5181,22 +3385,35 @@ u("div", { class: "avatar", children: u("div", { class: "w-16 rounded-box", chil
                 }
               }
             ) }) }),
-u("div", { class: "flex-grow", children: [
-u("div", { class: "flex items-center gap-2", children: [
+u("div", { class: "grow", children: [
+u("div", { class: "flex items-center gap-2 flex-wrap", children: [
 u("h3", { class: "font-semibold text-base", children: account.nick }),
                 (() => {
                   if (isLoadedFromDB.value) {
                     return null;
                   }
-                  const page = dashboardState.currentPage.value;
-                  if (fetchMode.value === "batch") {
-                    return u("div", { class: "badge badge-soft badge-primary badge-sm", children: isLoading.value ? t("Fetching...") : t("Batch: {{page}}", { page }) });
-                  }
-                  if (fetchMode.value === "auto") {
-                    return u("div", { class: "badge badge-soft badge-secondary badge-sm", children: isLoading.value ? t("Fetching...") : t("Batch: {{page}}", { page }) });
+                  const hasDateRange = metadata?.date_range || dateSince.value || dateUntil.value;
+                  if (!hasDateRange) {
+                    const page = dashboardState.currentPage.value;
+                    if (fetchMode.value === "batch") {
+                      return u("div", { class: "badge badge-soft badge-primary badge-sm", children: isLoading.value ? t("Fetching...") : t("Batch: {{page}}", { page }) });
+                    }
+                    if (fetchMode.value === "auto") {
+                      return u("div", { class: "badge badge-soft badge-secondary badge-sm", children: isLoading.value ? t("Fetching...") : t("Batch: {{page}}", { page }) });
+                    }
                   }
                   return null;
-                })()
+                })(),
+                metadata?.date_range && u("div", { class: "badge badge-soft badge-info badge-sm", children: [
+                  metadata.date_range.since.replace(/-/g, ""),
+                  " - ",
+                  metadata.date_range.until.replace(/-/g, "")
+                ] }),
+                (dateSince.value || dateUntil.value) && !metadata?.date_range && u("div", { class: "badge badge-soft badge-info badge-sm", children: [
+                  (dateSince.value || "none").replace(/-/g, ""),
+                  " - ",
+                  (dateUntil.value || "none").replace(/-/g, "")
+                ] })
               ] }),
 u("p", { class: "text-sm opacity-70", children: [
                 "@",
@@ -5384,6 +3601,58 @@ u("div", { class: "flex-1", dir: isArabic ? "rtl" : void 0, children: !authState
             }
           ) })
         ] }),
+u("div", { class: "relative", children: [
+          (dateSince.value || dateUntil.value) && u(
+            "button",
+            {
+              class: "btn btn-circle btn-xs btn-error absolute -top-2 -right-2 z-10",
+              onClick: () => {
+                dateSince.value = "";
+                dateUntil.value = "";
+              },
+              "aria-label": "Clear dates",
+              children: u(IconX, { size: 12 })
+            }
+          ),
+u("div", { class: "card bg-base-200 card-border", children: u("div", { class: "card-body p-4", children: [
+u("div", { class: "grid grid-cols-2 gap-3", children: [
+u("div", { class: "form-control", children: [
+u("label", { class: "label py-1", children: u("span", { class: "label-text text-xs", children: t("Date Since") }) }),
+u(
+                  "input",
+                  {
+                    type: "date",
+                    class: "input input-sm input-bordered w-full",
+                    value: dateSince.value,
+                    onInput: (e) => {
+                      dateSince.value = e.target.value;
+                    },
+                    placeholder: "YYYY-MM-DD"
+                  }
+                )
+              ] }),
+u("div", { class: "form-control", children: [
+u("label", { class: "label py-1", children: u("span", { class: "label-text text-xs", children: t("Date Until") }) }),
+u(
+                  "input",
+                  {
+                    type: "date",
+                    class: "input input-sm input-bordered w-full",
+                    value: dateUntil.value,
+                    onInput: (e) => {
+                      dateUntil.value = e.target.value;
+                    },
+                    placeholder: "YYYY-MM-DD"
+                  }
+                )
+              ] })
+            ] }),
+            (dateSince.value || dateUntil.value) && u("div", { class: "flex items-center gap-1 text-xs opacity-60 mt-1", children: [
+u(IconInfoCircle, { size: 14 }),
+u("span", { children: t("Empty dates will fetch all available media") })
+            ] })
+          ] }) })
+        ] }),
 u("div", { class: "flex justify-center", children: u("div", { class: "join", children: [
 u(
             "button",
@@ -5513,7 +3782,6 @@ u(IconWriting, { size: 16 }),
               ext = "mp4";
             }
           } catch (error) {
-            console.warn("GIF conversion failed, downloading original:", error);
             const response = await fetch(url);
             finalBlob = await response.blob();
             ext = "mp4";
@@ -5555,7 +3823,6 @@ u(IconWriting, { size: 16 }),
         document.body.removeChild(link);
         URL.revokeObjectURL(link.href);
       } catch (error) {
-        console.error("Failed to download file:", error);
       } finally {
         downloadingFiles.value = new Set([...downloadingFiles.value].filter((k) => k !== fileKey));
       }
@@ -5563,7 +3830,6 @@ u(IconWriting, { size: 16 }),
     const convertVideoToGif = (videoUrl) => {
       return new Promise((resolve) => {
         if (!gifshot.isExistingVideoGIFSupported()) {
-          console.warn("GIF conversion not supported in this browser");
           resolve(null);
           return;
         }
@@ -5579,7 +3845,6 @@ u(IconWriting, { size: 16 }),
               handleGifConversionResult(obj, resolve);
             });
           }).catch((error) => {
-            console.error("Failed to get video dimensions:", error);
             gifshot.createGIF({
               video: videoUrl,
               ...gifOptions
@@ -5592,7 +3857,6 @@ u(IconWriting, { size: 16 }),
     };
     const handleGifConversionResult = (obj, resolve) => {
       if (obj.error) {
-        console.error("GIF conversion failed:", obj.errorMsg);
         resolve(null);
       } else if (obj.image) {
         try {
@@ -5611,7 +3875,6 @@ u(IconWriting, { size: 16 }),
           const blob = new Blob([byteArray], { type: "image/gif" });
           resolve(blob);
         } catch (error) {
-          console.error("Failed to create blob:", error);
           resolve(null);
         }
       } else {
@@ -5642,7 +3905,6 @@ u(IconWriting, { size: 16 }),
     const handleDeleteEntry = async (tweetId, url) => {
       const key = `${tweetId}|${url}`;
       deletingEntry.value = key;
-      playDeleteSound();
       try {
         await onDeleteEntry(tweetId, url);
       } finally {
@@ -5664,6 +3926,23 @@ u(IconWriting, { size: 16 }),
     const formatDate = (timestamp) => {
       const fmt = appOptionsManager.get("dateTimeFormat") || "YYYY-MM-DD HH:mm:ss";
       return dayjs(timestamp).format(fmt);
+    };
+    const formatTimeAgo = (timestamp) => {
+      const now = dayjs();
+      const then = dayjs(timestamp);
+      const diff = now.diff(then, "second");
+      const years = Math.floor(diff / (365 * 24 * 60 * 60));
+      const days = Math.floor(diff % (365 * 24 * 60 * 60) / (24 * 60 * 60));
+      const hours = Math.floor(diff % (24 * 60 * 60) / (60 * 60));
+      const minutes = Math.floor(diff % (60 * 60) / 60);
+      const seconds = diff % 60;
+      const parts = [];
+      if (years > 0) parts.push(`${years}y`);
+      if (days > 0) parts.push(`${days}d`);
+      if (hours > 0) parts.push(`${hours}h`);
+      if (minutes > 0) parts.push(`${minutes}m`);
+      if (seconds > 0 && parts.length === 0) parts.push(`${seconds}s`);
+      return parts.slice(0, 2).join(" ") + " ago";
     };
     const handleSwipeLeft = () => {
       if (previewIndex.value < filteredTimeline.length - 1) {
@@ -5754,7 +4033,7 @@ u("div", { class: "avatar", children: u("div", { class: "w-16 rounded-box", chil
               }
             }
           ) }) }),
-u("div", { class: "flex-grow", children: [
+u("div", { class: "grow", children: [
 u("h3", { class: "font-semibold text-base", children: [
               account.account_info.nick,
               " ",
@@ -5837,23 +4116,23 @@ u("div", { class: "tooltip", "data-tip": `${t("GIF")} (${account.timeline.filter
             ) })
           ] }),
           totalPages > 1 && u("div", { class: "join", children: [
-u("div", { class: "tooltip tooltip-left", "data-tip": t("Home"), children: u(
+u("div", { class: "tooltip tooltip-left", "data-tip": t("First Page"), children: u(
               "button",
               {
                 class: "join-item btn btn-sm",
                 onClick: () => currentPage.value = 1,
                 disabled: currentPage.value === 1,
-                "aria-label": t("Home"),
+                "aria-label": t("First Page"),
                 children: "«"
               }
             ) }),
-u("div", { class: "tooltip tooltip-left", "data-tip": t("End"), children: u(
+u("div", { class: "tooltip tooltip-left", "data-tip": t("Last Page"), children: u(
               "button",
               {
                 class: "join-item btn btn-sm",
                 onClick: () => currentPage.value = totalPages,
                 disabled: currentPage.value === totalPages,
-                "aria-label": t("End"),
+                "aria-label": t("Last Page"),
                 children: "»"
               }
             ) })
@@ -5876,8 +4155,8 @@ u(
               }
             ),
 u("div", { class: "card bg-base-200 border border-base-300", children: u("div", { class: "card-body p-3", children: u("div", { class: "flex items-center gap-3", children: [
-u("div", { class: "flex-shrink-0", children: u("div", { class: `btn btn-xs btn-square btn-soft no-animation pointer-events-none ${item.type === "photo" ? "btn-primary" : item.type === "video" ? "btn-secondary" : "btn-accent"}`, children: getTypeIcon(item.type) }) }),
-u("div", { class: "flex-grow min-w-0", children: [
+u("div", { class: "shrink-0", children: u("div", { class: `btn btn-xs btn-square btn-soft no-animation pointer-events-none ${item.type === "photo" ? "btn-primary" : item.type === "video" ? "btn-secondary" : "btn-accent"}`, children: getTypeIcon(item.type) }) }),
+u("div", { class: "grow min-w-0", children: [
 u(
                   "a",
                   {
@@ -5888,9 +4167,14 @@ u(
                     children: item.tweet_id
                   }
                 ),
-u("p", { class: "text-xs opacity-60", children: formatDate(item.date) })
+u("p", { class: "text-xs opacity-60", children: [
+                  formatDate(item.date),
+                  " (",
+                  formatTimeAgo(item.date),
+                  ")"
+                ] })
               ] }),
-u("div", { class: "flex-shrink-0 flex items-center gap-1", children: [
+u("div", { class: "shrink-0 flex items-center gap-1", children: [
 u("div", { class: "tooltip tooltip-left", "data-tip": t("Preview"), children: u(
                   "button",
                   {
@@ -5961,7 +4245,7 @@ u(
 u(
           "div",
           {
-            class: "fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[1000]",
+            class: "fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-1000",
             onTouchStart: handleTouchStart,
             onTouchMove: handleTouchMove,
             onTouchEnd: handleTouchEnd,
@@ -5979,11 +4263,25 @@ u(
                   children: u(IconX, { size: 24 })
                 }
               ),
-u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn-neutral", children: u("span", { class: "text-base", children: [
-                (previewIndex.value + 1).toLocaleString(),
-                " / ",
-                filteredTimeline.length.toLocaleString()
-              ] }) }),
+u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2", children: [
+u("div", { class: "btn btn-neutral btn-sm", children: u("span", { class: "text-sm", children: [
+                  (previewIndex.value + 1).toLocaleString(),
+                  " / ",
+                  filteredTimeline.length.toLocaleString()
+                ] }) }),
+                (() => {
+                  const currentItem = filteredTimeline[previewIndex.value];
+                  if (currentItem) {
+                    return u("div", { class: "btn btn-neutral btn-sm", children: u("span", { class: "text-xs", children: [
+                      formatDate(currentItem.date),
+                      " (",
+                      formatTimeAgo(currentItem.date),
+                      ")"
+                    ] }) });
+                  }
+                  return null;
+                })()
+              ] }),
               previewIndex.value > 0 && u(
                 "button",
                 {
@@ -6057,12 +4355,15 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
     const isClearingAll = signals.useSignal(false);
     const fileInputRef = hooks.useRef(null);
     const filterByBatch = signals.useSignal(false);
+    const filterByDateRange = signals.useSignal(false);
     const hasInitialLoad = signals.useSignal(false);
     const showViewModal = signals.useSignal(false);
     const viewingAccount = signals.useSignal(null);
     const batchCount = signals.useSignal(0);
+    const dateRangeCount = signals.useSignal(0);
+    const batchDateRangeCount = signals.useSignal(0);
+    const filterByBatchDateRange = signals.useSignal(false);
     const handleImportClick = () => {
-      playClickSound();
       fileInputRef.current?.click();
     };
     const processJsonFile = async (text, fileName) => {
@@ -6077,16 +4378,16 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
           batch_mode: data.batch_mode,
           batch_identifier: data.batch_identifier,
           timeline_type: data.timeline_type,
-          media_type: data.media_type
+          media_type: data.media_type,
+          date_since: data.date_since,
+          date_until: data.date_until
         };
         if (!account.username || !account.account_info || !account.metadata || !Array.isArray(account.timeline)) {
-          console.warn("Skipped invalid account export file:", fileName);
           return;
         }
         await mediaDownloaderDB.insertAccount(account);
         playSuccessSound();
       } catch (err) {
-        console.error("Failed to process file:", fileName, err);
         playErrorSound();
       }
     };
@@ -6100,7 +4401,6 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
               const uint8Array = new Uint8Array(arrayBuffer);
               fflate.unzip(uint8Array, async (err, unzipped) => {
                 if (err) {
-                  console.error("Failed to unzip file:", file.name, err);
                   return;
                 }
                 for (const [fileName, fileData] of Object.entries(unzipped)) {
@@ -6116,10 +4416,8 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
               const text = await file.text();
               await processJsonFile(text, file.name);
             } else {
-              console.warn("Skipped unsupported file type:", file.name);
             }
           } catch (err) {
-            console.error("Failed to import file:", file.name, err);
           }
         }
         await loadAccounts();
@@ -6149,7 +4447,7 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
     hooks.useEffect(() => {
       currentPage.value = 1;
       loadAccounts();
-    }, [filterByBatch.value]);
+    }, [filterByBatch.value, filterByDateRange.value, filterByBatchDateRange.value]);
     hooks.useEffect(() => {
       if (isVisible && !hasInitialLoad.value) {
         loadAccounts();
@@ -6163,26 +4461,28 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
     const loadAccounts = async () => {
       try {
         isLoading.value = true;
-        const [accountsData, totalCountValue, batchCountValue] = await Promise.all([
-          mediaDownloaderDB.getAccounts(currentPage.value, ITEMS_PER_PAGE, filterByBatch.value),
-          mediaDownloaderDB.getAccountsCount(filterByBatch.value),
-          mediaDownloaderDB.getAccountsCount(true)
+        const [accountsData, totalCountValue, batchCountValue, dateRangeCountValue, batchDateRangeCountValue] = await Promise.all([
+          mediaDownloaderDB.getAccounts(currentPage.value, ITEMS_PER_PAGE, filterByBatch.value, filterByDateRange.value, filterByBatchDateRange.value),
+          mediaDownloaderDB.getAccountsCount(filterByBatch.value, filterByDateRange.value, filterByBatchDateRange.value),
+          mediaDownloaderDB.getAccountsCount(true, false, false),
+          mediaDownloaderDB.getAccountsCount(false, true, false),
+          mediaDownloaderDB.getAccountsCount(false, false, true)
         ]);
         accounts.value = accountsData;
         totalCount.value = totalCountValue;
         batchCount.value = batchCountValue;
+        dateRangeCount.value = dateRangeCountValue;
+        batchDateRangeCount.value = batchDateRangeCountValue;
         totalPages.value = Math.ceil(totalCountValue / ITEMS_PER_PAGE);
         onCountChange?.(totalCountValue);
         hasInitialLoad.value = true;
       } catch (error) {
-        console.error("Failed to load accounts:", error);
       } finally {
         isLoading.value = false;
       }
     };
     const exportAccount = async (account) => {
       if (!account.id) return;
-      playClickSound();
       try {
         exportingId.value = account.id;
         const fmt = dateFormat.value || appOptionsManager.get("dateTimeFormat") || "YYYY-MM-DD HH:mm:ss";
@@ -6197,6 +4497,8 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
           batch_identifier: account.batch_identifier,
           timeline_type: account.timeline_type,
           media_type: account.media_type,
+          date_since: account.date_since,
+          date_until: account.date_until,
           cached_at_formatted: dayjs(account.cached_at).format(fmt),
           exported_at: now.valueOf(),
           exported_at_formatted: now.format(fmt),
@@ -6211,22 +4513,18 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
         fileSaverEs.saveAs(blob, filename);
         playSuccessSound();
       } catch (error) {
-        console.error("Failed to export account:", error);
         playErrorSound();
       } finally {
         exportingId.value = null;
       }
     };
     const openDeleteDialog = (account) => {
-      console.log("Opening delete dialog for:", account.username);
-      playClickSound();
       accountToDelete.value = account;
       showDeleteModal.value = true;
     };
     const confirmDelete = async () => {
       const account = accountToDelete.value;
       if (!account?.id) return;
-      playDeleteSound();
       try {
         deletingId.value = account.id;
         await mediaDownloaderDB.deleteAccount(account.id);
@@ -6234,7 +4532,6 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
         showDeleteModal.value = false;
         playSuccessSound();
       } catch (error) {
-        console.error("Failed to delete account:", error);
         playErrorSound();
       } finally {
         deletingId.value = null;
@@ -6246,7 +4543,6 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
       accountToDelete.value = null;
     };
     const openClearDialog = () => {
-      playClickSound();
       showClearModal.value = true;
     };
     const closeClearDialog = () => {
@@ -6254,7 +4550,6 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
     };
     const handleDeleteEntry = async (tweetId, url) => {
       if (!viewingAccount.value?.id) return;
-      playDeleteSound();
       try {
         const account = viewingAccount.value;
         const updatedTimeline = account.timeline.filter(
@@ -6279,22 +4574,24 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
         await loadAccounts();
         playSuccessSound();
       } catch (error) {
-        console.error("Failed to delete entry:", error);
         playErrorSound();
       }
     };
     const handleLoadDatabase = () => {
       if (!viewingAccount.value?.username || !onLoadToDashboard) return;
-      playClickSound();
-      const username = viewingAccount.value.username;
+      const account = viewingAccount.value;
       showViewModal.value = false;
       requestAnimationFrame(() => {
-        onLoadToDashboard(username);
+        onLoadToDashboard({
+          username: account.username,
+          batch_mode: account.batch_mode,
+          date_since: account.date_since,
+          date_until: account.date_until
+        });
         viewingAccount.value = null;
       });
     };
     const confirmClearAll = async () => {
-      playDeleteSound();
       try {
         isClearingAll.value = true;
         await mediaDownloaderDB.clearAll();
@@ -6303,7 +4600,6 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
         showClearModal.value = false;
         playSuccessSound();
       } catch (error) {
-        console.error("Failed to clear database:", error);
         playErrorSound();
       } finally {
         isClearingAll.value = false;
@@ -6336,7 +4632,6 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
       }
     };
     const exportAllAccounts = async () => {
-      playClickSound();
       try {
         isExportingAll.value = true;
         const allAccounts = await mediaDownloaderDB.getAllAccounts();
@@ -6344,7 +4639,7 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
         const fmt = dateFormat.value || appOptionsManager.get("dateTimeFormat") || "YYYY-MM-DD HH:mm:ss";
         const now = dayjs();
         const exportTs = now.format("YYYYMMDD_HHmmss");
-        const files = allAccounts.map((account) => {
+        const files = allAccounts.map((account, index2) => {
           const exportData = {
             username: account.username,
             account_info: account.account_info,
@@ -6355,13 +4650,18 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
             batch_identifier: account.batch_identifier,
             timeline_type: account.timeline_type,
             media_type: account.media_type,
+            date_since: account.date_since,
+            date_until: account.date_until,
             cached_at_formatted: dayjs(account.cached_at).format(fmt),
             exported_at: now.valueOf(),
             exported_at_formatted: now.format(fmt),
             date_time_format: fmt
           };
           const batchSuffix = account.batch_mode && account.batch_mode !== "single" ? "_Batch" : "";
-          const fileName = `${sanitizeFilename(account.username)}_${exportTs}${batchSuffix}.json`;
+          const timelineTypeSuffix = account.timeline_type ? `_${account.timeline_type}` : "";
+          const mediaTypeSuffix = account.media_type && account.media_type !== "all" ? `_${account.media_type}` : "";
+          const uniqueSuffix = allAccounts.filter((a) => a.username === account.username).length > 1 ? `_${index2 + 1}` : "";
+          const fileName = `${sanitizeFilename(account.username)}_${exportTs}${batchSuffix}${timelineTypeSuffix}${mediaTypeSuffix}${uniqueSuffix}.json`;
           const content = JSON.stringify(exportData, null, 2);
           const blob = new Blob([content], { type: "application/json" });
           return { name: fileName, blob };
@@ -6398,7 +4698,6 @@ u("div", { class: "absolute bottom-4 left-1/2 transform -translate-x-1/2 btn btn
         fileSaverEs.saveAs(zipBlob, zipFilename);
         playSuccessSound();
       } catch (error) {
-        console.error("Failed to export all accounts:", error);
         playErrorSound();
       } finally {
         isExportingAll.value = false;
@@ -6418,7 +4717,7 @@ u("div", { class: "skeleton h-8 w-8" })
         ] }),
         [1, 2, 3].map((i) => u("div", { class: "card bg-base-200 border border-base-300 w-full", children: u("div", { class: "card-body p-4", children: u("div", { class: "flex items-center gap-4", children: [
 u("div", { class: "skeleton w-16 h-16 rounded-xl shrink-0" }),
-u("div", { class: "flex-grow space-y-2", children: [
+u("div", { class: "grow space-y-2", children: [
 u("div", { class: "skeleton h-4 w-32" }),
 u("div", { class: "skeleton h-3 w-24" }),
 u("div", { class: "flex gap-2", children: [
@@ -6482,16 +4781,56 @@ u(IconDatabaseExport, { size: 16 }),
             ) })
           ] }),
 u("div", { class: "flex items-center gap-2", children: [
+u("div", { class: "join", children: [
 u("div", { class: "tooltip tooltip-left", "data-tip": t("Filter by Batch"), children: u(
-              "button",
-              {
-                class: `btn btn-sm btn-square ${filterByBatch.value ? "btn-active btn-info" : "btn"}`,
-                "aria-label": t("Filter by Batch"),
-                onClick: () => filterByBatch.value = !filterByBatch.value,
-                disabled: isImporting.value || isExportingAll.value || isClearingAll.value || batchCount.value === 0,
-                children: u(IconStack2, { size: 16 })
-              }
-            ) }),
+                "button",
+                {
+                  class: `btn btn-sm btn-square join-item ${filterByBatch.value ? "btn-active btn-primary" : ""}`,
+                  "aria-label": t("Filter by Batch"),
+                  onClick: () => {
+                    if (!filterByBatch.value) {
+                      filterByDateRange.value = false;
+                      filterByBatchDateRange.value = false;
+                    }
+                    filterByBatch.value = !filterByBatch.value;
+                  },
+                  disabled: isImporting.value || isExportingAll.value || isClearingAll.value || batchCount.value === 0,
+                  children: u(IconStack, { size: 16 })
+                }
+              ) }),
+u("div", { class: "tooltip tooltip-left", "data-tip": t("Filter by Date Range"), children: u(
+                "button",
+                {
+                  class: `btn btn-sm btn-square join-item ${filterByDateRange.value ? "btn-active btn-primary" : ""}`,
+                  "aria-label": t("Filter by Date Range"),
+                  onClick: () => {
+                    if (!filterByDateRange.value) {
+                      filterByBatch.value = false;
+                      filterByBatchDateRange.value = false;
+                    }
+                    filterByDateRange.value = !filterByDateRange.value;
+                  },
+                  disabled: isImporting.value || isExportingAll.value || isClearingAll.value || dateRangeCount.value === 0,
+                  children: u(IconCalendarWeek, { size: 16 })
+                }
+              ) }),
+u("div", { class: "tooltip tooltip-left", "data-tip": `${t("Filter by Batch")} + ${t("Filter by Date Range")}`, children: u(
+                "button",
+                {
+                  class: `btn btn-sm btn-square join-item ${filterByBatchDateRange.value ? "btn-active btn-primary" : ""}`,
+                  "aria-label": `${t("Filter by Batch")} + ${t("Filter by Date Range")}`,
+                  onClick: () => {
+                    if (!filterByBatchDateRange.value) {
+                      filterByBatch.value = false;
+                      filterByDateRange.value = false;
+                    }
+                    filterByBatchDateRange.value = !filterByBatchDateRange.value;
+                  },
+                  disabled: isImporting.value || isExportingAll.value || isClearingAll.value || batchDateRangeCount.value === 0,
+                  children: u(IconStack2, { size: 16 })
+                }
+              ) })
+            ] }),
 u("div", { class: "tooltip tooltip-left", "data-tip": t("Clear"), children: u(
               "button",
               {
@@ -6514,21 +4853,28 @@ u(
             }
           ),
 u("div", { class: "card bg-base-200 border border-base-300 w-full", children: u("div", { class: "card-body p-4", children: u("div", { class: "flex items-center gap-4", children: [
+u("div", { class: "flex flex-col items-center gap-1", children: [
 u("div", { class: "avatar", children: u("div", { class: "w-16 rounded-xl", children: u(
-              "img",
-              {
-                src: account.account_info.profile_image,
-                alt: account.account_info.nick,
-                onError: (e) => {
-                  const target = e.target;
-                  target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"%3E%3Ccircle cx="12" cy="12" r="10"/%3E%3C/svg%3E';
+                "img",
+                {
+                  src: account.account_info.profile_image,
+                  alt: account.account_info.nick,
+                  onError: (e) => {
+                    const target = e.target;
+                    target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"%3E%3Ccircle cx="12" cy="12" r="10"/%3E%3C/svg%3E';
+                  }
                 }
-              }
-            ) }) }),
-u("div", { class: "flex-grow", children: [
-u("div", { class: "flex items-center gap-2", children: [
+              ) }) }),
+              (account.batch_mode === "batch" || account.batch_mode === "auto" || account.batch_mode === "batch_date_range") && u("div", { class: "badge badge-soft badge-info badge-sm uppercase", children: t("Batch") })
+            ] }),
+u("div", { class: "grow", children: [
+u("div", { class: "flex items-center gap-2 flex-wrap", children: [
 u("h3", { class: "font-semibold text-base", children: account.account_info.nick }),
-                account.batch_mode && account.batch_mode !== "single" && u("div", { class: "badge badge-soft badge-info badge-sm", children: t("Batch") })
+                (account.batch_mode === "batch_date_range" || account.batch_mode === "date_range") && account.date_since && account.date_until && u("div", { class: "badge badge-soft badge-info badge-sm", children: [
+                  account.date_since,
+                  " → ",
+                  account.date_until
+                ] })
               ] }),
 u("p", { class: "text-sm opacity-70", children: u(
                 "a",
@@ -6548,8 +4894,12 @@ u("div", { class: "flex gap-2 mt-1", children: [
                 account.media_type && u("div", { class: "badge badge-soft badge-secondary badge-sm", children: t(account.media_type === "all" ? "All" : account.media_type === "image" ? "Image" : account.media_type === "video" ? "Video" : "GIF") }),
 u("div", { class: "badge badge-soft badge-accent badge-sm", children: account.metadata.new_entries.toLocaleString() })
               ] }),
-u("p", { class: "text-xs opacity-50 mt-1", children: formatDate(account.cached_at) }),
-u("p", { class: "text-xs opacity-40 mt-0.5", children: formatTimeAgo(account.cached_at) })
+u("p", { class: "text-xs opacity-50 mt-1", children: [
+                formatDate(account.cached_at),
+                " (",
+                formatTimeAgo(account.cached_at),
+                ")"
+              ] })
             ] }),
 u("div", { class: "flex items-center gap-1", children: [
 u("div", { class: "tooltip tooltip-left", "data-tip": t("View Database"), children: u(
@@ -6719,7 +5069,6 @@ u(
           authState.patreonVerified.value = isPatreonValid.value;
         }
       } catch (error) {
-        console.error("Failed to load auth settings:", error);
       }
     };
     const autoSaveAuthToken = async (value) => {
@@ -6727,7 +5076,6 @@ u(
         await mediaDownloaderDB.saveAuthSettings(value, patreonAuth.value);
         authState.authToken.value = value;
       } catch (error) {
-        console.error("Failed to auto-save auth token:", error);
       }
     };
     const autoSavePatreonAuth = async (value) => {
@@ -6737,7 +5085,6 @@ u(
         authState.patreonAuth.value = value;
         authState.patreonVerified.value = false;
       } catch (error) {
-        console.error("Failed to auto-save patreon auth:", error);
       }
       isPatreonValid.value = false;
       verificationMessage.value = "";
@@ -6764,7 +5111,6 @@ u(
         }
         setTimeout(() => verificationMessage.value = "", 2e3);
       } catch (error) {
-        console.error("Verification error:", error);
         const raw = error instanceof Error ? error.message : "";
         const httpMatch = raw.match(/^HTTP error! status: (\d+)/);
         const msg = httpMatch ? t("HTTP error! status: {{status}}", { status: httpMatch[1] }) : (raw ? t(raw) : "") || t("Verification failed. Please try again");
@@ -6800,7 +5146,6 @@ u(
         }
         setTimeout(() => generationMessage.value = "", 2e3);
       } catch (error) {
-        console.error("Generation error:", error);
         const raw = error instanceof Error ? error.message : "";
         const httpMatch = raw.match(/^HTTP error! status: (\d+)/);
         const msg = httpMatch ? t("HTTP error! status: {{status}}", { status: httpMatch[1] }) : (raw ? t(raw) : "") || t("Token generation failed. Please try again");
@@ -6982,12 +5327,107 @@ u("a", { class: "text-primary opacity-80 hover:opacity-100", href: "mailto:suppo
       ] })
     ] }) });
   }
+  const flagUS = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20id='flag-icons-us'%20viewBox='0%200%20640%20480'%3e%3cpath%20fill='%23bd3d44'%20d='M0%200h640v480H0'/%3e%3cpath%20stroke='%23fff'%20stroke-width='37'%20d='M0%2055.3h640M0%20129h640M0%20203h640M0%20277h640M0%20351h640M0%20425h640'/%3e%3cpath%20fill='%23192f5d'%20d='M0%200h364.8v258.5H0'/%3e%3cmarker%20id='us-a'%20markerHeight='30'%20markerWidth='30'%3e%3cpath%20fill='%23fff'%20d='m14%200%209%2027L0%2010h28L5%2027z'/%3e%3c/marker%3e%3cpath%20fill='none'%20marker-mid='url(%23us-a)'%20d='m0%200%2016%2011h61%2061%2061%2061%2060L47%2037h61%2061%2060%2061L16%2063h61%2061%2061%2061%2060L47%2089h61%2061%2060%2061L16%20115h61%2061%2061%2061%2060L47%20141h61%2061%2060%2061L16%20166h61%2061%2061%2061%2060L47%20192h61%2061%2060%2061L16%20218h61%2061%2061%2061%2060z'/%3e%3c/svg%3e";
+  const flagDE = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20id='flag-icons-de'%20viewBox='0%200%20640%20480'%3e%3cpath%20fill='%23fc0'%20d='M0%20320h640v160H0z'/%3e%3cpath%20fill='%23000001'%20d='M0%200h640v160H0z'/%3e%3cpath%20fill='red'%20d='M0%20160h640v160H0z'/%3e%3c/svg%3e";
+  const flagSG = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20id='flag-icons-sg'%20viewBox='0%200%20640%20480'%3e%3cdefs%3e%3cclipPath%20id='sg-a'%3e%3cpath%20fill-opacity='.7'%20d='M0%200h640v480H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3cg%20fill-rule='evenodd'%20clip-path='url(%23sg-a)'%3e%3cpath%20fill='%23fff'%20d='M-20%200h720v480H-20z'/%3e%3cpath%20fill='%23df0000'%20d='M-20%200h720v240H-20z'/%3e%3cpath%20fill='%23fff'%20d='M146%2040.2a84.4%2084.4%200%200%200%20.8%20165.2%2086%2086%200%200%201-106.6-59%2086%2086%200%200%201%2059-106c16-4.6%2030.8-4.7%2046.9-.2z'/%3e%3cpath%20fill='%23fff'%20d='m133%20110%204.9%2015-13-9.2-12.8%209.4%204.7-15.2-12.8-9.3%2015.9-.2%205-15%205%2015h15.8zm17.5%2052%205%2015.1-13-9.2-12.9%209.3%204.8-15.1-12.8-9.4%2015.9-.1%204.9-15.1%205%2015h16zm58.5-.4%204.9%2015.2-13-9.3-12.8%209.3%204.7-15.1-12.8-9.3%2015.9-.2%205-15%205%2015h15.8zm17.4-51.6%204.9%2015.1-13-9.2-12.8%209.3%204.8-15.1-12.9-9.4%2016-.1%204.8-15.1%205%2015h16zm-46.3-34.3%205%2015.2-13-9.3-12.9%209.4%204.8-15.2-12.8-9.4%2015.8-.1%205-15.1%205%2015h16z'/%3e%3c/g%3e%3c/svg%3e";
+  const SERVER_CONFIG = {
+    oregon: { name: "Oregon", region: "US West", flag: flagUS },
+    frankfurt: { name: "Frankfurt", region: "EU Central", flag: flagDE },
+    singapore: { name: "Singapore", region: "Southeast Asia", flag: flagSG }
+  };
   function Settings() {
     const { t } = useTranslation();
     const [, force] = hooks.useState(0);
     const fetchMode = appOptionsManager.get("fetchMode") ?? "single";
     const isBatching = fetchMode !== "single";
     return u("div", { class: "space-y-4", children: [
+u("div", { class: "flex items-center justify-between", children: [
+u("span", { class: "text-sm flex items-center gap-1", children: [
+          t("Server"),
+u("div", { class: "tooltip tooltip-right", "data-tip": t("Choose the server closest to your location for best performance"), children: u(IconInfoCircle, { size: 14, class: "opacity-70" }) })
+        ] }),
+u("div", { class: "dropdown dropdown-end", children: [
+u(
+            "div",
+            {
+              tabIndex: 0,
+              role: "button",
+              class: "btn btn-sm gap-1.5 px-1.5 justify-start",
+              "aria-label": t("Server"),
+              children: [
+u("div", { class: "w-5 flex items-center justify-center", children: u(
+                  "img",
+                  {
+                    src: SERVER_CONFIG[appOptionsManager.get("apiServer") ?? "oregon"].flag,
+                    alt: "",
+                    class: "h-3 w-4 rounded-sm object-cover border border-base-content/10 bg-base-100"
+                  }
+                ) }),
+u("div", { class: "w-24 truncate text-xs text-left", children: SERVER_CONFIG[appOptionsManager.get("apiServer") ?? "oregon"].name }),
+u(
+                  "svg",
+                  {
+                    width: "12px",
+                    height: "12px",
+                    class: "mt-px hidden size-2 fill-current opacity-60 sm:inline-block ml-auto",
+                    xmlns: "http://www.w3.org/2000/svg",
+                    viewBox: "0 0 2048 2048",
+                    children: u("path", { d: "M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z" })
+                  }
+                )
+              ]
+            }
+          ),
+u(
+            "div",
+            {
+              tabIndex: 0,
+              class: "dropdown-content bg-base-200 text-base-content rounded-box mt-2 border-(length:--border) border-white/5 shadow-2xl outline-(length:--border) outline-black/5",
+              children: u("ul", { class: "menu w-48", children: [
+u("li", { class: "menu-title text-xs", children: t("Server") }),
+                Object.entries(SERVER_CONFIG).map(([key, config]) => u("li", { children: u(
+                  "button",
+                  {
+                    class: cx("gap-3 px-2", (appOptionsManager.get("apiServer") ?? "oregon") === key && "[&_svg]:visible"),
+                    onClick: () => {
+                      playRadioClickSound();
+                      appOptionsManager.set("apiServer", key);
+                      force((x) => x + 1);
+                    },
+                    children: [
+u(
+                        "img",
+                        {
+                          src: config.flag,
+                          alt: "",
+                          class: "h-3 w-4 rounded-sm object-cover border border-base-content/10 bg-base-100"
+                        }
+                      ),
+u("div", { class: "flex-1 min-w-0", children: [
+u("div", { class: "truncate", children: config.name }),
+u("div", { class: "text-[10px] opacity-60 truncate", children: config.region })
+                      ] }),
+u(
+                        "svg",
+                        {
+                          xmlns: "http://www.w3.org/2000/svg",
+                          width: "16",
+                          height: "16",
+                          viewBox: "0 0 24 24",
+                          fill: "currentColor",
+                          class: "invisible h-3 w-3 shrink-0",
+                          children: u("path", { d: "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z" })
+                        }
+                      )
+                    ]
+                  }
+                ) }, key))
+              ] })
+            }
+          )
+        ] })
+      ] }),
+u("div", { class: "divider my-2" }),
 u("div", { class: "flex items-center justify-between", children: [
 u("span", { class: "text-sm flex items-center gap-1", children: [
           t("Fetch"),
@@ -7016,13 +5456,12 @@ u("span", { class: "text-sm", children: t("Batch Size") }),
 u(
           "input",
           {
-            type: "text",
-            class: `input input-bordered input-sm w-12 text-right ${!isBatching ? "opacity-50" : ""}`,
-            value: String(appOptionsManager.get("batchSize") ?? 100),
-            onInput: (e) => {
-              const raw = e.target.value;
-              const digits = raw.replace(/\D+/g, "");
-              const v = parseInt(digits || "100", 10);
+            type: "number",
+            min: "1",
+            class: `input input-bordered input-sm w-16 text-right ${!isBatching ? "opacity-50" : ""}`,
+            value: appOptionsManager.get("batchSize") ?? 100,
+            onChange: (e) => {
+              const v = parseInt(e.target.value, 10);
               const safe = Number.isFinite(v) && v >= 1 ? v : 100;
               appOptionsManager.set("batchSize", safe);
               force((x) => x + 1);
@@ -7036,13 +5475,12 @@ u("span", { class: "text-sm", children: t("Starting Batch") }),
 u(
           "input",
           {
-            type: "text",
-            class: `input input-bordered input-sm w-12 text-right ${!isBatching ? "opacity-50" : ""}`,
-            value: String(appOptionsManager.get("startingBatch") ?? 0),
-            onInput: (e) => {
-              const raw = e.target.value;
-              const digits = raw.replace(/\D+/g, "");
-              const v = parseInt(digits || "0", 10);
+            type: "number",
+            min: "0",
+            class: `input input-bordered input-sm w-16 text-right ${!isBatching ? "opacity-50" : ""}`,
+            value: appOptionsManager.get("startingBatch") ?? 0,
+            onChange: (e) => {
+              const v = parseInt(e.target.value, 10);
               const safe = Number.isFinite(v) && v >= 0 ? v : 0;
               appOptionsManager.set("startingBatch", safe);
               force((x) => x + 1);
@@ -7052,6 +5490,29 @@ u(
         )
       ] }),
 u("div", { class: "divider my-2" }),
+u("div", { class: "flex justify-between items-center", children: [
+u("span", { class: "text-sm flex items-center gap-1", children: [
+          t("Include Retweets"),
+u("div", { class: "tooltip tooltip-right", "data-tip": t("Not supported with Media timeline"), children: u(IconInfoCircle, { size: 14, class: "opacity-70" }) })
+        ] }),
+u(
+          "input",
+          {
+            type: "checkbox",
+            class: "toggle toggle-primary",
+            checked: appOptionsManager.get("includeRetweets") ?? false,
+            onChange: (e) => {
+              const checked = e.target.checked;
+              checked ? playToggleOnSound() : playToggleOffSound();
+              appOptionsManager.set("includeRetweets", checked);
+              if (checked && appOptionsManager.get("timelineType") === "media") {
+                appOptionsManager.set("timelineType", "timeline");
+              }
+              force((x) => x + 1);
+            }
+          }
+        )
+      ] }),
 u("div", { class: "flex items-center justify-between", children: [
 u("span", { class: "text-sm", children: t("Timeline") }),
 u("div", { class: "flex flex-wrap items-center gap-3 justify-start", children: [
@@ -7059,7 +5520,10 @@ u("div", { class: "flex flex-wrap items-center gap-3 justify-start", children: [
           { value: "timeline", label: "Posts" },
           { value: "tweets", label: "Tweets" },
           { value: "with_replies", label: "Replies" }
-        ].map((opt) => u("label", { class: "label cursor-pointer gap-2", children: [
+        ].filter((opt) => {
+          const includeRetweets = appOptionsManager.get("includeRetweets") ?? false;
+          return !(includeRetweets && opt.value === "media");
+        }).map((opt) => u("label", { class: "label cursor-pointer gap-2", children: [
 u(
             "input",
             {
@@ -7154,30 +5618,23 @@ u("span", { class: "text-sm flex items-center gap-1", children: [
           t("Concurrent Downloads"),
 u("div", { class: "tooltip tooltip-right", "data-tip": t("Use 10+ only with fast internet"), children: u(IconInfoCircle, { size: 14, class: "opacity-70" }) })
         ] }),
-u("div", { class: "flex-1", children: u("div", { class: "flex justify-end", children: (() => {
-          const allowed = Array.from({ length: 10 }, (_, i) => (i + 1) * 5);
-          appOptionsManager.get("downloadConcurrency") ?? 10;
-          allowed[0] ?? 10;
-          for (const v of allowed) {
+u(
+          "input",
+          {
+            type: "number",
+            min: "1",
+            max: "50",
+            class: "input input-bordered input-sm w-16 text-right",
+            value: appOptionsManager.get("downloadConcurrency") ?? 10,
+            onChange: (e) => {
+              const v = parseInt(e.target.value, 10);
+              const safe = Number.isFinite(v) && v >= 1 && v <= 50 ? v : 10;
+              appOptionsManager.set("downloadConcurrency", safe);
+              force((x) => x + 1);
+            },
+            "aria-label": t("Concurrent Downloads")
           }
-          return u(
-            "input",
-            {
-              type: "text",
-              class: "input input-bordered input-sm w-12 text-right",
-              value: String(appOptionsManager.get("downloadConcurrency") ?? 10),
-              onInput: (e) => {
-                const raw = e.target.value;
-                const digits = raw.replace(/\D+/g, "");
-                const v = parseInt(digits || "10", 10);
-                const safe = Number.isFinite(v) && v >= 1 ? v : 10;
-                appOptionsManager.set("downloadConcurrency", safe);
-                force((x) => x + 1);
-              },
-              "aria-label": t("Concurrent Downloads")
-            }
-          );
-        })() }) })
+        )
       ] })
     ] });
   }
@@ -7203,6 +5660,7 @@ u("div", { class: "flex-1", children: u("div", { class: "flex justify-end", chil
       document.documentElement.setAttribute("data-theme", currentTheme.value || "light");
     }, [currentTheme.value]);
     const handleThemeChange = (theme) => {
+      playClickSound();
       currentTheme.value = theme;
       appOptionsManager.set("theme", theme);
       document.documentElement.setAttribute("data-theme", theme);
@@ -7242,7 +5700,7 @@ u(
         {
           tabIndex: 0,
           class: cx(
-            "dropdown-content bg-base-200 text-base-content rounded-box mt-2 max-h-60 overflow-y-auto border-[length:var(--border)] border-white/5 shadow-2xl outline-[length:var(--border)] outline-black/5",
+            "dropdown-content bg-base-200 text-base-content rounded-box mt-2 max-h-60 overflow-y-auto border-(length:--border) border-white/5 shadow-2xl outline-(length:--border) outline-black/5",
             contentClasses
           ),
           children: u("ul", { class: "menu w-56", children: [
@@ -7290,13 +5748,11 @@ u(
       )
     ] });
   }
-  const flagUS = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20id='flag-icons-us'%20viewBox='0%200%20640%20480'%3e%3cpath%20fill='%23bd3d44'%20d='M0%200h640v480H0'/%3e%3cpath%20stroke='%23fff'%20stroke-width='37'%20d='M0%2055.3h640M0%20129h640M0%20203h640M0%20277h640M0%20351h640M0%20425h640'/%3e%3cpath%20fill='%23192f5d'%20d='M0%200h364.8v258.5H0'/%3e%3cmarker%20id='us-a'%20markerHeight='30'%20markerWidth='30'%3e%3cpath%20fill='%23fff'%20d='m14%200%209%2027L0%2010h28L5%2027z'/%3e%3c/marker%3e%3cpath%20fill='none'%20marker-mid='url(%23us-a)'%20d='m0%200%2016%2011h61%2061%2061%2061%2060L47%2037h61%2061%2060%2061L16%2063h61%2061%2061%2061%2060L47%2089h61%2061%2060%2061L16%20115h61%2061%2061%2061%2060L47%20141h61%2061%2060%2061L16%20166h61%2061%2061%2061%2060L47%20192h61%2061%2060%2061L16%20218h61%2061%2061%2061%2060z'/%3e%3c/svg%3e";
   const flagCN = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%20id='flag-icons-cn'%20viewBox='0%200%20640%20480'%3e%3cdefs%3e%3cpath%20id='cn-a'%20fill='%23ff0'%20d='M-.6.8%200-1%20.6.8-1-.3h2z'/%3e%3c/defs%3e%3cpath%20fill='%23ee1c25'%20d='M0%200h640v480H0z'/%3e%3cuse%20xlink:href='%23cn-a'%20width='30'%20height='20'%20transform='matrix(71.9991%200%200%2072%20120%20120)'/%3e%3cuse%20xlink:href='%23cn-a'%20width='30'%20height='20'%20transform='matrix(-12.33562%20-20.5871%2020.58684%20-12.33577%20240.3%2048)'/%3e%3cuse%20xlink:href='%23cn-a'%20width='30'%20height='20'%20transform='matrix(-3.38573%20-23.75998%2023.75968%20-3.38578%20288%2095.8)'/%3e%3cuse%20xlink:href='%23cn-a'%20width='30'%20height='20'%20transform='matrix(6.5991%20-23.0749%2023.0746%206.59919%20288%20168)'/%3e%3cuse%20xlink:href='%23cn-a'%20width='30'%20height='20'%20transform='matrix(14.9991%20-18.73557%2018.73533%2014.99929%20240%20216)'/%3e%3c/svg%3e";
   const flagSA = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20id='flag-icons-sa'%20viewBox='0%200%20640%20480'%3e%3cdefs%3e%3cclipPath%20id='sa-a'%3e%3cpath%20fill-opacity='.7'%20d='M-85.3%200h682.6v512H-85.3z'/%3e%3c/clipPath%3e%3c/defs%3e%3cg%20fill-rule='evenodd'%20clip-path='url(%23sa-a)'%20transform='translate(80)scale(.9375)'%3e%3cpath%20fill='%23165d31'%20d='M-128%200h768v512h-768z'/%3e%3cpath%20fill='%23fff'%20d='M65.5%20145.1c-.8%2012-2%2033%208.3%2035.2%2012.3%201.2%205.5-20.8%2010-24.8.8-2%202.3-2%202.4.5v18.7c0%206%204%207.8%207%209%203.2-.2%205.4%200%206.6%203l1.6%2032.3s7.4%202.2%207.8-18.1c.3-12-2.4-21.9-.8-24.2%200-2.3%203-2.4%205-1.3%203.2%202.2%204.6%205%209.6%204%207.6-2.2%2012.2-5.9%2012.3-11.7a47%2047%200%200%200-3.5-16.6c.4-1-1.4-3.7-1-4.7%201.3%202.2%203.4%202%203.8%200-1.3-4.2-3.3-8.3-6.5-10-2.7-2.4-6.7-2-8%203-.8%205.7%202%2012.4%206.1%2018%20.9%202.1%202.1%205.7%201.6%208.9q-3.4%201.8-6.3-1.2s-6-4.5-6-5.6c1.6-10.2.3-11.4-.6-14.3-.6-3.9-2.5-5.2-4-7.8-1.5-1.6-3.5-1.6-4.5%200-2.7%204.6-1.4%2014.5.5%2019%201.4%204.1%203.5%206.7%202.5%206.7-.8%202.3-2.5%201.7-3.8-1a67%2067%200%200%201-2.1-17.4c-.5-4.6-1.1-14.4-4.2-17-1.8-2.4-4.5-1.2-5.5%201a82%2082%200%200%200%20.3%2013.4c2%207.4%202.7%2014%203.7%2021.5.3%2010.1-5.8%204.4-5.5-.7a45%2045%200%200%200-.3-19.4c-1-2.6-2.1-3.2-4.6-2.8-1.9%200-6.8%205.3-8.2%2014.3%200%200-1.2%204.6-1.7%208.7-.7%204.6-3.7%208-5.9-.6-1.8-6.3-3-21.6-6-18z'/%3e%3cpath%20fill='%23fff'%20d='m99%20194.2-32%2015.4c.3-7.3%2015.1-20.4%2025.3-20.5%206.5.1%204.9%202.5%206.6%205.1z'/%3e%3cpath%20fill='%23fff'%20d='M93.3%20204.2c-16.8%2043.5%2039.5%2049.6%2045.8%201.8.6-2%203-3.9%203.4-.7-1.3%2043.3-43.6%2046.2-50.8%2032.6a42%2042%200%200%201-2.5-14.6c-1-8.5-5.5-5.2-6.2%203.2-.7%204.7-.5%206-.5%2010.5%202.2%2034.2%2056.7%2019.5%2065.6-8.7%204.7-15.6-.8-27.1%201.7-27.1%205.4%205.8%2013%20.8%2014.7-1.2.7-1%202.5-1.7%203.7-.4%204.2%203%2011.6%201.6%2013.2-3.7q1.4-8%201.8-16.2c-3.5%201-6%201.7-6.3%203.2l-.7%204.6c-.3%201.5-3.2%201.5-3.4-.4-1.3-6-6.7-6.7-10%202.5-2.1%201.8-6.1%202.2-6.5-.5.5-6.2-2-7-7-4.1l-4.8-36.2c2%200%204%201.5%205.9-.9-2-6.5-6.5-19.7-9-20.7-1.1-1.4-2.1-.5-3.7-.1-2.6.8-5%203-4.2%207.4%203%2018.8%205%2033.1%208.1%2052%20.5%202.1-1.3%205-3.7%204.7-4-2.7-5-8.2-12-8-5%200-10.6%205.5-11.3%2010.7-.9%204.2-1.2%208.7%200%2012.3%203.5%204.2%207.7%203.8%2011.4%202.9%203-1.3%205.5-4.3%206.6-3.6.7.9.1%2010.9-14.3%2018.5-8.7%204-15.7%204.8-19.4-2.3-2.3-4.5.2-21.4-5.6-17.5'/%3e%3cpath%20fill='%23fff'%20d='M165%20160c3.3-1.2%2019.3-19.6%2019.3-19.6l-2.4-2q-1.3-1.1%200-2.2c4-2.4%202.7-7.4.7-9.8a10%2010%200%200%200-8.7.1c-2.8%202.7-3.4%207-1.2%209.6%202.1%201%204.2%203.2%202.8%204.4-6.6%207-24.5%2019.1-22.4%2019.5.4.6%2011.5.6%2011.8%200zm-97%2065c-6%209.6-6.5%2023.9-3.2%2028.2%201.8%202%204.7%202.9%206.8%202.2%203.8-1.6%205.5-9.3%204.6-12q-1.8-3-3.6-.7c-2.6%205.4-3.7%201.7-4-1.3a70%2070%200%200%201%20.8-15.2c.7-4.2%200-3-1.4-1.2m257.1-15.3c-5.8-12.6-13.9-25-16.4-29.7a558%20558%200%200%200-24.8-36c-6.2-7.4%2010.2%203.1-2-11.7l-8.9-7.5c-2-1.4-6.8-4-7.6.2-.4%203.8-.2%205.8.4%208.9.5%202%203.5%205.5%205%207.5a565%20565%200%200%201%2053.8%2086.5c2.6-1.3%202-16.1.5-18.2'/%3e%3cpath%20fill='%23fff'%20d='M299.6%20251.5c-1.2%201.3%202.8%206.8%208%206.8%208.6-1%2016.2-5.8%2023.2-18.6a33%2033%200%200%200%205.3-14.2%20317%20317%200%200%200-5.8-72.4c-.3-2%200-4.4.2-5%20.6-.7%202.5%200%203.5-1.7%201.5-1.5-4-14-7-18.7-1-2.2-1.5-3.6-3.3.2a27%2027%200%200%200-3%2013.6c4.1%2028.5%205.4%2053.4%208%2081.9.3%202.8-.1%206.8-2%208.4a80%2080%200%200%201-27.1%2019.7m116.5-.1c-6.2%203.6-6.2%207.7-1.2%207.8%208.6-1%2018.8-1.7%2025.8-12.3a41%2041%200%200%200%204.2-16%20303%20303%200%200%200-4.7-71.4c-.2-2-1.1-6.7-.8-7.3.6-1.4%203.4.1%204.4-1.5%201.4-1.5-7.3-12.7-10.4-17.5-1-2.2-1.4-3.6-3.3.2a22%2022%200%200%200-1.8%2013.6c4.6%2031%208%2054.2%208.7%2081.6-.4%202.6-.5%204-1.7%207.3-2.7%203.4-5.7%207.8-8.5%209.9-2.8%202-8.8%204-10.7%205.6'/%3e%3cpath%20fill='%23fff'%20d='M420.7%20223.7q.1-10.9-.1-19a34%2034%200%200%200-3-13.5c-1.8-4.1-.7-7.4-1.6-11.8-.8-4.4-.6-11-1.8-16.1-.4-2-1.4-8.5-1.1-9.2.5-1.4%202.4%200%203.4-1.6%201.4-1.5-5-18-8.2-22.7-1.1-2.1-3.3-1.4-5.8%202-2.5%202.3-1.6%207.4-.6%2012.3%206.1%2032.3%2010.8%2061.6%209.8%2092.3-.4%202.6%209-7.8%209-12.7m-45.7-40c-3.9-.2-12-7.7-14.4-12a8%208%200%200%201%20.4-6.5c1.5-1%203.7-2%205.4-1%200%200%201.7%202.4%201.4%202.7%202%201%203%20.5%203.2-.4.1-1.5-.6-2.4-.6-4%20.9-4.6%206-5.3%208-2.4%201.4%201.8%202%205.5%202.1%208%200%201.3-2-.2-3.3%200-1.1.4-1.4%201.8-1.5%203-.2%203.3-.6%208.6-.7%2012.5zm-71.8%2048c1-9.8-.4-27.3-.5-33.1A477%20477%200%200%200%20299%20154c-1.2-8.4%203.4.9%202.8-4-1.5-8.3-6.1-14-11.6-21.5-1.7-2.5-1.7-3-4.4.6-3%206.7-.4%2011.4.4%2016.7%203.9%2017.2%206.2%2033%207.3%2048.7a393%20393%200%200%201%20.4%2049c3%20.1%207.6-4.7%209.3-11.8'/%3e%3cpath%20fill='%23fff'%20d='M434%20216c-6.9-11.6-17.2-24-20-28.7a658%20658%200%200%200-29.2-37.8c-8.5-9%204-1.5-1.6-8.5-4.7-5.1-6-6.8-10.1-9.9-2-1.3-3.2-3.8-4%20.5a83%2083%200%200%200-.2%2011.2c0%201.7%201.8%205%203.4%207%2020.7%2025.5%2043.4%2051.5%2061.6%2084.2%202.6-1.3%201.7-16%200-18z'/%3e%3cpath%20fill='%23165d31'%20d='M122.6%20194.7c-.5.9-1.6%202-1.2%203.1q1%201.4%202.6%201.3c1.1%200%202.7.3%203-.3q1-1.2.6-3.3c-1.2-3-4.4-1.8-5-.8'/%3e%3cpath%20fill='%23fff'%20d='M354.2%20362.5c9.2.4%2015.2.5%2023.3%201.4l9.6-1c10.6-1%2011%2015.1%2011%2015.1%200%209.5-3.7%2010-8.4%2011-2.7.4-4-1.6-5.5-3.6a14%2014%200%200%201-7%20.4l-11.5-.5c-4-.3-6.2.5-10.3.1-.8%201.3-2%203.1-4.4%202.6-2-.3-4.5-6-3.8-10.5%201.5-3.2%201-2.1%201-3.5-37.6-1-75.5-2.7-112.3-2.2-28.8.1-57.2%201.3-85.7%202.5-15.2-.2-26.8-2.6-34.8-14.3.8%200%2038.8%202.1%2049.9%201.4%2020.5-.2%2039.3-1.9%2060.2-2.5%2041.2.7%2082.1.7%20123.3%203.6-4-2.7-4-9%202-10.6.5-.4.8%203.1%201.7%203%204.9-.3%202.7%206.3%201.7%207.6M188.6%20135.3c-6.2%2017.8%203.6%2037.4%2010.4%2035.5%205%202%208-7.4%2010-17.6%201.5-2.9%202.5-3.2%203.2-1.7-.2%2013.6%201%2016.7%204.5%2020.8%207.8%206%2014.3.8%2014.8.3l6-6.1q2.2-2.2%205.1-.3c1.9%201.7%201.6%204.6%205.6%206.6%203.4%201.4%2010.5.4%2012.2-2.5%202.2-3.9%202.8-5.2%203.8-6.6%201.6-2.1%204.3-1.2%204.3-.5-.3%201.2-1.9%202.3-.8%204.5%202%201.4%202.4.5%203.5.2%204-2%207-10.6%207-10.6.1-3.2-1.7-3-2.9-2.2l-3.1%202.1c-2%20.3-5.7%201.6-7.6-1.3-1.9-3.4-1.9-8.3-3.3-11.8%200-.2-2.6-5.5-.2-5.8%201.2.2%203.7.9%204.1-1.2%201.2-2.1-2.6-8-5.3-11-2.3-2.5-5.5-2.8-8.6-.2-2.2%202-1.9%204.2-2.3%206.3a10%2010%200%200%200%202%208.7c2.2%204.2%206.1%209.7%204.8%2017.5%200%200-2.3%203.6-6.3%203.1-1.7-.3-4.4-1-5.8-11.8-1.1-8%20.2-19.4-3.2-24.7-1.3-3.3-2.2-6.4-5.2-.9-.8%202.2-4.3%205.5-1.8%2012.2a36%2036%200%200%201%202%2019c-1.5%202.2-1.8%202.9-3.7%205-2.6%203-5.5%202.2-7.7%201.1-2-1.3-3.6-2-4.6-6.5.2-7%20.6-18.5-.7-20.9-1.9-3.8-5-2.4-6.3-1.2a48%2048%200%200%200-11.5%2023.5c-1.8%205.8-3.7%204.1-5%201.8-3.2-3-3.5-26.7-7.4-22.8'/%3e%3cpath%20fill='%23fff'%20d='M207.4%20174.1c2.9-2%201.6-3.4%205.8.8a72%2072%200%200%201%209.2%2031.3c-.2%202.6%201.6%204.2%202.5%203.6.4-6%2015.1-14.4%2028.6-15.6%202-.5%201-4.4%201.3-6.4-.8-7.5%204.2-14.3%2011.2-14.8%209.6%201.4%2012.8%206.5%2013%2014.2-1.1%2015-16.7%2017.5-25.4%2018.7-1.3.5-1.9%201.1%200%201.8l36.6.2%201.9%201c.2%201-.6.2-2%202.6a30%2030%200%200%200-3.7%2011.5c-10.9%203.6-22.2%205-33.6%206.5-4%202-6%204.7-5.2%207.7%201.4%203.3%2010.2%206.7%2010.2%206.8%201.7%201%203.6%203.5-.5%208.6-17.8-.8-31.7-8.4-36.5-19.1-1.4-1.1-3%200-4%201.4-7%209-13.8%2017-25.7%2021.4-7%201.8-14.3-1.1-17.7-5.7-2.3-2.7-2.2-5.6-3-6.2-3.9%201.7-36.9%2015.7-32.7%209.1%208-8.5%2022-14.9%2034.2-23.3.9-2.9%202.5-12.5%207.3-15.6.3%200-.7%205.6-.6%208%200%202-.2%202.7.2%202.2.9-.5%2015.7-12.2%2017-15.8%201.4-2%20.3-7.2.3-7.4-2.8-7.2-6.7-7.8-8.1-11.4-1.3-4.7-.7-10.1%202-11.7q3.7-3.1%207.9.5c3%202.7%205.6%208%206.4%2011.9-.5%201.5-4-1-5-.3a16%2016%200%200%201%203.7%207.8c2%208.2%201.4%2011.4-.6%2016.7-6.6%2013.9-15%2018-22.4%2023.2-.2%200-.3%203.5%202.4%205.4%201%201%204.9%201.5%209.4%200a55%2055%200%200%200%2022.3-23.3%2051%2051%200%200%200-2.4-22.2c-2.9-6.7-6.3-16.2-6.3-16.4-.1-4.2.2-5.6%202-7.7m-95.8-38.6c4.2%202%2012.2%201.1%2011.8-5.7l-.2-3.1c-.8-2-3.2-1.5-3.7.5-.2.7.3%201.8-.3%202.1-.4.4-1.7.2-1.7-1.7q-.1-1-.7-1.6-.2-.2-.9-.2c-.6%200-.6.1-.9.6l-.3%201.6q-.1.9-.8%201c-.6%200-.5%200-1-.2q-.4-.3-.5-1l-.3-1.6q-.3-.4-1-.6c-2.3%200-2.5%202.7-2.3%203.7-.2.2-.3%204.9%202.8%206.2'/%3e%3cpath%20fill='%23fff'%20d='M235.1%20187.7c4.2%202%2014.3.9%2011.8-5.6l-.2-3.2c-.9-2-3.2-1.5-3.7.6-.2.6.3%201.7-.4%202-.3.4-1.7.2-1.6-1.6q-.1-1-.7-1.7-.3-.2-1-.2c-.5%200-.5.2-.8.7q-.3.7-.3%201.6-.2.8-.9%201c-.5%200-.4%200-.8-.3q-.5-.3-.6-.9l-.3-1.6q-.3-.5-1-.6c-2.3%200-2.5%202.6-2.4%203.6-.1.2-.2%205%203%206.2zm72-21.6c4.2%202%2012.1%201.1%2011.8-5.6l-.2-3.2c-.9-2-3.2-1.5-3.7.5-.2.7.3%201.8-.4%202.2-.3.3-1.7.1-1.6-1.8q-.1-1-.7-1.6-.3-.2-1-.2t-.8.7l-.3%201.5q-.1%201-.9%201c-.8%200-.4%200-.8-.2q-.5-.3-.6-.9%200-1-.3-1.7-.4-.4-1-.5c-2.3%200-2.5%202.6-2.4%203.6-.1.2-.2%204.9%203%206.2zm37.3%2054.3c-7.3%208.3-4.1%2022-2.4%2025%202.4%204.8%204.3%207.9%209%2010.3%204.3%203.1%207.7%201.2%209.5-1%204.3-4.5%204.4-16%206.4-18.2%201.4-4.2%205-3.5%206.7-1.6a17%2017%200%200%200%206.2%205.3c4%203.5%208.8%204.2%2013.6%201%203.2-1.9%205.3-4.2%207.2-8.9%202-5.6%201-31.6.5-47l-4.2-21.5c0-.2-.5-10.2-1-12.5%200-1-.3-1.3.7-1.2%201.1%201%201.2%201%202%201.3%201%20.2%202-1.7%201.3-3.3l-10-18.6c-.8-.8-1.9-1.6-3.2.2a7%207%200%200%200-2.4%205.5l1.3%2013.3%204%2022.6c1.3%2016%201.6%2029.2%202.9%2045.3-.2%206.8-2.3%2012.7-4.3%2013.6%200%200-3%201.7-5-.2-1.5-.6-7.4-9.9-7.4-9.9-3-2.7-5-2-7.1%200-6%205.8-8.6%2016.4-12.7%2023.8-1%201.7-4%203-7.2-.1-8.2-11.3-3.4-27.3-4.4-23.2M309%20126.7c3.8%201.5%206.4%209.2%205.6%2013-.8%204.5-2.8%209.5-4.2%208.9-1.6-.6%201-4.6-.5-8.8-.8-2.8-6-7.8-5.4-9.2-1-3.1%202.2-4.5%204.5-4z'/%3e%3cpath%20fill='%23fff'%20d='M356.6%20225c.7-9.2-.6-14.8-.8-20.2s-6.1-46.6-7.3-50.6c-1.5-7.8%205.7-1%204.9-5.6-2.5-5.6-8.6-13.9-10.5-18.8-1.2-2-.7-4-3.3-.5a42%2042%200%200%200-2.3%2019.2c6.2%2032.3%2012.5%2059.1%2011.5%2089.8%203%200%206.3-6.7%207.8-13.3m64.4-85.3c3.5%201.7%205.5%2011.3%205.1%2014-.7%205-2.5%2010.4-3.8%209.7-1.5-.6.3-7.4-.4-9.5-.8-3-5.5-8.4-5-10-1-3.4%202-4.8%204.1-4.2m-255.7%2067.9c3.3%201.3%205.3%208.3%205%2010.3-.8%203.7-2.5%207.7-3.8%207.1-1.3-.4.3-5.4-.3-7-.3-3.7-4.9-5.7-4.8-7.3-.8-3%202-3.5%204-3.1z'/%3e%3cpath%20fill='%23165d31'%20d='M244.9%20218.2c4.2.2%206.3%203.6%202.4%205-4%201.3-7.7%202.4-7.8%208%201.5%208-2%205.2-4%204.2-2.4-1.8-9.2-6-10.2-15-.1-2.1%201.6-4%204.3-4%204%201.1%2010%201.2%2015.3%201.8'/%3e%3cpath%20fill='%23fff'%20d='M77.4%20124.4c4.8%201.4%205.1%208.6%204.8%2010.7-.7%203.8-2.4%207.9-3.6%207.4-1.4-.5%200-5.7-.7-7.3-.7-2.2-4.8-6.4-4.4-7.6-.9-2.5%202-3.7%203.9-3.2m95.9%2033.6c-3.8%202-5.2%208-2.9%2011.6%202.2%203%205.6%201.9%206%201.9%203.7.4%205.9-6.9%205.9-6.9s.1-2-4.2%201.9c-1.9.3-2-.4-2.5-1.4a9%209%200%200%201%20.5-5.7c.7-1.8-.7-2.6-2.8-1.4m28-36.4c-2%201.3-5.7%205.2-5.8%209.6-.1%202.5-.6%202.5%201%204%201.3%201.8%202.4%201.7%204.8.4a5%205%200%200%200%202.3-3.4c.6-2.8-3%201.4-3.4-1.8-.8-3%201.5-4.2%203.7-7%200-2%200-3.3-2.7-1.8zm22.4%204a60%2060%200%200%200-1.6%2011.1c-.6%202.8%203%204%204.5.4%202.4-6.5%202.4-9.3%202.6-12-.7-4.3-3.6-4.2-5.5.5m142%2072.3c.4-.5%2020-14.4%2020-14.4%202-.7%201.5%207.2.6%207.1a78%2078%200%200%201-20.7%2014.3c-1%20.7-1.9-5.3%200-7zm17.7-.2c3.5%201.7%204.9%2011.8%204.5%2014.5%200%205.4-3.3%209.6-4.7%209-1.4-.7.2-6.7-.5-8.8-.8-3-3.7-8.5-3.2-10.1-1-3.4%201.8-5.2%204-4.6zm-116%2043.4a26%2026%200%200%201%205.6-4.9c2-1%203.8.8%203.7.7.3%202-1.2%203.7-.7%206.3.4%201%20.7%202.2%202.6%201.8%203.1-2.5%206-2.7%209-2.8%202.5.1%202.6%204.2%201%204.2-5.7%201.2-8.2%202.8-12.3%204.3-2%201.2-3.6-.3-3.6-.4s-1.1-1.1-.4-3.7q.3-3.2-2.4-3c-1.2.8-2.4%201.2-3-.3q-.6-1.4.5-2.2m136.6%205.4c.8%201%201.4%202-.1%203.8l-3.7%203.2c-.6%201-1%202.8%201%203.3%203.6%201%2012-4.5%2012-4.6%201.4-1%201-3%20.8-3-.8-.9-2.6-.3-3.8-.5-.6%200-2.5-.2-1.6-2a11%2011%200%200%200%201.6-2.9q.9-1.7-2-2.7c-2.1-.4-3-.2-5.3%200q-1.6.2-1.9%202.3c.1%202.3%201.5%202.2%203%203z'/%3e%3cpath%20fill='%23165d31'%20d='M268.1%20189.7c-.5%201-2.3%201-4%200s-2.7-2.6-2.1-3.5%202.3-.9%204%200%202.6%202.6%202.1%203.5m-89-53.6c-1%20.3-2.4-.6-3-2s-.3-2.6.7-2.9%202.3.7%203%202%20.3%202.7-.8%203zM355.2%20375c9.4.4%2018.2%200%2027.5.5%201.7%201.5.5%205-.6%204.8l-7.8-.3c-.1-3-7.7-2.5-7.5.1-4.1.5-7.8-.1-12-.3-1.2-1.5-1-4.2.4-4.8'/%3e%3c/g%3e%3c/svg%3e";
   const flagJP = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20id='flag-icons-jp'%20viewBox='0%200%20640%20480'%3e%3cdefs%3e%3cclipPath%20id='jp-a'%3e%3cpath%20fill-opacity='.7'%20d='M-88%2032h640v480H-88z'/%3e%3c/clipPath%3e%3c/defs%3e%3cg%20fill-rule='evenodd'%20stroke-width='1pt'%20clip-path='url(%23jp-a)'%20transform='translate(88%20-32)'%3e%3cpath%20fill='%23fff'%20d='M-128%2032h720v480h-720z'/%3e%3ccircle%20cx='523.1'%20cy='344.1'%20r='194.9'%20fill='%23bc002d'%20transform='translate(-168.4%208.6)scale(.76554)'/%3e%3c/g%3e%3c/svg%3e";
   const flagKR = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%20id='flag-icons-kr'%20viewBox='0%200%20640%20480'%3e%3cdefs%3e%3cclipPath%20id='kr-a'%3e%3cpath%20fill-opacity='.7'%20d='M-95.8-.4h682.7v512H-95.8z'/%3e%3c/clipPath%3e%3c/defs%3e%3cg%20fill-rule='evenodd'%20clip-path='url(%23kr-a)'%20transform='translate(89.8%20.4)scale(.9375)'%3e%3cpath%20fill='%23fff'%20d='M-95.8-.4H587v512H-95.8Z'/%3e%3cg%20transform='rotate(-56.3%20361.6%20-101.3)scale(10.66667)'%3e%3cg%20id='kr-c'%3e%3cpath%20id='kr-b'%20fill='%23000001'%20d='M-6-26H6v2H-6Zm0%203H6v2H-6Zm0%203H6v2H-6Z'/%3e%3cuse%20xlink:href='%23kr-b'%20width='100%25'%20height='100%25'%20y='44'/%3e%3c/g%3e%3cpath%20stroke='%23fff'%20d='M0%2017v10'/%3e%3cpath%20fill='%23cd2e3a'%20d='M0-12a12%2012%200%200%201%200%2024Z'/%3e%3cpath%20fill='%230047a0'%20d='M0-12a12%2012%200%200%200%200%2024A6%206%200%200%200%200%200Z'/%3e%3ccircle%20cy='-6'%20r='6'%20fill='%23cd2e3a'/%3e%3c/g%3e%3cg%20transform='rotate(-123.7%20191.2%2062.2)scale(10.66667)'%3e%3cuse%20xlink:href='%23kr-c'%20width='100%25'%20height='100%25'/%3e%3cpath%20stroke='%23fff'%20d='M0-23.5v3M0%2017v3.5m0%203v3'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e";
   const flagFR = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20id='flag-icons-fr'%20viewBox='0%200%20640%20480'%3e%3cpath%20fill='%23fff'%20d='M0%200h640v480H0z'/%3e%3cpath%20fill='%23000091'%20d='M0%200h213.3v480H0z'/%3e%3cpath%20fill='%23e1000f'%20d='M426.7%200H640v480H426.7z'/%3e%3c/svg%3e";
-  const flagDE = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20id='flag-icons-de'%20viewBox='0%200%20640%20480'%3e%3cpath%20fill='%23fc0'%20d='M0%20320h640v160H0z'/%3e%3cpath%20fill='%23000001'%20d='M0%200h640v160H0z'/%3e%3cpath%20fill='red'%20d='M0%20160h640v160H0z'/%3e%3c/svg%3e";
   const flagIN = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%20id='flag-icons-in'%20viewBox='0%200%20640%20480'%3e%3cpath%20fill='%23f93'%20d='M0%200h640v160H0z'/%3e%3cpath%20fill='%23fff'%20d='M0%20160h640v160H0z'/%3e%3cpath%20fill='%23128807'%20d='M0%20320h640v160H0z'/%3e%3cg%20transform='matrix(3.2%200%200%203.2%20320%20240)'%3e%3ccircle%20r='20'%20fill='%23008'/%3e%3ccircle%20r='17.5'%20fill='%23fff'/%3e%3ccircle%20r='3.5'%20fill='%23008'/%3e%3cg%20id='in-d'%3e%3cg%20id='in-c'%3e%3cg%20id='in-b'%3e%3cg%20id='in-a'%20fill='%23008'%3e%3ccircle%20r='.9'%20transform='rotate(7.5%20-8.8%20133.5)'/%3e%3cpath%20d='M0%2017.5.6%207%200%202l-.6%205z'/%3e%3c/g%3e%3cuse%20xlink:href='%23in-a'%20width='100%25'%20height='100%25'%20transform='rotate(15)'/%3e%3c/g%3e%3cuse%20xlink:href='%23in-b'%20width='100%25'%20height='100%25'%20transform='rotate(30)'/%3e%3c/g%3e%3cuse%20xlink:href='%23in-c'%20width='100%25'%20height='100%25'%20transform='rotate(60)'/%3e%3c/g%3e%3cuse%20xlink:href='%23in-d'%20width='100%25'%20height='100%25'%20transform='rotate(120)'/%3e%3cuse%20xlink:href='%23in-d'%20width='100%25'%20height='100%25'%20transform='rotate(-120)'/%3e%3c/g%3e%3c/svg%3e";
   const flagPT = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%20id='flag-icons-pt'%20viewBox='0%200%20640%20480'%3e%3cpath%20fill='red'%20d='M256%200h384v480H256z'/%3e%3cpath%20fill='%23060'%20d='M0%200h256v480H0z'/%3e%3cg%20fill='%23ff0'%20fill-rule='evenodd'%20stroke='%23000'%20stroke-linecap='round'%20stroke-linejoin='round'%20stroke-width='.6'%3e%3cpath%20d='M339.5%20306.2c-32.3-1-180-93.2-181-108l8.1-13.5c14.7%2021.3%20165.7%20111%20180.6%20107.8z'/%3e%3cpath%20d='M164.9%20182.8c-2.9%207.8%2038.6%2033.4%2088.4%2063.8s92.9%2049%2096%2046.4l1.5-2.8q-.9%201.6-4.3.6c-13.5-3.9-48.6-20-92.1-46.4-43.6-26.4-81.4-50.7-87.3-61a6%206%200%200%201-.6-3.1h-.2l-1.2%202.2zm175.3%20123.8q-.7%201.3-3.5.8c-12-1.3-48.6-19.1-91.9-45-50.4-30.2-92-57.6-87.4-64.8l1.2-2.2.2.1c-4%2012.2%2082.1%2061.4%2087.2%2064.6%2049.8%2030.8%2091.8%2048.9%2095.5%2044.2z'/%3e%3cpath%20d='M256.2%20207.2c32.2-.3%2072-4.4%2095-13.6l-5-8c-13.5%207.5-53.5%2012.5-90.3%2013.2-43.4-.4-74.1-4.5-89.5-14.8l-4.6%208.6c28.2%2012%2057.2%2014.5%2094.4%2014.6'/%3e%3cpath%20d='M352.5%20193.8c-.8%201.3-15.8%206.4-37.8%2010.2a381%20381%200%200%201-58.6%204.3%20416%20416%200%200%201-56.2-3.6c-23.1-3.6-35-8.6-39.5-10.4l1.1-2.2c12.7%205%2024.7%208%2038.7%2010.2A412%20412%200%200%200%20256%20206a392%20392%200%200%200%2058.3-4.3c22.5-3.7%2034.8-8.4%2036.6-10.5zm-4.4-8.1c-2.4%202-14.6%206.3-36%209.7a388%20388%200%200%201-55.8%204c-22%200-40.1-1.6-53.8-3.6-21.8-2.8-33.4-8-37.6-9.4l1.3-2.2c3.3%201.7%2014.4%206.2%2036.5%209.3a385%20385%200%200%200%2053.6%203.4%20384%20384%200%200%200%2055.4-4c21.5-3%2033.1-8.4%2034.9-9.8zM150.3%20246c19.8%2010.7%2063.9%2016%20105.6%2016.4%2038%20.1%2087.4-5.8%20105.9-15.6l-.5-10.7c-5.8%209-58.8%2017.7-105.8%2017.4s-90.7-7.6-105.3-17v9.5'/%3e%3cpath%20d='M362.8%20244.5v2.5c-2.8%203.4-20.2%208.4-42%2012a434%20434%200%200%201-65.4%204.4%20400%20400%200%200%201-62-4.3%20155%20155%200%200%201-44.4-12v-2.9c9.7%206.4%2035.9%2011.2%2044.7%2012.6%2015.8%202.4%2036.1%204.2%2061.7%204.2%2026.9%200%2048.4-1.9%2065-4.4%2015.7-2.3%2038-8.2%2042.4-12.1m0-9v2.5c-2.8%203.3-20.2%208.3-42%2011.9a434%20434%200%200%201-65.4%204.5%20414%20414%200%200%201-62-4.3%20155%20155%200%200%201-44.4-12v-3c9.7%206.5%2036%2011.2%2044.7%2012.6a408%20408%200%200%200%2061.7%204.3c26.9%200%2048.5-2%2065-4.5%2015.7-2.2%2038-8.1%2042.4-12m-107%2068.8c-45.6-.2-84.7-12.4-93-14.4l6%209.4a250%20250%200%200%200%2087.4%2014.3c34.7-1%2065-3.7%2086.3-14.1l6.2-9.8c-14.5%206.9-64%2014.6-93%2014.6'/%3e%3cpath%20d='m344.9%20297.3-2.8%204c-10%203.6-26%207.4-32.6%208.4a296%20296%200%200%201-53.7%205c-40.4-.6-73.5-8.5-89-15.3l-1.3-2.1.2-.4%202.1.9a287%20287%200%200%200%2088.2%2014.5c18.8%200%2037.5-2.1%2052.6-4.8%2023.2-4.7%2032.6-8.2%2035.5-9.8l.7-.4zm5.3-8.8-2%203.5c-5.4%202-20%206.2-41.3%209.2-14%201.9-22.7%203.8-50.6%204.3a347%20347%200%200%201-94.2-14L161%20289a390%20390%200%200%200%2095.4%2014c25.5-.5%2036.4-2.4%2050.3-4.3%2024.8-3.8%2037.3-8%2041-9.1v-.2l2.6-1z'/%3e%3cpath%20d='M350.8%20237.6c.1%2030-15.3%2057-27.6%2068.8a99%2099%200%200%201-67.8%2028.2c-30.3.5-58.8-19.2-66.5-27.9a101%20101%200%200%201-27.5-67.4c1.8-32.8%2014.7-55.6%2033.3-71.3a100%20100%200%200%201%2064.2-22.7%2098%2098%200%200%201%2071%2035.6c12.5%2015.2%2018%2031.7%2020.9%2056.7M255.6%20135a106%20106%200%200%201%20106%20105.2%20105.6%20105.6%200%201%201-211.4%200c-.1-58%2047.3-105.2%20105.4-105.2'/%3e%3cpath%20d='M255.9%20134.5c58.2%200%20105.6%2047.4%20105.6%20105.6S314.1%20345.7%20256%20345.7s-105.6-47.4-105.6-105.6S197.8%20134.5%20256%20134.5zM152.6%20240c0%2056.8%2046.7%20103.3%20103.3%20103.3S359.2%20296.8%20359.2%20240s-46.7-103.3-103.3-103.3S152.6%20183.2%20152.6%20240'/%3e%3cpath%20d='M256%20143.3a97%2097%200%200%201%2096.7%2096.7%2097%2097%200%200%201-96.7%2096.8c-53%200-96.7-43.6-96.7-96.8a97%2097%200%200%201%2096.7-96.7M161.6%20240c0%2052%2042.6%2094.4%2094.4%2094.4s94.4-42.5%2094.4-94.4-42.6-94.4-94.4-94.4a95%2095%200%200%200-94.4%2094.4'/%3e%3cpath%20d='M260.3%20134h-9.1v212.3h9z'/%3e%3cpath%20d='M259.3%20132.8h2.3v214.7h-2.2V132.8zm-9%200h2.4v214.7h-2.3z'/%3e%3cpath%20d='M361.6%20244.2v-7.8l-6.4-6-36.3-9.6-52.2-5.3-63%203.2-44.8%2010.6-9%206.7v7.9l22.9-10.3%2054.4-8.5h52.3l38.4%204.2%2026.6%206.4z'/%3e%3cpath%20d='M256%20223.8c24.9%200%2049%202.3%2068.3%206%2019.8%204%2033.7%209%2038.5%2014.5v2.8c-5.8-7-24.5-12-39-15-19-3.6-43-6-67.9-6-26.1%200-50.5%202.6-69.3%206.2-15%203-35.1%209-37.6%2014.8v-2.9c1.3-4%2016.3-10%2037.3-14.3%2018.9-3.7%2043.3-6.1%2069.6-6.1zm0-9.1a383%20383%200%200%201%2068.3%206c19.8%204%2033.7%209%2038.5%2014.6v2.7c-5.8-6.9-24.5-12-39-14.9-19-3.7-43-6-67.9-6a376%20376%200%200%200-69.2%206.2c-14.5%202.7-35.4%208.9-37.7%2014.7v-2.8c1.4-4%2016.6-10.3%2037.3-14.3%2019-3.7%2043.3-6.2%2069.7-6.2m-.6-46.2c39.3-.2%2073.6%205.5%2089.3%2013.5l5.7%2010c-13.6-7.4-50.6-15-94.9-14-36.1.3-74.7%204-94%2014.4l6.8-11.4c15.9-8.3%2053.3-12.5%2087.1-12.5'/%3e%3cpath%20d='M256%20176.7a354%20354%200%200%201%2061.3%204.3c16%203%2031.3%207.4%2033.5%209.8l1.7%203c-5.3-3.4-18.6-7.3-35.6-10.5s-38.7-4.3-61-4.2c-25.3-.1-45%201.2-61.8%204.2a109%20109%200%200%200-33.3%2010.3l1.7-3.1c6-3%2015.3-6.7%2031.1-9.6%2017.5-3.2%2037.4-4.1%2062.4-4.2m0-9c21.4-.2%2042.6%201%2059.1%204a96%2096%200%200%201%2030.6%2010l2.5%204c-4.2-4.7-20-9.2-34.1-11.6-16.4-2.9-36.7-4-58.1-4.2a361%20361%200%200%200-59.5%204.4%2097%2097%200%200%200-29.6%209.1l2.2-3.3c5.8-3%2015.2-5.8%2027-8.1a357%20357%200%200%201%2059.9-4.4zM308.4%20284a276%20276%200%200%200-52.5-4c-65.5.8-86.6%2013.5-89.2%2017.3l-5-8c16.8-12%2052.4-18.8%2094.6-18.2q32.9.5%2056.6%205l-4.5%208'/%3e%3cpath%20d='M255.6%20278.9c18.2.3%2036%201%2053.3%204.2l-1.2%202.2c-16-3-33.2-4-52-4-24.3-.2-48.7%202.1-70%208.2-6.7%201.9-17.8%206.2-19%209.8l-1.2-2c.4-2.2%207-6.6%2019.6-10%2024.4-7%2047.2-8.3%2070.5-8.4m.8-9.2a327%20327%200%200%201%2057.3%205l-1.3%202.3a299%20299%200%200%200-56-4.9c-24.2%200-49.9%201.8-73.3%208.6-7.5%202.2-20.6%207-21%2010.7l-1.2-2.2c.2-3.4%2011.5-7.9%2021.7-10.8%2023.5-6.9%2049.3-8.6%2073.8-8.7'/%3e%3cpath%20d='m349.4%20290.5-7.8%2012.3-22.7-20.1-58.6-39.5-66.2-36.3-34.3-11.7%207.3-13.6%202.5-1.3%2021.3%205.3%2070.4%2036.3%2040.6%2025.6L336%20272l13.9%2016z'/%3e%3cpath%20d='M158.6%20195.5c6-4%2050.2%2015.6%2096.6%2043.6%2046.1%2028%2090.3%2059.6%2086.3%2065.5l-1.3%202.1-.6.5c.1-.1.8-1%200-3.1-2-6.5-33.4-31.5-85.3-62.9-50.7-30.1-92.9-48.3-97-43.1zM351%20290.4c3.8-7.6-37.2-38.5-88.1-68.6-52-29.5-89.6-46.9-96.5-41.7L165%20183l.4-.5c1.2-1%203.3-1%204.2-1%2011.8.2%2045.5%2015.7%2092.8%2042.8%2020.8%2012%2087.6%2055%2087.3%2067%200%201%20.1%201.2-.3%201.8l1.7-2.6z'/%3e%3c/g%3e%3cg%20transform='translate(0%2026.7)scale(1.06667)'%3e%3cpath%20fill='%23fff'%20stroke='%23000'%20stroke-width='.7'%20d='M180.6%20211a59%2059%200%200%200%2017.5%2041.7%2059%2059%200%200%200%2041.8%2017.6%2059%2059%200%200%200%2042-17.4%2059%2059%200%200%200%2017.4-41.8v-79.2l-118.7-.2z'/%3e%3cpath%20fill='red'%20stroke='%23000'%20stroke-width='.5'%20d='M183%20211.1a56%2056%200%200%200%2016.8%2040%2057%2057%200%200%200%2040.2%2016.8%2057%2057%200%200%200%2040.2-16.6%2056%2056%200%200%200%2016.7-40v-77H183v76.8m91-53.7v48.9l-.1%205.1a33%2033%200%200%201-10%2024%2034%2034%200%200%201-24%2010c-9.4%200-17.7-4-23.9-10.2a34%2034%200%200%201-10-24v-54z'/%3e%3cg%20id='pt-e'%3e%3cg%20id='pt-d'%20fill='%23ff0'%20stroke='%23000'%20stroke-width='.5'%3e%3cpath%20stroke='none'%20d='M190.2%20154.4c.1-5.5%204-6.8%204-6.8.1%200%204.3%201.4%204.3%206.9z'/%3e%3cpath%20d='m186.8%20147.7-.7%206.3h4.2c0-5.2%204-6%204-6%20.1%200%204%201.1%204.1%206h4.2l-.8-6.4zm-1%206.4h17q.5%200%20.6.7%200%20.8-.6.8h-17q-.5%200-.6-.8%200-.7.7-.7z'/%3e%3cpath%20d='M192%20154c0-3.3%202.3-4.2%202.3-4.2s2.3%201%202.3%204.2H192m-5.8-9h16.3q.5.1.6.8%200%20.5-.6.6h-16.3q-.5%200-.6-.7%200-.5.6-.6zm.4%201.5H202q.5%200%20.6.7t-.6.7h-15.5q-.6%200-.6-.7t.6-.7zm5-10.6h1.2v.8h.9v-.8h1.3v.9h.9v-1h1.2v2q0%20.6-.5.6h-4.4q-.5%200-.6-.5zm4.6%202.7.3%206.4h-4.3l.3-6.5h3.7'/%3e%3cpath%20id='pt-a'%20d='M191%20141.6v3.4h-4v-3.4z'/%3e%3cuse%20xlink:href='%23pt-a'%20width='100%25'%20height='100%25'%20x='10.6'/%3e%3cpath%20id='pt-b'%20d='M186.3%20139h1.2v1h.9v-1h1.2v1h.9v-1h1.2v2q0%20.6-.5.6h-4.3l-.6-.6z'/%3e%3cuse%20xlink:href='%23pt-b'%20width='100%25'%20height='100%25'%20x='10.6'/%3e%3cpath%20fill='%23000001'%20stroke='none'%20d='M193.9%20140.6c0-.6.9-.6.9%200v1.6h-.9z'/%3e%3cpath%20id='pt-c'%20fill='%23000001'%20stroke='none'%20d='M188.6%20142.8c0-.6.8-.6.8%200v1.2h-.8z'/%3e%3cuse%20xlink:href='%23pt-c'%20width='100%25'%20height='100%25'%20x='10.6'/%3e%3c/g%3e%3cuse%20xlink:href='%23pt-d'%20width='100%25'%20height='100%25'%20y='46.3'/%3e%3cuse%20xlink:href='%23pt-d'%20width='100%25'%20height='100%25'%20transform='rotate(-45.2%20312.8%20180)'/%3e%3c/g%3e%3cuse%20xlink:href='%23pt-d'%20width='100%25'%20height='100%25'%20x='45.7'/%3e%3cuse%20xlink:href='%23pt-e'%20width='100%25'%20height='100%25'%20transform='matrix(-1%200%200%201%20479.8%200)'/%3e%3cg%20id='pt-f'%20fill='%23fff'%3e%3cpath%20fill='%23039'%20d='M232.6%20202.4a8%208%200%200%200%202.2%205.7%207%207%200%200%200%205.3%202.4q3.2-.2%205.3-2.4a8%208%200%200%200%202.2-5.7v-10.8h-15z'/%3e%3ccircle%20cx='236.1'%20cy='195.7'%20r='1.5'/%3e%3ccircle%20cx='244.4'%20cy='195.7'%20r='1.5'/%3e%3ccircle%20cx='240.2'%20cy='199.7'%20r='1.5'/%3e%3ccircle%20cx='236.1'%20cy='203.9'%20r='1.5'/%3e%3ccircle%20cx='244.4'%20cy='203.9'%20r='1.5'/%3e%3c/g%3e%3cuse%20xlink:href='%23pt-f'%20width='100%25'%20height='100%25'%20y='-26'/%3e%3cuse%20xlink:href='%23pt-f'%20width='100%25'%20height='100%25'%20x='-20.8'/%3e%3cuse%20xlink:href='%23pt-f'%20width='100%25'%20height='100%25'%20x='20.8'/%3e%3cuse%20xlink:href='%23pt-f'%20width='100%25'%20height='100%25'%20y='25.8'/%3e%3c/g%3e%3c/svg%3e";
   const flagRU = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20id='flag-icons-ru'%20viewBox='0%200%20640%20480'%3e%3cpath%20fill='%23fff'%20d='M0%200h640v160H0z'/%3e%3cpath%20fill='%230039a6'%20d='M0%20160h640v160H0z'/%3e%3cpath%20fill='%23d52b1e'%20d='M0%20320h640v160H0z'/%3e%3c/svg%3e";
@@ -7356,6 +5812,7 @@ u(
       };
     }, []);
     const setLanguage = (code) => {
+      playClickSound();
       currentLang.value = code;
       appOptionsManager.set("language", code);
       i18n.changeLanguage(code);
@@ -7392,7 +5849,7 @@ u(
         {
           tabIndex: 0,
           class: cx(
-            "dropdown-content bg-base-200 text-base-content rounded-box mt-2 max-h-60 overflow-y-auto border-[length:var(--border)] border-white/5 shadow-2xl outline-[length:var(--border)] outline-black/5",
+            "dropdown-content bg-base-200 text-base-content rounded-box mt-2 max-h-60 overflow-y-auto border-(length:--border) border-white/5 shadow-2xl outline-(length:--border) outline-black/5",
             contentClasses
           ),
           children: u("ul", { class: "menu w-64", children: [
@@ -7425,13 +5882,16 @@ u(
       )
     ] });
   }
+  function getDefaultExportFromCjs(x) {
+    return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
+  }
   var localizedFormat$2 = { exports: {} };
   var localizedFormat$1 = localizedFormat$2.exports;
   var hasRequiredLocalizedFormat;
   function requireLocalizedFormat() {
     if (hasRequiredLocalizedFormat) return localizedFormat$2.exports;
     hasRequiredLocalizedFormat = 1;
-    (function(module, exports) {
+    (function(module, exports$1) {
       !(function(e, t) {
         module.exports = t();
       })(localizedFormat$1, (function() {
@@ -7516,6 +5976,37 @@ u(
                   dropdownClasses: "",
                   btnClasses: "btn-sm",
                   contentClasses: "mt-2"
+                }
+              )
+            ] }),
+u("div", { class: "flex justify-between items-center", children: [
+u("span", { class: "text-sm", children: t("Font Family") }),
+u(
+                "select",
+                {
+                  class: "select select-bordered select-sm w-40",
+                  value: String(appOptionsManager.get("fontFamily") ?? "system"),
+                  onChange: (e) => {
+                    playClickSound();
+                    const font = e.target.value;
+                    appOptionsManager.set("fontFamily", font);
+                    const shadowRoot = document.getElementById("tmd-root")?.shadowRoot;
+                    if (shadowRoot?.host) {
+                      if (font === "system") {
+                        shadowRoot.host.removeAttribute("data-font");
+                      } else {
+                        shadowRoot.host.setAttribute("data-font", font);
+                      }
+                    }
+                  },
+                  children: [
+u("option", { value: "system", children: t("System Default") }),
+u("option", { value: "Lato", children: "Lato" }),
+u("option", { value: "Montserrat", children: "Montserrat" }),
+u("option", { value: "Noto Sans", children: "Noto Sans" }),
+u("option", { value: "Open Sans", children: "Open Sans" }),
+u("option", { value: "Raleway", children: "Raleway" })
+                  ]
                 }
               )
             ] }),
@@ -7664,13 +6155,27 @@ u(
                 "a",
                 {
                   class: "flex items-center gap-1 opacity-80 hover:opacity-100",
+                  href: "https://status.exyezed.cc",
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  children: [
+u(IconServer, { size: 14 }),
+                    " ",
+                    t("Status")
+                  ]
+                }
+              ),
+u(
+                "a",
+                {
+                  class: "flex items-center gap-1 opacity-80 hover:opacity-100",
                   href: "https://exyezed.cc",
                   target: "_blank",
                   rel: "noopener noreferrer",
                   children: [
-u(IconWorld, { size: 14 }),
+u(IconHome, { size: 14 }),
                     " ",
-                    t("Website")
+                    t("Home")
                   ]
                 }
               ),
@@ -7704,14 +6209,20 @@ u(
                     appOptionsManager.set("soundEffects", true);
                     appOptionsManager.set("debug", false);
                     appOptionsManager.set("dateTimeFormat", "YYYY-MM-DD HH:mm:ss Z");
+                    appOptionsManager.set("fontFamily", "system");
+                    appOptionsManager.set("apiServer", "oregon");
                     appOptionsManager.set("fetchMode", "single");
                     appOptionsManager.set("batchSize", 100);
                     appOptionsManager.set("startingBatch", 0);
-                    appOptionsManager.set("timelineType", "media");
+                    appOptionsManager.set("timelineType", "timeline");
                     appOptionsManager.set("mediaType", "all");
                     appOptionsManager.set("convertAnimatedGifs", false);
                     appOptionsManager.set("convertGifsExternal", false);
                     appOptionsManager.set("downloadConcurrency", 1);
+                    const shadowRoot = document.getElementById("tmd-root")?.shadowRoot;
+                    if (shadowRoot?.host) {
+                      shadowRoot.host.removeAttribute("data-font");
+                    }
                     i18n.changeLanguage("en");
                     showResetConfirm.value = false;
                   },
@@ -7731,7 +6242,7 @@ u(IconRestore, { size: 16 }),
     const { t } = useTranslation();
     const activeTab = signals.useSignal("dashboard");
     const showGlobalSettings = signals.useSignal(false);
-    const loadFromDatabaseUsername = signals.useSignal("");
+    const loadFromDatabaseAccount = signals.useSignal(null);
     hooks.useEffect(() => {
       (async () => {
         try {
@@ -7798,15 +6309,15 @@ u("div", { class: "flex-1 transition-[height,max-height] duration-300 ease-in-ou
 u("div", { class: activeTab.value === "dashboard" ? "block" : "hidden", children: u(
             Dashboard,
             {
-              loadFromDatabaseUsername
+              loadFromDatabaseAccount
             }
           ) }),
 u("div", { class: activeTab.value === "database" ? "block" : "hidden", children: u(
             Database,
             {
               isVisible: activeTab.value === "database",
-              onLoadToDashboard: (username) => {
-                loadFromDatabaseUsername.value = username;
+              onLoadToDashboard: (accountInfo) => {
+                loadFromDatabaseAccount.value = accountInfo;
                 playTabClickSound();
                 activeTab.value = "dashboard";
               }
@@ -7833,6 +6344,17 @@ u(
     const toggleMediaDownloader = () => {
       showMediaDownloader.value = !showMediaDownloader.value;
     };
+    hooks.useEffect(() => {
+      const font = String(appOptionsManager.get("fontFamily") ?? "system");
+      const shadowRoot = document.getElementById("tmd-root")?.shadowRoot;
+      if (shadowRoot?.host) {
+        if (font !== "system") {
+          shadowRoot.host.setAttribute("data-font", font);
+        } else {
+          shadowRoot.host.removeAttribute("data-font");
+        }
+      }
+    }, []);
     appOptionsManager.signal.subscribe(() => {
       currentTheme.value = appOptionsManager.get("theme");
     });
@@ -7850,7 +6372,7 @@ u(
         "div",
         {
           onClick: toggleMediaDownloader,
-          class: `sparkle-icon fixed top-[50%] left-[-15px] cursor-pointer transition-all duration-300 z-50 ${showMediaDownloader.value ? "translate-x-[15px] rotate-[15deg]" : ""} hover:translate-x-[15px] hover:rotate-[15deg]`,
+          class: `sparkle-icon fixed top-[50%] left-[-15px] cursor-pointer transition-all duration-300 z-50 ${showMediaDownloader.value ? "translate-x-[15px] rotate-15" : ""} hover:translate-x-[15px] hover:rotate-15`,
           children: [
 u(IconBrandTwitter, { size: 48, "stroke-width": 1.25, class: "text-white" }),
             dashboardState.isDownloading.value && !showMediaDownloader.value && u("div", { class: "absolute -bottom-1 -right-1 flex items-center justify-center", children: u(
@@ -7878,9 +6400,25 @@ u("div", { id: "tmd-portal-root" })
       ] })
     ] });
   }
-  const styles = `/*! tailwindcss v4.1.16 | MIT License | https://tailwindcss.com */@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-backdrop-blur:initial;--tw-backdrop-brightness:initial;--tw-backdrop-contrast:initial;--tw-backdrop-grayscale:initial;--tw-backdrop-hue-rotate:initial;--tw-backdrop-invert:initial;--tw-backdrop-opacity:initial;--tw-backdrop-saturate:initial;--tw-backdrop-sepia:initial;--tw-duration:initial;--tw-ease:initial}}}@layer theme{:root,:host{--font-sans:ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";--font-mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;--color-black:#000;--color-white:#fff;--spacing:.25rem;--container-sm:24rem;--text-xs:.75rem;--text-xs--line-height:calc(1/.75);--text-sm:.875rem;--text-sm--line-height:calc(1.25/.875);--text-base:1rem;--text-base--line-height: 1.5 ;--text-lg:1.125rem;--text-lg--line-height:calc(1.75/1.125);--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--leading-normal:1.5;--radius-sm:.25rem;--radius-md:.375rem;--radius-lg:.5rem;--radius-xl:.75rem;--ease-in-out:cubic-bezier(.4,0,.2,1);--blur-sm:8px;--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4,0,.2,1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab,red,red)){::placeholder{color:color-mix(in oklab,currentcolor 50%,transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}:where(:root),:root:has(input.theme-controller[value=light]:checked),[data-theme=light]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(98% 0 0);--color-base-300:oklch(95% 0 0);--color-base-content:oklch(21% .006 285.885);--color-primary:oklch(45% .24 277.023);--color-primary-content:oklch(93% .034 272.788);--color-secondary:oklch(65% .241 354.308);--color-secondary-content:oklch(94% .028 342.258);--color-accent:oklch(77% .152 181.912);--color-accent-content:oklch(38% .063 188.416);--color-neutral:oklch(14% .005 285.823);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(71% .194 13.428);--color-error-content:oklch(27% .105 12.094);--radius-selector:.5rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}@media(prefers-color-scheme:dark){:root:not([data-theme]){color-scheme:dark;--color-base-100:oklch(25.33% .016 252.42);--color-base-200:oklch(23.26% .014 253.1);--color-base-300:oklch(21.15% .012 254.09);--color-base-content:oklch(97.807% .029 256.847);--color-primary:oklch(58% .233 277.117);--color-primary-content:oklch(96% .018 272.314);--color-secondary:oklch(65% .241 354.308);--color-secondary-content:oklch(94% .028 342.258);--color-accent:oklch(77% .152 181.912);--color-accent-content:oklch(38% .063 188.416);--color-neutral:oklch(14% .005 285.823);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(71% .194 13.428);--color-error-content:oklch(27% .105 12.094);--radius-selector:.5rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}}:root:has(input.theme-controller[value=light]:checked),[data-theme=light]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(98% 0 0);--color-base-300:oklch(95% 0 0);--color-base-content:oklch(21% .006 285.885);--color-primary:oklch(45% .24 277.023);--color-primary-content:oklch(93% .034 272.788);--color-secondary:oklch(65% .241 354.308);--color-secondary-content:oklch(94% .028 342.258);--color-accent:oklch(77% .152 181.912);--color-accent-content:oklch(38% .063 188.416);--color-neutral:oklch(14% .005 285.823);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(71% .194 13.428);--color-error-content:oklch(27% .105 12.094);--radius-selector:.5rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=dark]:checked),[data-theme=dark]{color-scheme:dark;--color-base-100:oklch(25.33% .016 252.42);--color-base-200:oklch(23.26% .014 253.1);--color-base-300:oklch(21.15% .012 254.09);--color-base-content:oklch(97.807% .029 256.847);--color-primary:oklch(58% .233 277.117);--color-primary-content:oklch(96% .018 272.314);--color-secondary:oklch(65% .241 354.308);--color-secondary-content:oklch(94% .028 342.258);--color-accent:oklch(77% .152 181.912);--color-accent-content:oklch(38% .063 188.416);--color-neutral:oklch(14% .005 285.823);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(71% .194 13.428);--color-error-content:oklch(27% .105 12.094);--radius-selector:.5rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=cupcake]:checked),[data-theme=cupcake]{color-scheme:light;--color-base-100:oklch(97.788% .004 56.375);--color-base-200:oklch(93.982% .007 61.449);--color-base-300:oklch(91.586% .006 53.44);--color-base-content:oklch(23.574% .066 313.189);--color-primary:oklch(85% .138 181.071);--color-primary-content:oklch(43% .078 188.216);--color-secondary:oklch(89% .061 343.231);--color-secondary-content:oklch(45% .187 3.815);--color-accent:oklch(90% .076 70.697);--color-accent-content:oklch(47% .157 37.304);--color-neutral:oklch(27% .006 286.033);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(68% .169 237.323);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(69% .17 162.48);--color-success-content:oklch(26% .051 172.552);--color-warning:oklch(79% .184 86.047);--color-warning-content:oklch(28% .066 53.813);--color-error:oklch(64% .246 16.439);--color-error-content:oklch(27% .105 12.094);--radius-selector:1rem;--radius-field:2rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:2px;--depth:1;--noise:0}:root:has(input.theme-controller[value=bumblebee]:checked),[data-theme=bumblebee]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(97% 0 0);--color-base-300:oklch(92% 0 0);--color-base-content:oklch(20% 0 0);--color-primary:oklch(85% .199 91.936);--color-primary-content:oklch(42% .095 57.708);--color-secondary:oklch(75% .183 55.934);--color-secondary-content:oklch(40% .123 38.172);--color-accent:oklch(0% 0 0);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(37% .01 67.558);--color-neutral-content:oklch(92% .003 48.717);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(39% .09 240.876);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(70% .191 22.216);--color-error-content:oklch(39% .141 25.723);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=emerald]:checked),[data-theme=emerald]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(93% 0 0);--color-base-300:oklch(86% 0 0);--color-base-content:oklch(35.519% .032 262.988);--color-primary:oklch(76.662% .135 153.45);--color-primary-content:oklch(33.387% .04 162.24);--color-secondary:oklch(61.302% .202 261.294);--color-secondary-content:oklch(100% 0 0);--color-accent:oklch(72.772% .149 33.2);--color-accent-content:oklch(0% 0 0);--color-neutral:oklch(35.519% .032 262.988);--color-neutral-content:oklch(98.462% .001 247.838);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=corporate]:checked),[data-theme=corporate]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(93% 0 0);--color-base-300:oklch(86% 0 0);--color-base-content:oklch(22.389% .031 278.072);--color-primary:oklch(58% .158 241.966);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(55% .046 257.417);--color-secondary-content:oklch(100% 0 0);--color-accent:oklch(60% .118 184.704);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(0% 0 0);--color-neutral-content:oklch(100% 0 0);--color-info:oklch(60% .126 221.723);--color-info-content:oklch(100% 0 0);--color-success:oklch(62% .194 149.214);--color-success-content:oklch(100% 0 0);--color-warning:oklch(85% .199 91.936);--color-warning-content:oklch(0% 0 0);--color-error:oklch(70% .191 22.216);--color-error-content:oklch(0% 0 0);--radius-selector:.25rem;--radius-field:.25rem;--radius-box:.25rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=synthwave]:checked),[data-theme=synthwave]{color-scheme:dark;--color-base-100:oklch(15% .09 281.288);--color-base-200:oklch(20% .09 281.288);--color-base-300:oklch(25% .09 281.288);--color-base-content:oklch(78% .115 274.713);--color-primary:oklch(71% .202 349.761);--color-primary-content:oklch(28% .109 3.907);--color-secondary:oklch(82% .111 230.318);--color-secondary-content:oklch(29% .066 243.157);--color-accent:oklch(75% .183 55.934);--color-accent-content:oklch(26% .079 36.259);--color-neutral:oklch(45% .24 277.023);--color-neutral-content:oklch(87% .065 274.039);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(77% .152 181.912);--color-success-content:oklch(27% .046 192.524);--color-warning:oklch(90% .182 98.111);--color-warning-content:oklch(42% .095 57.708);--color-error:oklch(73.7% .121 32.639);--color-error-content:oklch(23.501% .096 290.329);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=retro]:checked),[data-theme=retro]{color-scheme:light;--color-base-100:oklch(91.637% .034 90.515);--color-base-200:oklch(88.272% .049 91.774);--color-base-300:oklch(84.133% .065 90.856);--color-base-content:oklch(41% .112 45.904);--color-primary:oklch(80% .114 19.571);--color-primary-content:oklch(39% .141 25.723);--color-secondary:oklch(92% .084 155.995);--color-secondary-content:oklch(44% .119 151.328);--color-accent:oklch(68% .162 75.834);--color-accent-content:oklch(41% .112 45.904);--color-neutral:oklch(44% .011 73.639);--color-neutral-content:oklch(86% .005 56.366);--color-info:oklch(58% .158 241.966);--color-info-content:oklch(96% .059 95.617);--color-success:oklch(51% .096 186.391);--color-success-content:oklch(96% .059 95.617);--color-warning:oklch(64% .222 41.116);--color-warning-content:oklch(96% .059 95.617);--color-error:oklch(70% .191 22.216);--color-error-content:oklch(40% .123 38.172);--radius-selector:.25rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=cyberpunk]:checked),[data-theme=cyberpunk]{color-scheme:light;--color-base-100:oklch(94.51% .179 104.32);--color-base-200:oklch(91.51% .179 104.32);--color-base-300:oklch(85.51% .179 104.32);--color-base-content:oklch(0% 0 0);--color-primary:oklch(74.22% .209 6.35);--color-primary-content:oklch(14.844% .041 6.35);--color-secondary:oklch(83.33% .184 204.72);--color-secondary-content:oklch(16.666% .036 204.72);--color-accent:oklch(71.86% .217 310.43);--color-accent-content:oklch(14.372% .043 310.43);--color-neutral:oklch(23.04% .065 269.31);--color-neutral-content:oklch(94.51% .179 104.32);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:0rem;--radius-field:0rem;--radius-box:0rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=valentine]:checked),[data-theme=valentine]{color-scheme:light;--color-base-100:oklch(97% .014 343.198);--color-base-200:oklch(94% .028 342.258);--color-base-300:oklch(89% .061 343.231);--color-base-content:oklch(52% .223 3.958);--color-primary:oklch(65% .241 354.308);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(62% .265 303.9);--color-secondary-content:oklch(97% .014 308.299);--color-accent:oklch(82% .111 230.318);--color-accent-content:oklch(39% .09 240.876);--color-neutral:oklch(40% .153 2.432);--color-neutral-content:oklch(89% .061 343.231);--color-info:oklch(86% .127 207.078);--color-info-content:oklch(44% .11 240.79);--color-success:oklch(84% .143 164.978);--color-success-content:oklch(43% .095 166.913);--color-warning:oklch(75% .183 55.934);--color-warning-content:oklch(26% .079 36.259);--color-error:oklch(63% .237 25.331);--color-error-content:oklch(97% .013 17.38);--radius-selector:1rem;--radius-field:2rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=halloween]:checked),[data-theme=halloween]{color-scheme:dark;--color-base-100:oklch(21% .006 56.043);--color-base-200:oklch(14% .004 49.25);--color-base-300:oklch(0% 0 0);--color-base-content:oklch(84.955% 0 0);--color-primary:oklch(77.48% .204 60.62);--color-primary-content:oklch(19.693% .004 196.779);--color-secondary:oklch(45.98% .248 305.03);--color-secondary-content:oklch(89.196% .049 305.03);--color-accent:oklch(64.8% .223 136.073);--color-accent-content:oklch(0% 0 0);--color-neutral:oklch(24.371% .046 65.681);--color-neutral-content:oklch(84.874% .009 65.681);--color-info:oklch(54.615% .215 262.88);--color-info-content:oklch(90.923% .043 262.88);--color-success:oklch(62.705% .169 149.213);--color-success-content:oklch(12.541% .033 149.213);--color-warning:oklch(66.584% .157 58.318);--color-warning-content:oklch(13.316% .031 58.318);--color-error:oklch(65.72% .199 27.33);--color-error-content:oklch(13.144% .039 27.33);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=garden]:checked),[data-theme=garden]{color-scheme:light;--color-base-100:oklch(92.951% .002 17.197);--color-base-200:oklch(86.445% .002 17.197);--color-base-300:oklch(79.938% .001 17.197);--color-base-content:oklch(16.961% .001 17.32);--color-primary:oklch(62.45% .278 3.836);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(48.495% .11 355.095);--color-secondary-content:oklch(89.699% .022 355.095);--color-accent:oklch(56.273% .054 154.39);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(24.155% .049 89.07);--color-neutral-content:oklch(92.951% .002 17.197);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=forest]:checked),[data-theme=forest]{color-scheme:dark;--color-base-100:oklch(20.84% .008 17.911);--color-base-200:oklch(18.522% .007 17.911);--color-base-300:oklch(16.203% .007 17.911);--color-base-content:oklch(83.768% .001 17.911);--color-primary:oklch(68.628% .185 148.958);--color-primary-content:oklch(0% 0 0);--color-secondary:oklch(69.776% .135 168.327);--color-secondary-content:oklch(13.955% .027 168.327);--color-accent:oklch(70.628% .119 185.713);--color-accent-content:oklch(14.125% .023 185.713);--color-neutral:oklch(30.698% .039 171.364);--color-neutral-content:oklch(86.139% .007 171.364);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:1rem;--radius-field:2rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=aqua]:checked),[data-theme=aqua]{color-scheme:dark;--color-base-100:oklch(37% .146 265.522);--color-base-200:oklch(28% .091 267.935);--color-base-300:oklch(22% .091 267.935);--color-base-content:oklch(90% .058 230.902);--color-primary:oklch(85.661% .144 198.645);--color-primary-content:oklch(40.124% .068 197.603);--color-secondary:oklch(60.682% .108 309.782);--color-secondary-content:oklch(96% .016 293.756);--color-accent:oklch(93.426% .102 94.555);--color-accent-content:oklch(18.685% .02 94.555);--color-neutral:oklch(27% .146 265.522);--color-neutral-content:oklch(80% .146 265.522);--color-info:oklch(54.615% .215 262.88);--color-info-content:oklch(90.923% .043 262.88);--color-success:oklch(62.705% .169 149.213);--color-success-content:oklch(12.541% .033 149.213);--color-warning:oklch(66.584% .157 58.318);--color-warning-content:oklch(27% .077 45.635);--color-error:oklch(73.95% .19 27.33);--color-error-content:oklch(14.79% .038 27.33);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=lofi]:checked),[data-theme=lofi]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(97% 0 0);--color-base-300:oklch(94% 0 0);--color-base-content:oklch(0% 0 0);--color-primary:oklch(15.906% 0 0);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(21.455% .001 17.278);--color-secondary-content:oklch(100% 0 0);--color-accent:oklch(26.861% 0 0);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(0% 0 0);--color-neutral-content:oklch(100% 0 0);--color-info:oklch(79.54% .103 205.9);--color-info-content:oklch(15.908% .02 205.9);--color-success:oklch(90.13% .153 164.14);--color-success-content:oklch(18.026% .03 164.14);--color-warning:oklch(88.37% .135 79.94);--color-warning-content:oklch(17.674% .027 79.94);--color-error:oklch(78.66% .15 28.47);--color-error-content:oklch(15.732% .03 28.47);--radius-selector:2rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=pastel]:checked),[data-theme=pastel]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(98.462% .001 247.838);--color-base-300:oklch(92.462% .001 247.838);--color-base-content:oklch(20% 0 0);--color-primary:oklch(90% .063 306.703);--color-primary-content:oklch(49% .265 301.924);--color-secondary:oklch(89% .058 10.001);--color-secondary-content:oklch(51% .222 16.935);--color-accent:oklch(90% .093 164.15);--color-accent-content:oklch(50% .118 165.612);--color-neutral:oklch(55% .046 257.417);--color-neutral-content:oklch(92% .013 255.508);--color-info:oklch(86% .127 207.078);--color-info-content:oklch(52% .105 223.128);--color-success:oklch(87% .15 154.449);--color-success-content:oklch(52% .154 150.069);--color-warning:oklch(83% .128 66.29);--color-warning-content:oklch(55% .195 38.402);--color-error:oklch(80% .114 19.571);--color-error-content:oklch(50% .213 27.518);--radius-selector:1rem;--radius-field:2rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:2px;--depth:0;--noise:0}:root:has(input.theme-controller[value=fantasy]:checked),[data-theme=fantasy]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(93% 0 0);--color-base-300:oklch(86% 0 0);--color-base-content:oklch(27.807% .029 256.847);--color-primary:oklch(37.45% .189 325.02);--color-primary-content:oklch(87.49% .037 325.02);--color-secondary:oklch(53.92% .162 241.36);--color-secondary-content:oklch(90.784% .032 241.36);--color-accent:oklch(75.98% .204 56.72);--color-accent-content:oklch(15.196% .04 56.72);--color-neutral:oklch(27.807% .029 256.847);--color-neutral-content:oklch(85.561% .005 256.847);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=wireframe]:checked),[data-theme=wireframe]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(97% 0 0);--color-base-300:oklch(94% 0 0);--color-base-content:oklch(20% 0 0);--color-primary:oklch(87% 0 0);--color-primary-content:oklch(26% 0 0);--color-secondary:oklch(87% 0 0);--color-secondary-content:oklch(26% 0 0);--color-accent:oklch(87% 0 0);--color-accent-content:oklch(26% 0 0);--color-neutral:oklch(87% 0 0);--color-neutral-content:oklch(26% 0 0);--color-info:oklch(44% .11 240.79);--color-info-content:oklch(90% .058 230.902);--color-success:oklch(43% .095 166.913);--color-success-content:oklch(90% .093 164.15);--color-warning:oklch(47% .137 46.201);--color-warning-content:oklch(92% .12 95.746);--color-error:oklch(44% .177 26.899);--color-error-content:oklch(88% .062 18.334);--radius-selector:0rem;--radius-field:.25rem;--radius-box:.25rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=black]:checked),[data-theme=black]{color-scheme:dark;--color-base-100:oklch(0% 0 0);--color-base-200:oklch(19% 0 0);--color-base-300:oklch(22% 0 0);--color-base-content:oklch(87.609% 0 0);--color-primary:oklch(35% 0 0);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(35% 0 0);--color-secondary-content:oklch(100% 0 0);--color-accent:oklch(35% 0 0);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(35% 0 0);--color-neutral-content:oklch(100% 0 0);--color-info:oklch(45.201% .313 264.052);--color-info-content:oklch(89.04% .062 264.052);--color-success:oklch(51.975% .176 142.495);--color-success-content:oklch(90.395% .035 142.495);--color-warning:oklch(96.798% .211 109.769);--color-warning-content:oklch(19.359% .042 109.769);--color-error:oklch(62.795% .257 29.233);--color-error-content:oklch(12.559% .051 29.233);--radius-selector:0rem;--radius-field:0rem;--radius-box:0rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=luxury]:checked),[data-theme=luxury]{color-scheme:dark;--color-base-100:oklch(14.076% .004 285.822);--color-base-200:oklch(20.219% .004 308.229);--color-base-300:oklch(23.219% .004 308.229);--color-base-content:oklch(75.687% .123 76.89);--color-primary:oklch(100% 0 0);--color-primary-content:oklch(20% 0 0);--color-secondary:oklch(27.581% .064 261.069);--color-secondary-content:oklch(85.516% .012 261.069);--color-accent:oklch(36.674% .051 338.825);--color-accent-content:oklch(87.334% .01 338.825);--color-neutral:oklch(24.27% .057 59.825);--color-neutral-content:oklch(93.203% .089 90.861);--color-info:oklch(79.061% .121 237.133);--color-info-content:oklch(15.812% .024 237.133);--color-success:oklch(78.119% .192 132.154);--color-success-content:oklch(15.623% .038 132.154);--color-warning:oklch(86.127% .136 102.891);--color-warning-content:oklch(17.225% .027 102.891);--color-error:oklch(71.753% .176 22.568);--color-error-content:oklch(14.35% .035 22.568);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=dracula]:checked),[data-theme=dracula]{color-scheme:dark;--color-base-100:oklch(28.822% .022 277.508);--color-base-200:oklch(26.805% .02 277.508);--color-base-300:oklch(24.787% .019 277.508);--color-base-content:oklch(97.747% .007 106.545);--color-primary:oklch(75.461% .183 346.812);--color-primary-content:oklch(15.092% .036 346.812);--color-secondary:oklch(74.202% .148 301.883);--color-secondary-content:oklch(14.84% .029 301.883);--color-accent:oklch(83.392% .124 66.558);--color-accent-content:oklch(16.678% .024 66.558);--color-neutral:oklch(39.445% .032 275.524);--color-neutral-content:oklch(87.889% .006 275.524);--color-info:oklch(88.263% .093 212.846);--color-info-content:oklch(17.652% .018 212.846);--color-success:oklch(87.099% .219 148.024);--color-success-content:oklch(17.419% .043 148.024);--color-warning:oklch(95.533% .134 112.757);--color-warning-content:oklch(19.106% .026 112.757);--color-error:oklch(68.22% .206 24.43);--color-error-content:oklch(13.644% .041 24.43);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=cmyk]:checked),[data-theme=cmyk]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(95% 0 0);--color-base-300:oklch(90% 0 0);--color-base-content:oklch(20% 0 0);--color-primary:oklch(71.772% .133 239.443);--color-primary-content:oklch(14.354% .026 239.443);--color-secondary:oklch(64.476% .202 359.339);--color-secondary-content:oklch(12.895% .04 359.339);--color-accent:oklch(94.228% .189 105.306);--color-accent-content:oklch(18.845% .037 105.306);--color-neutral:oklch(21.778% 0 0);--color-neutral-content:oklch(84.355% 0 0);--color-info:oklch(68.475% .094 217.284);--color-info-content:oklch(13.695% .018 217.284);--color-success:oklch(46.949% .162 321.406);--color-success-content:oklch(89.389% .032 321.406);--color-warning:oklch(71.236% .159 52.023);--color-warning-content:oklch(14.247% .031 52.023);--color-error:oklch(62.013% .208 28.717);--color-error-content:oklch(12.402% .041 28.717);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=autumn]:checked),[data-theme=autumn]{color-scheme:light;--color-base-100:oklch(95.814% 0 0);--color-base-200:oklch(89.107% 0 0);--color-base-300:oklch(82.4% 0 0);--color-base-content:oklch(19.162% 0 0);--color-primary:oklch(40.723% .161 17.53);--color-primary-content:oklch(88.144% .032 17.53);--color-secondary:oklch(61.676% .169 23.865);--color-secondary-content:oklch(12.335% .033 23.865);--color-accent:oklch(73.425% .094 60.729);--color-accent-content:oklch(14.685% .018 60.729);--color-neutral:oklch(54.367% .037 51.902);--color-neutral-content:oklch(90.873% .007 51.902);--color-info:oklch(69.224% .097 207.284);--color-info-content:oklch(13.844% .019 207.284);--color-success:oklch(60.995% .08 174.616);--color-success-content:oklch(12.199% .016 174.616);--color-warning:oklch(70.081% .164 56.844);--color-warning-content:oklch(14.016% .032 56.844);--color-error:oklch(53.07% .241 24.16);--color-error-content:oklch(90.614% .048 24.16);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=business]:checked),[data-theme=business]{color-scheme:dark;--color-base-100:oklch(24.353% 0 0);--color-base-200:oklch(22.648% 0 0);--color-base-300:oklch(20.944% 0 0);--color-base-content:oklch(84.87% 0 0);--color-primary:oklch(41.703% .099 251.473);--color-primary-content:oklch(88.34% .019 251.473);--color-secondary:oklch(64.092% .027 229.389);--color-secondary-content:oklch(12.818% .005 229.389);--color-accent:oklch(67.271% .167 35.791);--color-accent-content:oklch(13.454% .033 35.791);--color-neutral:oklch(27.441% .013 253.041);--color-neutral-content:oklch(85.488% .002 253.041);--color-info:oklch(62.616% .143 240.033);--color-info-content:oklch(12.523% .028 240.033);--color-success:oklch(70.226% .094 156.596);--color-success-content:oklch(14.045% .018 156.596);--color-warning:oklch(77.482% .115 81.519);--color-warning-content:oklch(15.496% .023 81.519);--color-error:oklch(51.61% .146 29.674);--color-error-content:oklch(90.322% .029 29.674);--radius-selector:0rem;--radius-field:.25rem;--radius-box:.25rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=acid]:checked),[data-theme=acid]{color-scheme:light;--color-base-100:oklch(98% 0 0);--color-base-200:oklch(95% 0 0);--color-base-300:oklch(91% 0 0);--color-base-content:oklch(0% 0 0);--color-primary:oklch(71.9% .357 330.759);--color-primary-content:oklch(14.38% .071 330.759);--color-secondary:oklch(73.37% .224 48.25);--color-secondary-content:oklch(14.674% .044 48.25);--color-accent:oklch(92.78% .264 122.962);--color-accent-content:oklch(18.556% .052 122.962);--color-neutral:oklch(21.31% .128 278.68);--color-neutral-content:oklch(84.262% .025 278.68);--color-info:oklch(60.72% .227 252.05);--color-info-content:oklch(12.144% .045 252.05);--color-success:oklch(85.72% .266 158.53);--color-success-content:oklch(17.144% .053 158.53);--color-warning:oklch(91.01% .212 100.5);--color-warning-content:oklch(18.202% .042 100.5);--color-error:oklch(64.84% .293 29.349);--color-error-content:oklch(12.968% .058 29.349);--radius-selector:1rem;--radius-field:1rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=lemonade]:checked),[data-theme=lemonade]{color-scheme:light;--color-base-100:oklch(98.71% .02 123.72);--color-base-200:oklch(91.8% .018 123.72);--color-base-300:oklch(84.89% .017 123.72);--color-base-content:oklch(19.742% .004 123.72);--color-primary:oklch(58.92% .199 134.6);--color-primary-content:oklch(11.784% .039 134.6);--color-secondary:oklch(77.75% .196 111.09);--color-secondary-content:oklch(15.55% .039 111.09);--color-accent:oklch(85.39% .201 100.73);--color-accent-content:oklch(17.078% .04 100.73);--color-neutral:oklch(30.98% .075 108.6);--color-neutral-content:oklch(86.196% .015 108.6);--color-info:oklch(86.19% .047 224.14);--color-info-content:oklch(17.238% .009 224.14);--color-success:oklch(86.19% .047 157.85);--color-success-content:oklch(17.238% .009 157.85);--color-warning:oklch(86.19% .047 102.15);--color-warning-content:oklch(17.238% .009 102.15);--color-error:oklch(86.19% .047 25.85);--color-error-content:oklch(17.238% .009 25.85);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=night]:checked),[data-theme=night]{color-scheme:dark;--color-base-100:oklch(20.768% .039 265.754);--color-base-200:oklch(19.314% .037 265.754);--color-base-300:oklch(17.86% .034 265.754);--color-base-content:oklch(84.153% .007 265.754);--color-primary:oklch(75.351% .138 232.661);--color-primary-content:oklch(15.07% .027 232.661);--color-secondary:oklch(68.011% .158 276.934);--color-secondary-content:oklch(13.602% .031 276.934);--color-accent:oklch(72.36% .176 350.048);--color-accent-content:oklch(14.472% .035 350.048);--color-neutral:oklch(27.949% .036 260.03);--color-neutral-content:oklch(85.589% .007 260.03);--color-info:oklch(68.455% .148 237.251);--color-info-content:oklch(0% 0 0);--color-success:oklch(78.452% .132 181.911);--color-success-content:oklch(15.69% .026 181.911);--color-warning:oklch(83.242% .139 82.95);--color-warning-content:oklch(16.648% .027 82.95);--color-error:oklch(71.785% .17 13.118);--color-error-content:oklch(14.357% .034 13.118);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=coffee]:checked),[data-theme=coffee]{color-scheme:dark;--color-base-100:oklch(24% .023 329.708);--color-base-200:oklch(21% .021 329.708);--color-base-300:oklch(16% .019 329.708);--color-base-content:oklch(72.354% .092 79.129);--color-primary:oklch(71.996% .123 62.756);--color-primary-content:oklch(14.399% .024 62.756);--color-secondary:oklch(34.465% .029 199.194);--color-secondary-content:oklch(86.893% .005 199.194);--color-accent:oklch(42.621% .074 224.389);--color-accent-content:oklch(88.524% .014 224.389);--color-neutral:oklch(16.51% .015 326.261);--color-neutral-content:oklch(83.302% .003 326.261);--color-info:oklch(79.49% .063 184.558);--color-info-content:oklch(15.898% .012 184.558);--color-success:oklch(74.722% .072 131.116);--color-success-content:oklch(14.944% .014 131.116);--color-warning:oklch(88.15% .14 87.722);--color-warning-content:oklch(17.63% .028 87.722);--color-error:oklch(77.318% .128 31.871);--color-error-content:oklch(15.463% .025 31.871);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=winter]:checked),[data-theme=winter]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(97.466% .011 259.822);--color-base-300:oklch(93.268% .016 262.751);--color-base-content:oklch(41.886% .053 255.824);--color-primary:oklch(56.86% .255 257.57);--color-primary-content:oklch(91.372% .051 257.57);--color-secondary:oklch(42.551% .161 282.339);--color-secondary-content:oklch(88.51% .032 282.339);--color-accent:oklch(59.939% .191 335.171);--color-accent-content:oklch(11.988% .038 335.171);--color-neutral:oklch(19.616% .063 257.651);--color-neutral-content:oklch(83.923% .012 257.651);--color-info:oklch(88.127% .085 214.515);--color-info-content:oklch(17.625% .017 214.515);--color-success:oklch(80.494% .077 197.823);--color-success-content:oklch(16.098% .015 197.823);--color-warning:oklch(89.172% .045 71.47);--color-warning-content:oklch(17.834% .009 71.47);--color-error:oklch(73.092% .11 20.076);--color-error-content:oklch(14.618% .022 20.076);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=dim]:checked),[data-theme=dim]{color-scheme:dark;--color-base-100:oklch(30.857% .023 264.149);--color-base-200:oklch(28.036% .019 264.182);--color-base-300:oklch(26.346% .018 262.177);--color-base-content:oklch(82.901% .031 222.959);--color-primary:oklch(86.133% .141 139.549);--color-primary-content:oklch(17.226% .028 139.549);--color-secondary:oklch(73.375% .165 35.353);--color-secondary-content:oklch(14.675% .033 35.353);--color-accent:oklch(74.229% .133 311.379);--color-accent-content:oklch(14.845% .026 311.379);--color-neutral:oklch(24.731% .02 264.094);--color-neutral-content:oklch(82.901% .031 222.959);--color-info:oklch(86.078% .142 206.182);--color-info-content:oklch(17.215% .028 206.182);--color-success:oklch(86.171% .142 166.534);--color-success-content:oklch(17.234% .028 166.534);--color-warning:oklch(86.163% .142 94.818);--color-warning-content:oklch(17.232% .028 94.818);--color-error:oklch(82.418% .099 33.756);--color-error-content:oklch(16.483% .019 33.756);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=nord]:checked),[data-theme=nord]{color-scheme:light;--color-base-100:oklch(95.127% .007 260.731);--color-base-200:oklch(93.299% .01 261.788);--color-base-300:oklch(89.925% .016 262.749);--color-base-content:oklch(32.437% .022 264.182);--color-primary:oklch(59.435% .077 254.027);--color-primary-content:oklch(11.887% .015 254.027);--color-secondary:oklch(69.651% .059 248.687);--color-secondary-content:oklch(13.93% .011 248.687);--color-accent:oklch(77.464% .062 217.469);--color-accent-content:oklch(15.492% .012 217.469);--color-neutral:oklch(45.229% .035 264.131);--color-neutral-content:oklch(89.925% .016 262.749);--color-info:oklch(69.207% .062 332.664);--color-info-content:oklch(13.841% .012 332.664);--color-success:oklch(76.827% .074 131.063);--color-success-content:oklch(15.365% .014 131.063);--color-warning:oklch(85.486% .089 84.093);--color-warning-content:oklch(17.097% .017 84.093);--color-error:oklch(60.61% .12 15.341);--color-error-content:oklch(12.122% .024 15.341);--radius-selector:1rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=sunset]:checked),[data-theme=sunset]{color-scheme:dark;--color-base-100:oklch(22% .019 237.69);--color-base-200:oklch(20% .019 237.69);--color-base-300:oklch(18% .019 237.69);--color-base-content:oklch(77.383% .043 245.096);--color-primary:oklch(74.703% .158 39.947);--color-primary-content:oklch(14.94% .031 39.947);--color-secondary:oklch(72.537% .177 2.72);--color-secondary-content:oklch(14.507% .035 2.72);--color-accent:oklch(71.294% .166 299.844);--color-accent-content:oklch(14.258% .033 299.844);--color-neutral:oklch(26% .019 237.69);--color-neutral-content:oklch(70% .019 237.69);--color-info:oklch(85.559% .085 206.015);--color-info-content:oklch(17.111% .017 206.015);--color-success:oklch(85.56% .085 144.778);--color-success-content:oklch(17.112% .017 144.778);--color-warning:oklch(85.569% .084 74.427);--color-warning-content:oklch(17.113% .016 74.427);--color-error:oklch(85.511% .078 16.886);--color-error-content:oklch(17.102% .015 16.886);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=caramellatte]:checked),[data-theme=caramellatte]{color-scheme:light;--color-base-100:oklch(98% .016 73.684);--color-base-200:oklch(95% .038 75.164);--color-base-300:oklch(90% .076 70.697);--color-base-content:oklch(40% .123 38.172);--color-primary:oklch(0% 0 0);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(22.45% .075 37.85);--color-secondary-content:oklch(90% .076 70.697);--color-accent:oklch(46.44% .111 37.85);--color-accent-content:oklch(90% .076 70.697);--color-neutral:oklch(55% .195 38.402);--color-neutral-content:oklch(98% .016 73.684);--color-info:oklch(42% .199 265.638);--color-info-content:oklch(90% .076 70.697);--color-success:oklch(43% .095 166.913);--color-success-content:oklch(90% .076 70.697);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(70% .191 22.216);--color-error-content:oklch(39% .141 25.723);--radius-selector:2rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:2px;--depth:1;--noise:1}:root:has(input.theme-controller[value=abyss]:checked),[data-theme=abyss]{color-scheme:dark;--color-base-100:oklch(20% .08 209);--color-base-200:oklch(15% .08 209);--color-base-300:oklch(10% .08 209);--color-base-content:oklch(90% .076 70.697);--color-primary:oklch(92% .2653 125);--color-primary-content:oklch(50% .2653 125);--color-secondary:oklch(83.27% .0764 298.3);--color-secondary-content:oklch(43.27% .0764 298.3);--color-accent:oklch(43% 0 0);--color-accent-content:oklch(98% 0 0);--color-neutral:oklch(30% .08 209);--color-neutral-content:oklch(90% .076 70.697);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(79% .209 151.711);--color-success-content:oklch(26% .065 152.934);--color-warning:oklch(84.8% .1962 84.62);--color-warning-content:oklch(44.8% .1962 84.62);--color-error:oklch(65% .1985 24.22);--color-error-content:oklch(27% .1985 24.22);--radius-selector:2rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=silk]:checked),[data-theme=silk]{color-scheme:light;--color-base-100:oklch(97% .0035 67.78);--color-base-200:oklch(95% .0081 61.42);--color-base-300:oklch(90% .0081 61.42);--color-base-content:oklch(40% .0081 61.42);--color-primary:oklch(23.27% .0249 284.3);--color-primary-content:oklch(94.22% .2505 117.44);--color-secondary:oklch(23.27% .0249 284.3);--color-secondary-content:oklch(73.92% .2135 50.94);--color-accent:oklch(23.27% .0249 284.3);--color-accent-content:oklch(88.92% .2061 189.9);--color-neutral:oklch(20% 0 0);--color-neutral-content:oklch(80% .0081 61.42);--color-info:oklch(80.39% .1148 241.68);--color-info-content:oklch(30.39% .1148 241.68);--color-success:oklch(83.92% .0901 136.87);--color-success-content:oklch(23.92% .0901 136.87);--color-warning:oklch(83.92% .1085 80);--color-warning-content:oklch(43.92% .1085 80);--color-error:oklch(75.1% .1814 22.37);--color-error-content:oklch(35.1% .1814 22.37);--radius-selector:2rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:2px;--depth:1;--noise:0}:root{--fx-noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.34' numOctaves='4' stitchTiles='stitch'%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23a)' opacity='0.2'%3E%3C/rect%3E%3C/svg%3E");scrollbar-color:currentColor #0000}@supports (color:color-mix(in lab,red,red)){:root{scrollbar-color:color-mix(in oklch,currentColor 35%,#0000)#0000}}@property --radialprogress{syntax: "<percentage>"; inherits: true; initial-value: 0%;}:root:has(.modal-open,.modal[open],.modal:target,.modal-toggle:checked),:root:has(.drawer:not([class*=drawer-open])>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}@media not all and (min-width:40rem){:root:has(.sm\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}@media not all and (min-width:48rem){:root:has(.md\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}@media not all and (min-width:64rem){:root:has(.lg\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}@media not all and (min-width:80rem){:root:has(.xl\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}@media not all and (min-width:96rem){:root:has(.\\32xl\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}@media(min-width:40rem){:root:has(.max-sm\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}@media(min-width:48rem){:root:has(.max-md\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}@media(min-width:64rem){:root:has(.max-lg\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}@media(min-width:80rem){:root:has(.max-xl\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}@media(min-width:96rem){:root:has(.max-2xl\\:drawer-open>.drawer-toggle:checked){--page-has-backdrop:1;overflow:hidden}}:root:has(.modal-open,.modal[open],.modal:target,.modal-toggle:checked,.drawer:not(.drawer-open)>.drawer-toggle:checked){background-image:linear-gradient(var(--root-bg),var(--root-bg));background-color:var(--root-bg)}@supports (color:color-mix(in lab,red,red)){:root:has(.modal-open,.modal[open],.modal:target,.modal-toggle:checked,.drawer:not(.drawer-open)>.drawer-toggle:checked){background-color:color-mix(in srgb,var(--root-bg),oklch(0% 0 0) calc(var(--page-has-backdrop,0)*40%))}}:root:has(.modal-open,.modal[open],.modal:target,.modal-toggle:checked,.drawer:not(.drawer-open)>.drawer-toggle:checked){scrollbar-gutter:stable;scrollbar-gutter:if(style(--page-has-scroll: 1): stable; else: unset);animation:forwards set-page-has-scroll;animation-timeline:scroll()}@keyframes set-page-has-scroll{0%,to{--page-has-scroll:1}}:root,[data-theme]{background-color:var(--root-bg,var(--color-base-100));color:var(--color-base-content)}:where(:root,[data-theme]){--root-bg:var(--color-base-100)}}@layer components;@layer utilities{@layer daisyui.component{.diff{webkit-user-select:none;-webkit-user-select:none;user-select:none;direction:ltr;grid-template-rows:1fr 1.8rem 1fr;grid-template-columns:auto 1fr;width:100%;display:grid;position:relative;overflow:hidden;container-type:inline-size}.diff:focus-visible,.diff:has(.diff-item-1:focus-visible){outline-style:var(--tw-outline-style);outline-offset:1px;outline-width:2px;outline-color:var(--color-base-content)}.diff:focus-visible .diff-resizer{min-width:95cqi;max-width:95cqi}.diff:has(.diff-item-1:focus-visible){outline-style:var(--tw-outline-style);outline-offset:1px;outline-width:2px}.diff:has(.diff-item-1:focus-visible) .diff-resizer{min-width:5cqi;max-width:5cqi}@supports (-webkit-overflow-scrolling:touch) and (overflow:-webkit-paged-x){.diff:focus .diff-resizer{min-width:5cqi;max-width:5cqi}.diff:has(.diff-item-1:focus) .diff-resizer{min-width:95cqi;max-width:95cqi}}.modal{pointer-events:none;visibility:hidden;width:100%;max-width:none;height:100%;max-height:none;color:inherit;transition:visibility .3s allow-discrete,background-color .3s ease-out,opacity .1s ease-out;overscroll-behavior:contain;z-index:999;scrollbar-gutter:auto;background-color:#0000;place-items:center;margin:0;padding:0;display:grid;position:fixed;inset:0;overflow:clip}.modal::backdrop{display:none}.tooltip{--tt-bg:var(--color-neutral);--tt-off: calc(100% + .5rem) ;--tt-tail: calc(100% + 1px + .25rem) ;display:inline-block;position:relative}.tooltip>.tooltip-content,.tooltip[data-tip]:before{border-radius:var(--radius-field);text-align:center;white-space:normal;max-width:20rem;color:var(--color-neutral-content);opacity:0;background-color:var(--tt-bg);pointer-events:none;z-index:2;--tw-content:attr(data-tip);content:var(--tw-content);width:max-content;padding-block:.25rem;padding-inline:.5rem;font-size:.875rem;line-height:1.25;position:absolute}@media(prefers-reduced-motion:no-preference){.tooltip>.tooltip-content,.tooltip[data-tip]:before,.tooltip:after{transition:opacity .2s cubic-bezier(.4,0,.2,1) 75ms,transform .2s cubic-bezier(.4,0,.2,1) 75ms}}.tooltip:after{opacity:0;background-color:var(--tt-bg);content:"";pointer-events:none;--mask-tooltip:url("data:image/svg+xml,%3Csvg width='10' height='4' viewBox='0 0 8 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.500009 1C3.5 1 3.00001 4 5.00001 4C7 4 6.5 1 9.5 1C10 1 10 0.499897 10 0H0C-1.99338e-08 0.5 0 1 0.500009 1Z' fill='black'/%3E%3C/svg%3E%0A");width:.625rem;height:.25rem;-webkit-mask-position:-1px 0;mask-position:-1px 0;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-image:var(--mask-tooltip);mask-image:var(--mask-tooltip);display:block;position:absolute}:is(.tooltip.tooltip-open,.tooltip[data-tip]:not([data-tip=""]):hover,.tooltip:not(:has(.tooltip-content:empty)):has(.tooltip-content):hover,.tooltip:has(:focus-visible))>.tooltip-content,:is(.tooltip.tooltip-open,.tooltip[data-tip]:not([data-tip=""]):hover,.tooltip:not(:has(.tooltip-content:empty)):has(.tooltip-content):hover,.tooltip:has(:focus-visible))[data-tip]:before,:is(.tooltip.tooltip-open,.tooltip[data-tip]:not([data-tip=""]):hover,.tooltip:not(:has(.tooltip-content:empty)):has(.tooltip-content):hover,.tooltip:has(:focus-visible)):after{opacity:1;--tt-pos:0rem}@media(prefers-reduced-motion:no-preference){:is(.tooltip.tooltip-open,.tooltip[data-tip]:not([data-tip=""]):hover,.tooltip:not(:has(.tooltip-content:empty)):has(.tooltip-content):hover,.tooltip:has(:focus-visible))>.tooltip-content,:is(.tooltip.tooltip-open,.tooltip[data-tip]:not([data-tip=""]):hover,.tooltip:not(:has(.tooltip-content:empty)):has(.tooltip-content):hover,.tooltip:has(:focus-visible))[data-tip]:before,:is(.tooltip.tooltip-open,.tooltip[data-tip]:not([data-tip=""]):hover,.tooltip:not(:has(.tooltip-content:empty)):has(.tooltip-content):hover,.tooltip:has(:focus-visible)):after{transition:opacity .2s cubic-bezier(.4,0,.2,1),transform .2s cubic-bezier(.4,0,.2,1)}}.tab{cursor:pointer;appearance:none;text-align:center;webkit-user-select:none;-webkit-user-select:none;user-select:none;flex-wrap:wrap;justify-content:center;align-items:center;display:inline-flex;position:relative}@media(hover:hover){.tab:hover{color:var(--color-base-content)}}.tab{--tab-p:1rem;--tab-bg:var(--color-base-100);--tab-border-color:var(--color-base-300);--tab-radius-ss:0;--tab-radius-se:0;--tab-radius-es:0;--tab-radius-ee:0;--tab-order:0;--tab-radius-min:calc(.75rem - var(--border));order:var(--tab-order);height:var(--tab-height);border-color:#0000;padding-inline-start:var(--tab-p);padding-inline-end:var(--tab-p);font-size:.875rem}.tab:is(input[type=radio]){min-width:fit-content}.tab:is(input[type=radio]):after{--tw-content:attr(aria-label);content:var(--tw-content)}.tab:is(label){position:relative}.tab:is(label) input{cursor:pointer;appearance:none;opacity:0;position:absolute;inset:0}:is(.tab:checked,.tab:is(label:has(:checked)),.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]))+.tab-content{height:calc(100% - var(--tab-height) + var(--border));display:block}.tab:not(:checked,label:has(:checked),:hover,.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]){color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.tab:not(:checked,label:has(:checked),:hover,.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]){color:color-mix(in oklab,var(--color-base-content)50%,transparent)}}.tab:not(input):empty{cursor:default;flex-grow:1}.tab:focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.tab:focus{outline-offset:2px;outline:2px solid #0000}}.tab:focus-visible,.tab:is(label:has(:checked:focus-visible)){outline-offset:-5px;outline:2px solid}.tab[disabled]{pointer-events:none;opacity:.4}.menu{--menu-active-fg:var(--color-neutral-content);--menu-active-bg:var(--color-neutral);flex-flow:column wrap;width:fit-content;padding:.5rem;font-size:.875rem;display:flex}.menu :where(li ul){white-space:nowrap;margin-inline-start:1rem;padding-inline-start:.5rem;position:relative}.menu :where(li ul):before{background-color:var(--color-base-content);opacity:.1;width:var(--border);content:"";inset-inline-start:0;position:absolute;top:.75rem;bottom:.75rem}.menu :where(li>.menu-dropdown:not(.menu-dropdown-show)){display:none}.menu :where(li:not(.menu-title)>:not(ul,details,.menu-title,.btn)),.menu :where(li:not(.menu-title)>details>summary:not(.menu-title)){border-radius:var(--radius-field);text-align:start;text-wrap:balance;-webkit-user-select:none;user-select:none;grid-auto-columns:minmax(auto,max-content) auto max-content;grid-auto-flow:column;align-content:flex-start;align-items:center;gap:.5rem;padding-block:.375rem;padding-inline:.75rem;transition-property:color,background-color,box-shadow;transition-duration:.2s;transition-timing-function:cubic-bezier(0,0,.2,1);display:grid}.menu :where(li>details>summary){--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.menu :where(li>details>summary){outline-offset:2px;outline:2px solid #0000}}.menu :where(li>details>summary)::-webkit-details-marker{display:none}:is(.menu :where(li>details>summary),.menu :where(li>.menu-dropdown-toggle)):after{content:"";transform-origin:50%;pointer-events:none;justify-self:flex-end;width:.375rem;height:.375rem;transition-property:rotate,translate;transition-duration:.2s;display:block;translate:0 -1px;rotate:-135deg;box-shadow:inset 2px 2px}.menu :where(li>details[open]>summary):after,.menu :where(li>.menu-dropdown-toggle.menu-dropdown-show):after{translate:0 1px;rotate:45deg}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn).menu-focus,.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn):focus-visible{cursor:pointer;background-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn).menu-focus,.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn):focus-visible{background-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn).menu-focus,.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn):focus-visible{color:var(--color-base-content);--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn).menu-focus,.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn):focus-visible{outline-offset:2px;outline:2px solid #0000}}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){cursor:pointer;background-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){background-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){outline-offset:2px;outline:2px solid #0000}}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){box-shadow:inset 0 1px #00000003,inset 0 -1px #ffffff03}.menu :where(li:empty){background-color:var(--color-base-content);opacity:.1;height:1px;margin:.5rem 1rem}.menu :where(li){flex-flow:column wrap;flex-shrink:0;align-items:stretch;display:flex;position:relative}.menu :where(li) .badge{justify-self:flex-end}.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active{outline-offset:2px;outline:2px solid #0000}}.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active{color:var(--menu-active-fg);background-color:var(--menu-active-bg);background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise)}:is(.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active):not(:is(.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active):active){box-shadow:0 2px calc(var(--depth)*3px) -2px var(--menu-active-bg)}.menu :where(li).menu-disabled{pointer-events:none;color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.menu :where(li).menu-disabled{color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.menu .dropdown:focus-within .menu-dropdown-toggle:after{translate:0 1px;rotate:45deg}.menu .dropdown-content{margin-top:.5rem;padding:.5rem}.menu .dropdown-content:before{display:none}.dropdown{position-area:var(--anchor-v,bottom)var(--anchor-h,span-right);display:inline-block;position:relative}.dropdown>:not(summary):focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.dropdown>:not(summary):focus{outline-offset:2px;outline:2px solid #0000}}.dropdown .dropdown-content{position:absolute}.dropdown:not(details,.dropdown-open,.dropdown-hover:hover,:focus-within) .dropdown-content,.dropdown.dropdown-hover:not(:hover) [tabindex]:first-child:focus:not(:focus-visible)~.dropdown-content{transform-origin:top;opacity:0;display:none;scale:95%}.dropdown[popover],.dropdown .dropdown-content{z-index:999}@media(prefers-reduced-motion:no-preference){.dropdown[popover],.dropdown .dropdown-content{transition-behavior:allow-discrete;transition-property:opacity,scale,display;transition-duration:.2s;transition-timing-function:cubic-bezier(.4,0,.2,1);animation:.2s dropdown}}@starting-style{.dropdown[popover],.dropdown .dropdown-content{opacity:0;scale:95%}}:is(.dropdown.dropdown-open,.dropdown:not(.dropdown-hover):focus,.dropdown:focus-within)>[tabindex]:first-child{pointer-events:none}:is(.dropdown.dropdown-open,.dropdown:not(.dropdown-hover):focus,.dropdown:focus-within) .dropdown-content{opacity:1}.dropdown.dropdown-hover:hover .dropdown-content{opacity:1;scale:100%}.dropdown:is(details) summary::-webkit-details-marker{display:none}:is(.dropdown.dropdown-open,.dropdown:focus,.dropdown:focus-within) .dropdown-content{scale:100%}.dropdown:where([popover]){background:0 0}.dropdown[popover]{color:inherit;position:fixed}@supports not (position-area:bottom){.dropdown[popover]{margin:auto}.dropdown[popover].dropdown-open:not(:popover-open){transform-origin:top;opacity:0;display:none;scale:95%}.dropdown[popover]::backdrop{background-color:oklab(0% none none/.3)}}.dropdown[popover]:not(.dropdown-open,:popover-open){transform-origin:top;opacity:0;display:none;scale:95%}:where(.btn){width:unset}.btn{cursor:pointer;text-align:center;vertical-align:middle;outline-offset:2px;webkit-user-select:none;-webkit-user-select:none;user-select:none;padding-inline:var(--btn-p);color:var(--btn-fg);--tw-prose-links:var(--btn-fg);height:var(--size);font-size:var(--fontsize,.875rem);outline-color:var(--btn-color,var(--color-base-content));background-color:var(--btn-bg);background-size:auto,calc(var(--noise)*100%);background-image:none,var(--btn-noise);border-width:var(--border);border-style:solid;border-color:var(--btn-border);text-shadow:0 .5px oklch(100% 0 0/calc(var(--depth)*.15));touch-action:manipulation;box-shadow:0 .5px 0 .5px oklch(100% 0 0/calc(var(--depth)*6%)) inset,var(--btn-shadow);--size:calc(var(--size-field,.25rem)*10);--btn-bg:var(--btn-color,var(--color-base-200));--btn-fg:var(--color-base-content);--btn-p:1rem;--btn-border:var(--btn-bg);border-start-start-radius:var(--join-ss,var(--radius-field));border-start-end-radius:var(--join-se,var(--radius-field));border-end-end-radius:var(--join-ee,var(--radius-field));border-end-start-radius:var(--join-es,var(--radius-field));flex-wrap:nowrap;flex-shrink:0;justify-content:center;align-items:center;gap:.375rem;font-weight:600;transition-property:color,background-color,border-color,box-shadow;transition-duration:.2s;transition-timing-function:cubic-bezier(0,0,.2,1);display:inline-flex}@supports (color:color-mix(in lab,red,red)){.btn{--btn-border:color-mix(in oklab,var(--btn-bg),#000 calc(var(--depth)*5%))}}.btn{--btn-shadow:0 3px 2px -2px var(--btn-bg),0 4px 3px -2px var(--btn-bg)}@supports (color:color-mix(in lab,red,red)){.btn{--btn-shadow:0 3px 2px -2px color-mix(in oklab,var(--btn-bg)calc(var(--depth)*30%),#0000),0 4px 3px -2px color-mix(in oklab,var(--btn-bg)calc(var(--depth)*30%),#0000)}}.btn{--btn-noise:var(--fx-noise)}@media(hover:hover){.btn:hover{--btn-bg:var(--btn-color,var(--color-base-200))}@supports (color:color-mix(in lab,red,red)){.btn:hover{--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-200)),#000 7%)}}}.btn:focus-visible,.btn:has(:focus-visible){isolation:isolate;outline-width:2px;outline-style:solid}.btn:active:not(.btn-active){--btn-bg:var(--btn-color,var(--color-base-200));translate:0 .5px}@supports (color:color-mix(in lab,red,red)){.btn:active:not(.btn-active){--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-200)),#000 5%)}}.btn:active:not(.btn-active){--btn-border:var(--btn-color,var(--color-base-200))}@supports (color:color-mix(in lab,red,red)){.btn:active:not(.btn-active){--btn-border:color-mix(in oklab,var(--btn-color,var(--color-base-200)),#000 7%)}}.btn:active:not(.btn-active){--btn-shadow:0 0 0 0 oklch(0% 0 0/0),0 0 0 0 oklch(0% 0 0/0)}.btn:is(input[type=checkbox],input[type=radio]){appearance:none}.btn:is(input[type=checkbox],input[type=radio]):after{--tw-content:attr(aria-label);content:var(--tw-content)}.btn:where(input:checked:not(.filter .btn)){--btn-color:var(--color-primary);--btn-fg:var(--color-primary-content);isolation:isolate}.loading{pointer-events:none;aspect-ratio:1;vertical-align:middle;width:calc(var(--size-selector,.25rem)*6);background-color:currentColor;display:inline-block;-webkit-mask-image:url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");-webkit-mask-position:50%;mask-position:50%;-webkit-mask-size:100%;mask-size:100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}.radial-progress{height:var(--size);width:var(--size);vertical-align:middle;box-sizing:content-box;--value:0;--size:5rem;--thickness:calc(var(--size)/10);--radialprogress:calc(var(--value)*1%);background-color:#0000;border-radius:3.40282e38px;place-content:center;transition:--radialprogress .3s linear;display:inline-grid;position:relative}.radial-progress:before{content:"";background:radial-gradient(farthest-side,currentColor 98%,#0000)top/var(--thickness)var(--thickness)no-repeat,conic-gradient(currentColor var(--radialprogress),#0000 0);webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - var(--thickness)),#000 calc(100% + .5px - var(--thickness)));-webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - var(--thickness)),#000 calc(100% + .5px - var(--thickness)));mask:radial-gradient(farthest-side,#0000 calc(100% - var(--thickness)),#000 calc(100% + .5px - var(--thickness)));border-radius:3.40282e38px;position:absolute;inset:0}.radial-progress:after{content:"";inset:calc(50% - var(--thickness)/2);transform:rotate(calc(var(--value)*3.6deg - 90deg))translate(calc(var(--size)/2 - 50%));background-color:currentColor;border-radius:3.40282e38px;transition:transform .3s linear;position:absolute}.list{flex-direction:column;font-size:.875rem;display:flex}.list .list-row{--list-grid-cols:minmax(0,auto)1fr;border-radius:var(--radius-box);word-break:break-word;grid-auto-flow:column;grid-template-columns:var(--list-grid-cols);gap:1rem;padding:1rem;display:grid;position:relative}:is(.list>:not(:last-child).list-row,.list>:not(:last-child) .list-row):after{content:"";border-bottom:var(--border)solid;inset-inline:var(--radius-box);border-color:var(--color-base-content);position:absolute;bottom:0}@supports (color:color-mix(in lab,red,red)){:is(.list>:not(:last-child).list-row,.list>:not(:last-child) .list-row):after{border-color:color-mix(in oklab,var(--color-base-content)5%,transparent)}}.toggle{border:var(--border)solid currentColor;color:var(--input-color);cursor:pointer;appearance:none;vertical-align:middle;webkit-user-select:none;-webkit-user-select:none;user-select:none;--radius-selector-max:calc(var(--radius-selector) + var(--radius-selector) + var(--radius-selector));border-radius:calc(var(--radius-selector) + min(var(--toggle-p),var(--radius-selector-max)) + min(var(--border),var(--radius-selector-max)));padding:var(--toggle-p);flex-shrink:0;grid-template-columns:0fr 1fr 1fr;place-content:center;display:inline-grid;position:relative;box-shadow:inset 0 1px}@supports (color:color-mix(in lab,red,red)){.toggle{box-shadow:0 1px color-mix(in oklab,currentColor calc(var(--depth)*10%),#0000) inset}}.toggle{--input-color:var(--color-base-content);transition:color .3s,grid-template-columns .2s}@supports (color:color-mix(in lab,red,red)){.toggle{--input-color:color-mix(in oklab,var(--color-base-content)50%,#0000)}}.toggle{--toggle-p:calc(var(--size)*.125);--size:calc(var(--size-selector,.25rem)*6);width:calc((var(--size)*2) - (var(--border) + var(--toggle-p))*2);height:var(--size)}.toggle>*{z-index:1;cursor:pointer;appearance:none;background-color:#0000;border:none;grid-column:2/span 1;grid-row-start:1;height:100%;padding:.125rem;transition:opacity .2s,rotate .4s}.toggle>:focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.toggle>:focus{outline-offset:2px;outline:2px solid #0000}}.toggle>:nth-child(2){color:var(--color-base-100);rotate:none}.toggle>:nth-child(3){color:var(--color-base-100);opacity:0;rotate:-15deg}.toggle:has(:checked)>:nth-child(2){opacity:0;rotate:15deg}.toggle:has(:checked)>:nth-child(3){opacity:1;rotate:none}.toggle:before{aspect-ratio:1;border-radius:var(--radius-selector);--tw-content:"";content:var(--tw-content);height:100%;box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px currentColor;background-color:currentColor;grid-row-start:1;grid-column-start:2;transition:background-color .1s,translate .2s,inset-inline-start .2s;position:relative;inset-inline-start:0;translate:0}@supports (color:color-mix(in lab,red,red)){.toggle:before{box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px color-mix(in oklab,currentColor calc(var(--depth)*10%),#0000)}}.toggle:before{background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise)}@media(forced-colors:active){.toggle:before{outline-style:var(--tw-outline-style);outline-offset:-1px;outline-width:1px}}@media print{.toggle:before{outline-offset:-1rem;outline:.25rem solid}}.toggle:focus-visible,.toggle:has(:focus-visible){outline-offset:2px;outline:2px solid}.toggle:checked,.toggle[aria-checked=true],.toggle:has(>input:checked){background-color:var(--color-base-100);--input-color:var(--color-base-content);grid-template-columns:1fr 1fr 0fr}:is(.toggle:checked,.toggle[aria-checked=true],.toggle:has(>input:checked)):before{background-color:currentColor}@starting-style{:is(.toggle:checked,.toggle[aria-checked=true],.toggle:has(>input:checked)):before{opacity:0}}.toggle:indeterminate{grid-template-columns:.5fr 1fr .5fr}.toggle:disabled{cursor:not-allowed;opacity:.3}.toggle:disabled:before{border:var(--border)solid currentColor;background-color:#0000}.input{cursor:text;border:var(--border)solid #0000;appearance:none;background-color:var(--color-base-100);vertical-align:middle;white-space:nowrap;width:clamp(3rem,20rem,100%);height:var(--size);font-size:max(var(--font-size,.875rem),.875rem);touch-action:manipulation;border-color:var(--input-color);box-shadow:0 1px var(--input-color) inset,0 -1px oklch(100% 0 0/calc(var(--depth)*.1)) inset;border-start-start-radius:var(--join-ss,var(--radius-field));border-start-end-radius:var(--join-se,var(--radius-field));border-end-end-radius:var(--join-ee,var(--radius-field));border-end-start-radius:var(--join-es,var(--radius-field));flex-shrink:1;align-items:center;gap:.5rem;padding-inline:.75rem;display:inline-flex;position:relative}@supports (color:color-mix(in lab,red,red)){.input{box-shadow:0 1px color-mix(in oklab,var(--input-color)calc(var(--depth)*10%),#0000) inset,0 -1px oklch(100% 0 0/calc(var(--depth)*.1)) inset}}.input{--size:calc(var(--size-field,.25rem)*10);--input-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.input{--input-color:color-mix(in oklab,var(--color-base-content)20%,#0000)}}.input:where(input){display:inline-flex}.input :where(input){appearance:none;background-color:#0000;border:none;width:100%;height:100%;display:inline-flex}.input :where(input):focus,.input :where(input):focus-within{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.input :where(input):focus,.input :where(input):focus-within{outline-offset:2px;outline:2px solid #0000}}.input :where(input[type=url]),.input :where(input[type=email]){direction:ltr}.input :where(input[type=date]){display:inline-flex}.input:focus,.input:focus-within{--input-color:var(--color-base-content);box-shadow:0 1px var(--input-color)}@supports (color:color-mix(in lab,red,red)){.input:focus,.input:focus-within{box-shadow:0 1px color-mix(in oklab,var(--input-color)calc(var(--depth)*10%),#0000)}}.input:focus,.input:focus-within{outline:2px solid var(--input-color);outline-offset:2px;isolation:isolate;z-index:1}@media(pointer:coarse){@supports (-webkit-touch-callout:none){.input:focus,.input:focus-within{--font-size:1rem}}}.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input{cursor:not-allowed;border-color:var(--color-base-200);background-color:var(--color-base-200);color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input{color:color-mix(in oklab,var(--color-base-content)40%,transparent)}}:is(.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input)::placeholder{color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){:is(.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input)::placeholder{color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input{box-shadow:none}.input:has(>input[disabled])>input[disabled]{cursor:not-allowed}.input::-webkit-date-and-time-value{text-align:inherit}.input[type=number]::-webkit-inner-spin-button{margin-block:-.75rem;margin-inline-end:-.75rem}.input::-webkit-calendar-picker-indicator{position:absolute;inset-inline-end:.75em}.input:has(>input[type=date]) :where(input[type=date]){webkit-appearance:none;appearance:none;display:inline-flex}.input:has(>input[type=date]) input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;width:1em;height:1em;position:absolute;inset-inline-end:.75em}.table{border-radius:var(--radius-box);text-align:left;width:100%;font-size:.875rem;position:relative}.table:where(:dir(rtl),[dir=rtl],[dir=rtl] *){text-align:right}@media(hover:hover){:is(.table tr.row-hover,.table tr.row-hover:nth-child(2n)):hover{background-color:var(--color-base-200)}}.table :where(th,td){vertical-align:middle;padding-block:.75rem;padding-inline:1rem}.table :where(thead,tfoot){white-space:nowrap;color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.table :where(thead,tfoot){color:color-mix(in oklab,var(--color-base-content)60%,transparent)}}.table :where(thead,tfoot){font-size:.875rem;font-weight:600}.table :where(tfoot){border-top:var(--border)solid var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.table :where(tfoot){border-top:var(--border)solid color-mix(in oklch,var(--color-base-content)5%,#0000)}}.table :where(.table-pin-rows thead tr){z-index:1;background-color:var(--color-base-100);position:sticky;top:0}.table :where(.table-pin-rows tfoot tr){z-index:1;background-color:var(--color-base-100);position:sticky;bottom:0}.table :where(.table-pin-cols tr th){background-color:var(--color-base-100);position:sticky;left:0;right:0}.table :where(thead tr,tbody tr:not(:last-child)){border-bottom:var(--border)solid var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.table :where(thead tr,tbody tr:not(:last-child)){border-bottom:var(--border)solid color-mix(in oklch,var(--color-base-content)5%,#0000)}}.timeline{display:flex;position:relative}.timeline>li{grid-template-rows:var(--timeline-row-start,minmax(0,1fr))auto var(--timeline-row-end,minmax(0,1fr));grid-template-columns:var(--timeline-col-start,minmax(0,1fr))auto var(--timeline-col-end,minmax(0,1fr));flex-shrink:0;align-items:center;display:grid;position:relative}.timeline>li>hr{border:none;width:100%}.timeline>li>hr:first-child{grid-row-start:2;grid-column-start:1}.timeline>li>hr:last-child{grid-area:2/3/auto/none}@media print{.timeline>li>hr{border:.1px solid var(--color-base-300)}}.timeline :where(hr){background-color:var(--color-base-300);height:.25rem}.timeline:has(.timeline-middle hr):first-child{border-start-start-radius:0;border-start-end-radius:var(--radius-selector);border-end-end-radius:var(--radius-selector);border-end-start-radius:0}.timeline:has(.timeline-middle hr):last-child,.timeline:not(:has(.timeline-middle)) :first-child hr:last-child{border-start-start-radius:var(--radius-selector);border-start-end-radius:0;border-end-end-radius:0;border-end-start-radius:var(--radius-selector)}.timeline:not(:has(.timeline-middle)) :last-child hr:first-child{border-start-start-radius:0;border-start-end-radius:var(--radius-selector);border-end-end-radius:var(--radius-selector);border-end-start-radius:0}.avatar{vertical-align:middle;display:inline-flex;position:relative}.avatar>div{aspect-ratio:1;display:block;overflow:hidden}.avatar img{object-fit:cover;width:100%;height:100%}.checkbox{border:var(--border)solid var(--input-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.checkbox{border:var(--border)solid var(--input-color,color-mix(in oklab,var(--color-base-content)20%,#0000))}}.checkbox{cursor:pointer;appearance:none;border-radius:var(--radius-selector);vertical-align:middle;color:var(--color-base-content);box-shadow:0 1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 0 #0000 inset,0 0 #0000;--size:calc(var(--size-selector,.25rem)*6);width:var(--size);height:var(--size);background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise);flex-shrink:0;padding:.25rem;transition:background-color .2s,box-shadow .2s;display:inline-block;position:relative}.checkbox:before{--tw-content:"";content:var(--tw-content);opacity:0;clip-path:polygon(20% 100%,20% 80%,50% 80%,50% 80%,70% 80%,70% 100%);width:100%;height:100%;box-shadow:0 3px oklch(100% 0 0/calc(var(--depth)*.1)) inset;background-color:currentColor;font-size:1rem;line-height:.75;transition:clip-path .3s .1s,opacity .1s .1s,rotate .3s .1s,translate .3s .1s;display:block;rotate:45deg}.checkbox:focus-visible{outline:2px solid var(--input-color,currentColor);outline-offset:2px}.checkbox:checked,.checkbox[aria-checked=true]{background-color:var(--input-color,#0000);box-shadow:0 0 #0000 inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px oklch(0% 0 0/calc(var(--depth)*.1))}:is(.checkbox:checked,.checkbox[aria-checked=true]):before{clip-path:polygon(20% 100%,20% 80%,50% 80%,50% 0%,70% 0%,70% 100%);opacity:1}@media(forced-colors:active){:is(.checkbox:checked,.checkbox[aria-checked=true]):before{--tw-content:"✔︎";clip-path:none;background-color:#0000;rotate:none}}@media print{:is(.checkbox:checked,.checkbox[aria-checked=true]):before{--tw-content:"✔︎";clip-path:none;background-color:#0000;rotate:none}}.checkbox:indeterminate{background-color:var(--input-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.checkbox:indeterminate{background-color:var(--input-color,color-mix(in oklab,var(--color-base-content)20%,#0000))}}.checkbox:indeterminate:before{opacity:1;clip-path:polygon(20% 100%,20% 80%,50% 80%,50% 80%,80% 80%,80% 100%);translate:0 -35%;rotate:none}.radio{cursor:pointer;appearance:none;vertical-align:middle;border:var(--border)solid var(--input-color,currentColor);border-radius:3.40282e38px;flex-shrink:0;padding:.25rem;display:inline-block;position:relative}@supports (color:color-mix(in lab,red,red)){.radio{border:var(--border)solid var(--input-color,color-mix(in srgb,currentColor 20%,#0000))}}.radio{box-shadow:0 1px oklch(0% 0 0/calc(var(--depth)*.1)) inset;--size:calc(var(--size-selector,.25rem)*6);width:var(--size);height:var(--size);color:var(--input-color,currentColor)}.radio:before{--tw-content:"";content:var(--tw-content);background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise);border-radius:3.40282e38px;width:100%;height:100%;display:block}.radio:focus-visible{outline:2px solid}.radio:checked,.radio[aria-checked=true]{background-color:var(--color-base-100);border-color:currentColor}@media(prefers-reduced-motion:no-preference){.radio:checked,.radio[aria-checked=true]{animation:.2s ease-out radio}}:is(.radio:checked,.radio[aria-checked=true]):before{box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px oklch(0% 0 0/calc(var(--depth)*.1));background-color:currentColor}@media(forced-colors:active){:is(.radio:checked,.radio[aria-checked=true]):before{outline-style:var(--tw-outline-style);outline-offset:-1px;outline-width:1px}}@media print{:is(.radio:checked,.radio[aria-checked=true]):before{outline-offset:-1rem;outline:.25rem solid}}.card{border-radius:var(--radius-box);outline-offset:2px;outline:0 solid #0000;flex-direction:column;transition:outline .2s ease-in-out;display:flex;position:relative}.card:focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.card:focus{outline-offset:2px;outline:2px solid #0000}}.card:focus-visible{outline-color:currentColor}.card :where(figure:first-child){border-start-start-radius:inherit;border-start-end-radius:inherit;border-end-end-radius:unset;border-end-start-radius:unset;overflow:hidden}.card :where(figure:last-child){border-start-start-radius:unset;border-start-end-radius:unset;border-end-end-radius:inherit;border-end-start-radius:inherit;overflow:hidden}.card figure{justify-content:center;align-items:center;display:flex}.card:has(>input:is(input[type=checkbox],input[type=radio])){cursor:pointer;-webkit-user-select:none;user-select:none}.card:has(>:checked){outline:2px solid}.progress{appearance:none;border-radius:var(--radius-box);background-color:currentColor;width:100%;height:.5rem;position:relative;overflow:hidden}@supports (color:color-mix(in lab,red,red)){.progress{background-color:color-mix(in oklab,currentcolor 20%,transparent)}}.progress{color:var(--color-base-content)}.progress:indeterminate{background-image:repeating-linear-gradient(90deg,currentColor -1% 10%,#0000 10% 90%);background-position-x:15%;background-size:200%}@media(prefers-reduced-motion:no-preference){.progress:indeterminate{animation:5s ease-in-out infinite progress}}@supports ((-moz-appearance:none)){.progress:indeterminate::-moz-progress-bar{background-color:#0000}@media(prefers-reduced-motion:no-preference){.progress:indeterminate::-moz-progress-bar{background-image:repeating-linear-gradient(90deg,currentColor -1% 10%,#0000 10% 90%);background-position-x:15%;background-size:200%;animation:5s ease-in-out infinite progress}}.progress::-moz-progress-bar{border-radius:var(--radius-box);background-color:currentColor}}@supports ((-webkit-appearance:none)){.progress::-webkit-progress-bar{border-radius:var(--radius-box);background-color:#0000}.progress::-webkit-progress-value{border-radius:var(--radius-box);background-color:currentColor}}.modal-backdrop{color:#0000;z-index:-1;grid-row-start:1;grid-column-start:1;place-self:stretch stretch;display:grid}.modal-backdrop button{cursor:pointer}.modal-box{background-color:var(--color-base-100);border-top-left-radius:var(--modal-tl,var(--radius-box));border-top-right-radius:var(--modal-tr,var(--radius-box));border-bottom-left-radius:var(--modal-bl,var(--radius-box));border-bottom-right-radius:var(--modal-br,var(--radius-box));opacity:0;overscroll-behavior:contain;grid-row-start:1;grid-column-start:1;width:91.6667%;max-width:32rem;max-height:100vh;padding:1.5rem;transition:translate .3s ease-out,scale .3s ease-out,opacity .2s ease-out 50ms,box-shadow .3s ease-out;overflow-y:auto;scale:95%;box-shadow:0 25px 50px -12px #00000040}.divider{white-space:nowrap;height:1rem;margin:var(--divider-m,1rem 0);--divider-color:var(--color-base-content);flex-direction:row;align-self:stretch;align-items:center;display:flex}@supports (color:color-mix(in lab,red,red)){.divider{--divider-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.divider:before,.divider:after{content:"";background-color:var(--divider-color);flex-grow:1;width:100%;height:.125rem}@media print{.divider:before,.divider:after{border:.5px solid}}.divider:not(:empty){gap:1rem}.filter{flex-wrap:wrap;display:flex}.filter input[type=radio]{width:auto}.filter input{opacity:1;transition:margin .1s,opacity .3s,padding .3s,border-width .1s;overflow:hidden;scale:1}.filter input:not(:last-child){margin-inline-end:.25rem}.filter input.filter-reset{aspect-ratio:1}.filter input.filter-reset:after{--tw-content:"×";content:var(--tw-content)}.filter:not(:has(input:checked:not(.filter-reset))) .filter-reset,.filter:not(:has(input:checked:not(.filter-reset))) input[type=reset],.filter:has(input:checked:not(.filter-reset)) input:not(:checked,.filter-reset,input[type=reset]){opacity:0;border-width:0;width:0;margin-inline:0;padding-inline:0;scale:0}.label{white-space:nowrap;color:currentColor;align-items:center;gap:.375rem;display:inline-flex}@supports (color:color-mix(in lab,red,red)){.label{color:color-mix(in oklab,currentcolor 60%,transparent)}}.label:has(input){cursor:pointer}.label:is(.input>*,.select>*){white-space:nowrap;height:calc(100% - .5rem);font-size:inherit;align-items:center;padding-inline:.75rem;display:flex}.label:is(.input>*,.select>*):first-child{border-inline-end:var(--border)solid currentColor;margin-inline:-.75rem .75rem}@supports (color:color-mix(in lab,red,red)){.label:is(.input>*,.select>*):first-child{border-inline-end:var(--border)solid color-mix(in oklab,currentColor 10%,#0000)}}.label:is(.input>*,.select>*):last-child{border-inline-start:var(--border)solid currentColor;margin-inline:.75rem -.75rem}@supports (color:color-mix(in lab,red,red)){.label:is(.input>*,.select>*):last-child{border-inline-start:var(--border)solid color-mix(in oklab,currentColor 10%,#0000)}}.modal-action{justify-content:flex-end;gap:.5rem;margin-top:1.5rem;display:flex}.status{aspect-ratio:1;border-radius:var(--radius-selector);background-color:var(--color-base-content);width:.5rem;height:.5rem;display:inline-block}@supports (color:color-mix(in lab,red,red)){.status{background-color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.status{vertical-align:middle;color:#0000004d;background-position:50%;background-repeat:no-repeat}@supports (color:color-mix(in lab,red,red)){.status{color:color-mix(in oklab,var(--color-black)30%,transparent)}}.status{background-image:radial-gradient(circle at 35% 30%,oklch(1 0 0/calc(var(--depth)*.5)),#0000);box-shadow:0 2px 3px -1px}@supports (color:color-mix(in lab,red,red)){.status{box-shadow:0 2px 3px -1px color-mix(in oklab,currentColor calc(var(--depth)*100%),#0000)}}.badge{border-radius:var(--radius-selector);vertical-align:middle;color:var(--badge-fg);border:var(--border)solid var(--badge-color,var(--color-base-200));width:fit-content;padding-inline:calc(.25rem*3 - var(--border));background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise);background-color:var(--badge-bg);--badge-bg:var(--badge-color,var(--color-base-100));--badge-fg:var(--color-base-content);--size:calc(var(--size-selector,.25rem)*6);height:var(--size);justify-content:center;align-items:center;gap:.5rem;font-size:.875rem;display:inline-flex}.tabs{--tabs-height:auto;--tabs-direction:row;--tab-height:calc(var(--size-field,.25rem)*10);height:var(--tabs-height);flex-wrap:wrap;flex-direction:var(--tabs-direction);display:flex}.footer{grid-auto-flow:row;place-items:start;gap:2.5rem 1rem;width:100%;font-size:.875rem;line-height:1.25rem;display:grid}.footer>*{place-items:start;gap:.5rem;display:grid}.footer.footer-center{text-align:center;grid-auto-flow:column dense;place-items:center}.footer.footer-center>*{place-items:center}.card-body{padding:var(--card-p,1.5rem);font-size:var(--card-fs,.875rem);flex-direction:column;flex:auto;gap:.5rem;display:flex}.card-body :where(p){flex-grow:1}.alert{--alert-border-color:var(--color-base-200);border-radius:var(--radius-box);color:var(--color-base-content);background-color:var(--alert-color,var(--color-base-200));text-align:start;background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise);box-shadow:0 3px 0 -2px oklch(100% 0 0/calc(var(--depth)*.08)) inset,0 1px #000,0 4px 3px -2px oklch(0% 0 0/calc(var(--depth)*.08));border-style:solid;grid-template-columns:auto;grid-auto-flow:column;justify-content:start;place-items:center start;gap:1rem;padding-block:.75rem;padding-inline:1rem;font-size:.875rem;line-height:1.25rem;display:grid}@supports (color:color-mix(in lab,red,red)){.alert{box-shadow:0 3px 0 -2px oklch(100% 0 0/calc(var(--depth)*.08)) inset,0 1px color-mix(in oklab,color-mix(in oklab,#000 20%,var(--alert-color,var(--color-base-200)))calc(var(--depth)*20%),#0000),0 4px 3px -2px oklch(0% 0 0/calc(var(--depth)*.08))}}.alert:has(:nth-child(2)){grid-template-columns:auto minmax(auto,1fr)}.skeleton{border-radius:var(--radius-box);background-color:var(--color-base-300)}@media(prefers-reduced-motion:reduce){.skeleton{transition-duration:15s}}.skeleton{will-change:background-position;background-image:linear-gradient(105deg,#0000 0% 40%,var(--color-base-100)50%,#0000 60% 100%);background-position-x:-50%;background-repeat:no-repeat;background-size:200%}@media(prefers-reduced-motion:no-preference){.skeleton{animation:1.8s ease-in-out infinite skeleton}}.link{cursor:pointer;text-decoration-line:underline}.link:focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.link:focus{outline-offset:2px;outline:2px solid #0000}}.link:focus-visible{outline-offset:2px;outline:2px solid}.menu-title{color:var(--color-base-content);padding-block:.5rem;padding-inline:.75rem}@supports (color:color-mix(in lab,red,red)){.menu-title{color:color-mix(in oklab,var(--color-base-content)40%,transparent)}}.menu-title{font-size:.875rem;font-weight:600}}@layer daisyui.modifier{.modal.modal-open,.modal[open],.modal:target,.modal-toggle:checked+.modal{pointer-events:auto;visibility:visible;opacity:1;transition:visibility 0s allow-discrete,background-color .3s ease-out,opacity .1s ease-out;background-color:#0006}:is(.modal.modal-open,.modal[open],.modal:target,.modal-toggle:checked+.modal) .modal-box{opacity:1;translate:0;scale:1}@starting-style{.modal.modal-open,.modal[open],.modal:target,.modal-toggle:checked+.modal{opacity:0}}.tooltip>.tooltip-content,.tooltip[data-tip]:before{transform:translate(-50%)translateY(var(--tt-pos,.25rem));inset:auto auto var(--tt-off)50%}.tooltip:after{transform:translate(-50%)translateY(var(--tt-pos,.25rem));inset:auto auto var(--tt-tail)50%}.btn:disabled:not(.btn-link,.btn-ghost){background-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn:disabled:not(.btn-link,.btn-ghost){background-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.btn:disabled:not(.btn-link,.btn-ghost){box-shadow:none}.btn:disabled{pointer-events:none;--btn-border:#0000;--btn-noise:none;--btn-fg:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn:disabled{--btn-fg:color-mix(in oklch,var(--color-base-content)20%,#0000)}}@media(hover:hover){.btn:disabled:hover{pointer-events:none;background-color:var(--color-neutral)}@supports (color:color-mix(in lab,red,red)){.btn:disabled:hover{background-color:color-mix(in oklab,var(--color-neutral)20%,transparent)}}.btn:disabled:hover{--btn-border:#0000;--btn-fg:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn:disabled:hover{--btn-fg:color-mix(in oklch,var(--color-base-content)20%,#0000)}}}.btn[disabled]:not(.btn-link,.btn-ghost){background-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn[disabled]:not(.btn-link,.btn-ghost){background-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.btn[disabled]:not(.btn-link,.btn-ghost){box-shadow:none}.btn[disabled]{pointer-events:none;--btn-border:#0000;--btn-noise:none;--btn-fg:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn[disabled]{--btn-fg:color-mix(in oklch,var(--color-base-content)20%,#0000)}}@media(hover:hover){.btn[disabled]:hover{pointer-events:none;background-color:var(--color-neutral)}@supports (color:color-mix(in lab,red,red)){.btn[disabled]:hover{background-color:color-mix(in oklab,var(--color-neutral)20%,transparent)}}.btn[disabled]:hover{--btn-border:#0000;--btn-fg:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn[disabled]:hover{--btn-fg:color-mix(in oklch,var(--color-base-content)20%,#0000)}}}.tabs-lift{--tabs-height:auto;--tabs-direction:row}.tabs-lift>.tab{--tab-border:0 0 var(--border)0;--tab-radius-ss:min(var(--radius-field),var(--tab-radius-min));--tab-radius-se:min(var(--radius-field),var(--tab-radius-min));--tab-radius-es:0;--tab-radius-ee:0;--tab-paddings:var(--border)var(--tab-p)0 var(--tab-p);--tab-border-colors:#0000 #0000 var(--tab-border-color)#0000;--tab-corner-width: calc(100% + min(var(--radius-field),var(--tab-radius-min))*2) ;--tab-corner-height:min(var(--radius-field),var(--tab-radius-min));--tab-corner-position:top left,top right;border-width:var(--tab-border);padding:var(--tab-paddings);border-color:var(--tab-border-colors);border-start-start-radius:var(--tab-radius-ss);border-start-end-radius:var(--tab-radius-se);border-end-end-radius:var(--tab-radius-ee);border-end-start-radius:var(--tab-radius-es)}.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked)){--tab-border:var(--border)var(--border)0 var(--border);--tab-border-colors:var(--tab-border-color)var(--tab-border-color)#0000 var(--tab-border-color);--tab-paddings:0 calc(var(--tab-p) - var(--border))var(--border)calc(var(--tab-p) - var(--border));--tab-inset:auto auto 0 auto;--tab-grad:calc(69% - var(--border));--radius-start:radial-gradient(circle at top left,#0000 var(--tab-grad),var(--tab-border-color)calc(var(--tab-grad) + .25px),var(--tab-border-color)calc(var(--tab-grad) + var(--border)),var(--tab-bg)calc(var(--tab-grad) + var(--border) + .25px));--radius-end:radial-gradient(circle at top right,#0000 var(--tab-grad),var(--tab-border-color)calc(var(--tab-grad) + .25px),var(--tab-border-color)calc(var(--tab-grad) + var(--border)),var(--tab-bg)calc(var(--tab-grad) + var(--border) + .25px));background-color:var(--tab-bg)}:is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):before{z-index:1;content:"";width:var(--tab-corner-width);height:var(--tab-corner-height);background-position:var(--tab-corner-position);background-image:var(--radius-start),var(--radius-end);background-size:min(var(--radius-field),var(--tab-radius-min))min(var(--radius-field),var(--tab-radius-min));inset:var(--tab-inset);background-repeat:no-repeat;display:block;position:absolute}:is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):first-child:before{--radius-start:none}[dir=rtl] :is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):first-child:before{transform:rotateY(180deg)}:is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):last-child:before{--radius-end:none}[dir=rtl] :is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):last-child:before{transform:rotateY(180deg)}.tabs-lift:has(>.tab-content)>.tab:first-child:not(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]){--tab-border-colors:var(--tab-border-color)var(--tab-border-color)#0000 var(--tab-border-color)}.tabs-lift>.tab-content{--tabcontent-margin:calc(-1*var(--border))0 0 0;--tabcontent-radius-ss:0;--tabcontent-radius-se:var(--radius-box);--tabcontent-radius-es:var(--radius-box);--tabcontent-radius-ee:var(--radius-box)}:is(.tabs-lift :checked,.tabs-lift label:has(:checked),.tabs-lift :is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]))+.tab-content:first-child,:is(.tabs-lift :checked,.tabs-lift label:has(:checked),.tabs-lift :is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]))+.tab-content:nth-child(n+3){--tabcontent-radius-ss:var(--radius-box)}.list .list-row:has(.list-col-grow:first-child){--list-grid-cols:1fr}.list .list-row:has(.list-col-grow:nth-child(2)){--list-grid-cols:minmax(0,auto)1fr}.list .list-row:has(.list-col-grow:nth-child(3)){--list-grid-cols:minmax(0,auto)minmax(0,auto)1fr}.list .list-row:has(.list-col-grow:nth-child(4)){--list-grid-cols:minmax(0,auto)minmax(0,auto)minmax(0,auto)1fr}.list .list-row:has(.list-col-grow:nth-child(5)){--list-grid-cols:minmax(0,auto)minmax(0,auto)minmax(0,auto)minmax(0,auto)1fr}.list .list-row:has(.list-col-grow:nth-child(6)){--list-grid-cols:minmax(0,auto)minmax(0,auto)minmax(0,auto)minmax(0,auto)minmax(0,auto)1fr}.list .list-row :not(.list-col-wrap){grid-row-start:1}.checkbox:disabled,.radio:disabled{cursor:not-allowed;opacity:.2}.tooltip-left>.tooltip-content,.tooltip-left[data-tip]:before{transform:translate(calc(var(--tt-pos,.25rem) - .25rem))translateY(-50%);inset:50% var(--tt-off)auto auto}.tooltip-left:after{transform:translate(var(--tt-pos,.25rem))translateY(-50%)rotate(-90deg);inset:50% calc(var(--tt-tail) + 1px)auto auto}.tooltip-right>.tooltip-content,.tooltip-right[data-tip]:before{transform:translate(calc(var(--tt-pos,-.25rem) + .25rem))translateY(-50%);inset:50% auto auto var(--tt-off)}.tooltip-right:after{transform:translate(var(--tt-pos,-.25rem))translateY(-50%)rotate(90deg);inset:50% auto auto calc(var(--tt-tail) + 1px)}.dropdown-end{--anchor-h:span-left}.dropdown-end :where(.dropdown-content){inset-inline-end:0;translate:0}[dir=rtl] :is(.dropdown-end :where(.dropdown-content)){translate:0}.dropdown-end.dropdown-left{--anchor-h:left;--anchor-v:span-top}.dropdown-end.dropdown-left .dropdown-content{top:auto;bottom:0}.dropdown-end.dropdown-right{--anchor-h:right;--anchor-v:span-top}.dropdown-end.dropdown-right .dropdown-content{top:auto;bottom:0}.btn-active{--btn-bg:var(--btn-color,var(--color-base-200))}@supports (color:color-mix(in lab,red,red)){.btn-active{--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-200)),#000 7%)}}.btn-active{--btn-shadow:0 0 0 0 oklch(0% 0 0/0),0 0 0 0 oklch(0% 0 0/0);isolation:isolate}.input-sm{--size:calc(var(--size-field,.25rem)*8);font-size:max(var(--font-size,.75rem),.75rem)}.input-sm[type=number]::-webkit-inner-spin-button{margin-block:-.5rem;margin-inline-end:-.75rem}.btn-circle{width:var(--size);height:var(--size);border-radius:3.40282e38px;padding-inline:0}.btn-square{width:var(--size);height:var(--size);padding-inline:0}.loading-sm{width:calc(var(--size-selector,.25rem)*5)}.loading-xs{width:calc(var(--size-selector,.25rem)*4)}.badge-soft{color:var(--badge-color,var(--color-base-content));background-color:var(--badge-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.badge-soft{background-color:color-mix(in oklab,var(--badge-color,var(--color-base-content))8%,var(--color-base-100))}}.badge-soft{border-color:var(--badge-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.badge-soft{border-color:color-mix(in oklab,var(--badge-color,var(--color-base-content))10%,var(--color-base-100))}}.badge-soft{background-image:none}.loading-spinner{-webkit-mask-image:url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E")}.radio-sm{padding:.1875rem}.radio-sm[type=radio]{--size:calc(var(--size-selector,.25rem)*5)}.badge-sm{--size:calc(var(--size-selector,.25rem)*5);padding-inline:calc(.25rem*2.5 - var(--border));font-size:.75rem}.alert-error{color:var(--color-error-content);--alert-border-color:var(--color-error);--alert-color:var(--color-error)}.alert-info{color:var(--color-info-content);--alert-border-color:var(--color-info);--alert-color:var(--color-info)}.alert-success{color:var(--color-success-content);--alert-border-color:var(--color-success);--alert-color:var(--color-success)}.alert-warning{color:var(--color-warning-content);--alert-border-color:var(--color-warning);--alert-color:var(--color-warning)}.progress-primary{color:var(--color-primary)}.link-hover{text-decoration-line:none}@media(hover:hover){.link-hover:hover{text-decoration-line:underline}}.btn-ghost:not(.btn-active,:hover,:active:focus,:focus-visible){--btn-shadow:"";--btn-bg:#0000;--btn-border:#0000;--btn-noise:none}.btn-ghost:not(.btn-active,:hover,:active:focus,:focus-visible):not(:disabled,[disabled],.btn-disabled){--btn-fg:currentColor;outline-color:currentColor}@media(hover:none){.btn-ghost:hover:not(.btn-active,:active,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-shadow:"";--btn-bg:#0000;--btn-border:#0000;--btn-noise:none;--btn-fg:currentColor}}.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-shadow:"";--btn-fg:var(--btn-color,var(--color-base-content));--btn-bg:var(--btn-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-content))8%,var(--color-base-100))}}.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-border:var(--btn-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-border:color-mix(in oklab,var(--btn-color,var(--color-base-content))10%,var(--color-base-100))}}.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-noise:none}@media(hover:none){.btn-soft:hover:not(.btn-active,:active,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-shadow:"";--btn-fg:var(--btn-color,var(--color-base-content));--btn-bg:var(--btn-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.btn-soft:hover:not(.btn-active,:active,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-content))8%,var(--color-base-100))}}.btn-soft:hover:not(.btn-active,:active,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-border:var(--btn-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.btn-soft:hover:not(.btn-active,:active,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-border:color-mix(in oklab,var(--btn-color,var(--color-base-content))10%,var(--color-base-100))}}.btn-soft:hover:not(.btn-active,:active,:focus-visible,:disabled,[disabled],.btn-disabled){--btn-noise:none}}.btn-lg{--fontsize:1.125rem;--btn-p:1.25rem;--size:calc(var(--size-field,.25rem)*12)}.btn-sm{--fontsize:.75rem;--btn-p:.75rem;--size:calc(var(--size-field,.25rem)*8)}.btn-xs{--fontsize:.6875rem;--btn-p:.5rem;--size:calc(var(--size-field,.25rem)*6)}.badge-accent{--badge-color:var(--color-accent);--badge-fg:var(--color-accent-content)}.badge-info{--badge-color:var(--color-info);--badge-fg:var(--color-info-content)}.badge-primary{--badge-color:var(--color-primary);--badge-fg:var(--color-primary-content)}.badge-secondary{--badge-color:var(--color-secondary);--badge-fg:var(--color-secondary-content)}.card-border{border:var(--border)solid var(--color-base-200)}.radio-primary,.toggle-primary:checked,.toggle-primary[aria-checked=true]{--input-color:var(--color-primary)}}.prose .btn{text-decoration-line:none}.pointer-events-none{pointer-events:none}.invisible{visibility:hidden}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.inset-0{inset:calc(var(--spacing)*0)}.-top-2{top:calc(var(--spacing)*-2)}.top-2{top:calc(var(--spacing)*2)}.top-4{top:calc(var(--spacing)*4)}.top-\\[50\\%\\]{top:50%}.-right-1{right:calc(var(--spacing)*-1)}.-right-2{right:calc(var(--spacing)*-2)}.right-2{right:calc(var(--spacing)*2)}.right-4{right:calc(var(--spacing)*4)}.-bottom-1{bottom:calc(var(--spacing)*-1)}.bottom-4{bottom:calc(var(--spacing)*4)}.left-1\\/2{left:50%}.left-2{left:calc(var(--spacing)*2)}.left-4{left:calc(var(--spacing)*4)}.left-\\[-15px\\]{left:-15px}.z-10{z-index:10}.z-50{z-index:50}.z-\\[1000\\]{z-index:1000}.mx-auto{margin-inline:auto}.my-2{margin-block:calc(var(--spacing)*2)}.join-item:where(:not(:first-child,:disabled,[disabled],.btn-disabled)){margin-block-start:0;margin-inline-start:calc(var(--border,1px)*-1)}.join-item:where(:is(:disabled,[disabled],.btn-disabled)){border-width:var(--border,1px)0 var(--border,1px)var(--border,1px)}.mt-0\\.5{margin-top:calc(var(--spacing)*.5)}.mt-1{margin-top:calc(var(--spacing)*1)}.mt-2{margin-top:calc(var(--spacing)*2)}.mt-3{margin-top:calc(var(--spacing)*3)}.mt-16{margin-top:calc(var(--spacing)*16)}.mt-px{margin-top:1px}.mb-1{margin-bottom:calc(var(--spacing)*1)}.mb-2{margin-bottom:calc(var(--spacing)*2)}.mb-4{margin-bottom:calc(var(--spacing)*4)}.mb-6{margin-bottom:calc(var(--spacing)*6)}.ml-auto{margin-left:auto}.alert{border-width:var(--border);border-color:var(--alert-border-color,var(--color-base-200))}.join{--join-ss:0;--join-se:0;--join-es:0;--join-ee:0;align-items:stretch;display:inline-flex}.join :where(.join-item){border-start-start-radius:var(--join-ss,0);border-start-end-radius:var(--join-se,0);border-end-end-radius:var(--join-ee,0);border-end-start-radius:var(--join-es,0)}.join :where(.join-item) *{--join-ss:var(--radius-field);--join-se:var(--radius-field);--join-es:var(--radius-field);--join-ee:var(--radius-field)}.join>.join-item:where(:first-child),.join :first-child:not(:last-child) :where(.join-item){--join-ss:var(--radius-field);--join-se:0;--join-es:var(--radius-field);--join-ee:0}.join>.join-item:where(:last-child),.join :last-child:not(:first-child) :where(.join-item){--join-ss:0;--join-se:var(--radius-field);--join-es:0;--join-ee:var(--radius-field)}.join>.join-item:where(:only-child),.join :only-child :where(.join-item){--join-ss:var(--radius-field);--join-se:var(--radius-field);--join-es:var(--radius-field);--join-ee:var(--radius-field)}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.table{display:table}.size-1{width:calc(var(--spacing)*1);height:calc(var(--spacing)*1)}.size-2{width:calc(var(--spacing)*2);height:calc(var(--spacing)*2)}.h-3{height:calc(var(--spacing)*3)}.h-4{height:calc(var(--spacing)*4)}.h-5{height:calc(var(--spacing)*5)}.h-8{height:calc(var(--spacing)*8)}.h-16{height:calc(var(--spacing)*16)}.max-h-60{max-height:calc(var(--spacing)*60)}.max-h-full{max-height:100%}.w-3{width:calc(var(--spacing)*3)}.w-4{width:calc(var(--spacing)*4)}.w-5{width:calc(var(--spacing)*5)}.w-8{width:calc(var(--spacing)*8)}.w-12{width:calc(var(--spacing)*12)}.w-16{width:calc(var(--spacing)*16)}.w-24{width:calc(var(--spacing)*24)}.w-28{width:calc(var(--spacing)*28)}.w-32{width:calc(var(--spacing)*32)}.w-40{width:calc(var(--spacing)*40)}.w-52{width:calc(var(--spacing)*52)}.w-56{width:calc(var(--spacing)*56)}.w-64{width:calc(var(--spacing)*64)}.w-full{width:100%}.max-w-full{max-width:100%}.max-w-sm{max-width:var(--container-sm)}.min-w-0{min-width:calc(var(--spacing)*0)}.flex-1{flex:1}.flex-shrink-0,.shrink-0{flex-shrink:0}.flex-grow,.grow{flex-grow:1}.-translate-x-1\\/2{--tw-translate-x: -50% ;translate:var(--tw-translate-x)var(--tw-translate-y)}.translate-x-\\[15px\\]{--tw-translate-x:15px;translate:var(--tw-translate-x)var(--tw-translate-y)}.rotate-\\[15deg\\]{rotate:15deg}.transform{transform:var(--tw-rotate-x,)var(--tw-rotate-y,)var(--tw-rotate-z,)var(--tw-skew-x,)var(--tw-skew-y,)}.cursor-pointer{cursor:pointer}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-row-reverse{flex-direction:row-reverse}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.justify-start{justify-content:flex-start}.gap-0\\.5{gap:calc(var(--spacing)*.5)}.gap-1{gap:calc(var(--spacing)*1)}.gap-1\\.5{gap:calc(var(--spacing)*1.5)}.gap-2{gap:calc(var(--spacing)*2)}.gap-2\\.5{gap:calc(var(--spacing)*2.5)}.gap-3{gap:calc(var(--spacing)*3)}.gap-4{gap:calc(var(--spacing)*4)}:where(.space-y-1>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*1)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*1)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-1\\.5>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*1.5)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*1.5)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-2>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*2)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*2)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-4>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*4)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*4)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-6>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*6)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*6)*calc(1 - var(--tw-space-y-reverse)))}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-y-auto{overflow-y:auto}.rounded{border-radius:.25rem}.rounded-box{border-radius:var(--radius-box)}.rounded-full{border-radius:3.40282e38px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-sm{border-radius:var(--radius-sm)}.rounded-xl{border-radius:var(--radius-xl)}.border{border-style:var(--tw-border-style);border-width:1px}.border-\\[length\\:var\\(--border\\)\\]{border-style:var(--tw-border-style);border-width:var(--border)}.border-base-300{border-color:var(--color-base-300)}.border-base-content\\/10{border-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.border-base-content\\/10{border-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.border-white\\/5{border-color:#ffffff0d}@supports (color:color-mix(in lab,red,red)){.border-white\\/5{border-color:color-mix(in oklab,var(--color-white)5%,transparent)}}.bg-accent{background-color:var(--color-accent)}.bg-base-100{background-color:var(--color-base-100)}.bg-base-200,.bg-base-200\\/70{background-color:var(--color-base-200)}@supports (color:color-mix(in lab,red,red)){.bg-base-200\\/70{background-color:color-mix(in oklab,var(--color-base-200)70%,transparent)}}.bg-base-content{background-color:var(--color-base-content)}.bg-black\\/90{background-color:#000000e6}@supports (color:color-mix(in lab,red,red)){.bg-black\\/90{background-color:color-mix(in oklab,var(--color-black)90%,transparent)}}.bg-primary{background-color:var(--color-primary)}.bg-secondary{background-color:var(--color-secondary)}@layer daisyui.style{.alert-soft{color:var(--alert-color,var(--color-base-content));background:var(--alert-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.alert-soft{background:color-mix(in oklab,var(--alert-color,var(--color-base-content))8%,var(--color-base-100))}}.alert-soft{--alert-border-color:var(--alert-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.alert-soft{--alert-border-color:color-mix(in oklab,var(--alert-color,var(--color-base-content))10%,var(--color-base-100))}}.alert-soft{box-shadow:none;background-image:none}}.fill-current{fill:currentColor}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.p-1{padding:calc(var(--spacing)*1)}.p-2{padding:calc(var(--spacing)*2)}.p-3{padding:calc(var(--spacing)*3)}.p-4{padding:calc(var(--spacing)*4)}.px-1\\.5{padding-inline:calc(var(--spacing)*1.5)}.px-2{padding-inline:calc(var(--spacing)*2)}.py-0\\.5{padding-block:calc(var(--spacing)*.5)}.py-8{padding-block:calc(var(--spacing)*8)}.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}.font-mono{font-family:var(--font-mono)}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-lg{font-size:var(--text-lg);line-height:var(--tw-leading,var(--text-lg--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\\[10px\\]{font-size:10px}.leading-normal{--tw-leading:var(--leading-normal);line-height:var(--leading-normal)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.font-semibold{--tw-font-weight:var(--font-weight-semibold);font-weight:var(--font-weight-semibold)}.break-all{word-break:break-all}.text-base-content,.text-base-content\\/90{color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.text-base-content\\/90{color:color-mix(in oklab,var(--color-base-content)90%,transparent)}}.text-info{color:var(--color-info)}.text-primary{color:var(--color-primary)}.text-warning{color:var(--color-warning)}.text-white{color:var(--color-white)}.capitalize{text-transform:capitalize}.opacity-40{opacity:.4}.opacity-50{opacity:.5}.opacity-60{opacity:.6}.opacity-70{opacity:.7}.opacity-80{opacity:.8}.shadow-2xl{--tw-shadow:0 25px 50px -12px var(--tw-shadow-color,#00000040);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a),0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.outline-\\[length\\:var\\(--border\\)\\]{outline-style:var(--tw-outline-style);outline-width:var(--border)}.outline-black\\/5{outline-color:#0000000d}@supports (color:color-mix(in lab,red,red)){.outline-black\\/5{outline-color:color-mix(in oklab,var(--color-black)5%,transparent)}}.filter{filter:var(--tw-blur,)var(--tw-brightness,)var(--tw-contrast,)var(--tw-grayscale,)var(--tw-hue-rotate,)var(--tw-invert,)var(--tw-saturate,)var(--tw-sepia,)var(--tw-drop-shadow,)}.backdrop-blur-sm{--tw-backdrop-blur:blur(var(--blur-sm));-webkit-backdrop-filter:var(--tw-backdrop-blur,)var(--tw-backdrop-brightness,)var(--tw-backdrop-contrast,)var(--tw-backdrop-grayscale,)var(--tw-backdrop-hue-rotate,)var(--tw-backdrop-invert,)var(--tw-backdrop-opacity,)var(--tw-backdrop-saturate,)var(--tw-backdrop-sepia,);backdrop-filter:var(--tw-backdrop-blur,)var(--tw-backdrop-brightness,)var(--tw-backdrop-contrast,)var(--tw-backdrop-grayscale,)var(--tw-backdrop-hue-rotate,)var(--tw-backdrop-invert,)var(--tw-backdrop-opacity,)var(--tw-backdrop-saturate,)var(--tw-backdrop-sepia,)}.transition-\\[height\\,max-height\\]{transition-property:height,max-height;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-all{transition-property:all;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-300{--tw-duration:.3s;transition-duration:.3s}.ease-in-out{--tw-ease:var(--ease-in-out);transition-timing-function:var(--ease-in-out)}@layer daisyui.modifier.color{.btn-accent{--btn-color:var(--color-accent);--btn-fg:var(--color-accent-content)}.btn-error{--btn-color:var(--color-error);--btn-fg:var(--color-error-content)}.btn-info{--btn-color:var(--color-info);--btn-fg:var(--color-info-content)}.btn-neutral{--btn-color:var(--color-neutral);--btn-fg:var(--color-neutral-content)}.btn-primary{--btn-color:var(--color-primary);--btn-fg:var(--color-primary-content)}.btn-secondary{--btn-color:var(--color-secondary);--btn-fg:var(--color-secondary-content)}.btn-success{--btn-color:var(--color-success);--btn-fg:var(--color-success-content)}.btn-warning{--btn-color:var(--color-warning);--btn-fg:var(--color-warning-content)}}@media(hover:hover){.group-hover\\:border-base-content\\/20:is(:where(.group):hover *){border-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.group-hover\\:border-base-content\\/20:is(:where(.group):hover *){border-color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.hover\\:translate-x-\\[15px\\]:hover{--tw-translate-x:15px;translate:var(--tw-translate-x)var(--tw-translate-y)}.hover\\:rotate-\\[15deg\\]:hover{rotate:15deg}.hover\\:opacity-100:hover{opacity:1}}@media(min-width:40rem){.sm\\:inline-block{display:inline-block}.sm\\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(min-width:48rem){.md\\:flex{display:flex}}.\\[\\&_svg\\]\\:visible svg{visibility:visible}}@keyframes rating{0%,40%{filter:brightness(1.05)contrast(1.05);scale:1.1}}@keyframes dropdown{0%{opacity:0}}@keyframes radio{0%{padding:5px}50%{padding:3px}}@keyframes toast{0%{opacity:0;scale:.9}to{opacity:1;scale:1}}@keyframes skeleton{0%{background-position:150%}to{background-position:-50%}}@keyframes progress{50%{background-position-x:-115%}}@property --tw-translate-x{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-y{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-z{syntax:"*";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:"*";inherits:false}@property --tw-rotate-y{syntax:"*";inherits:false}@property --tw-rotate-z{syntax:"*";inherits:false}@property --tw-skew-x{syntax:"*";inherits:false}@property --tw-skew-y{syntax:"*";inherits:false}@property --tw-space-y-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-leading{syntax:"*";inherits:false}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:"*";inherits:false}@property --tw-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:"*";inherits:false}@property --tw-inset-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:"*";inherits:false}@property --tw-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:"*";inherits:false}@property --tw-inset-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:"*";inherits:false}@property --tw-ring-offset-width{syntax:"<length>";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:"*";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-blur{syntax:"*";inherits:false}@property --tw-brightness{syntax:"*";inherits:false}@property --tw-contrast{syntax:"*";inherits:false}@property --tw-grayscale{syntax:"*";inherits:false}@property --tw-hue-rotate{syntax:"*";inherits:false}@property --tw-invert{syntax:"*";inherits:false}@property --tw-opacity{syntax:"*";inherits:false}@property --tw-saturate{syntax:"*";inherits:false}@property --tw-sepia{syntax:"*";inherits:false}@property --tw-drop-shadow{syntax:"*";inherits:false}@property --tw-drop-shadow-color{syntax:"*";inherits:false}@property --tw-drop-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:"*";inherits:false}@property --tw-backdrop-blur{syntax:"*";inherits:false}@property --tw-backdrop-brightness{syntax:"*";inherits:false}@property --tw-backdrop-contrast{syntax:"*";inherits:false}@property --tw-backdrop-grayscale{syntax:"*";inherits:false}@property --tw-backdrop-hue-rotate{syntax:"*";inherits:false}@property --tw-backdrop-invert{syntax:"*";inherits:false}@property --tw-backdrop-opacity{syntax:"*";inherits:false}@property --tw-backdrop-saturate{syntax:"*";inherits:false}@property --tw-backdrop-sepia{syntax:"*";inherits:false}@property --tw-duration{syntax:"*";inherits:false}@property --tw-ease{syntax:"*";inherits:false}`;
+  const styles = `@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-ordinal:initial;--tw-slashed-zero:initial;--tw-numeric-figure:initial;--tw-numeric-spacing:initial;--tw-numeric-fraction:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-backdrop-blur:initial;--tw-backdrop-brightness:initial;--tw-backdrop-contrast:initial;--tw-backdrop-grayscale:initial;--tw-backdrop-hue-rotate:initial;--tw-backdrop-invert:initial;--tw-backdrop-opacity:initial;--tw-backdrop-saturate:initial;--tw-backdrop-sepia:initial;--tw-duration:initial;--tw-ease:initial}}}@layer theme{:root,:host{--font-sans:ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";--font-mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;--color-black:#000;--color-white:#fff;--spacing:.25rem;--container-sm:24rem;--text-xs:.75rem;--text-xs--line-height:calc(1/.75);--text-sm:.875rem;--text-sm--line-height:calc(1.25/.875);--text-base:1rem;--text-base--line-height: 1.5 ;--text-lg:1.125rem;--text-lg--line-height:calc(1.75/1.125);--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--leading-normal:1.5;--radius-sm:.25rem;--radius-md:.375rem;--radius-lg:.5rem;--radius-xl:.75rem;--ease-out:cubic-bezier(0,0,.2,1);--ease-in-out:cubic-bezier(.4,0,.2,1);--blur-sm:8px;--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4,0,.2,1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab,red,red)){::placeholder{color:color-mix(in oklab,currentcolor 50%,transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}:where(:root),:root:has(input.theme-controller[value=light]:checked),[data-theme=light]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(98% 0 0);--color-base-300:oklch(95% 0 0);--color-base-content:oklch(21% .006 285.885);--color-primary:oklch(45% .24 277.023);--color-primary-content:oklch(93% .034 272.788);--color-secondary:oklch(65% .241 354.308);--color-secondary-content:oklch(94% .028 342.258);--color-accent:oklch(77% .152 181.912);--color-accent-content:oklch(38% .063 188.416);--color-neutral:oklch(14% .005 285.823);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(71% .194 13.428);--color-error-content:oklch(27% .105 12.094);--radius-selector:.5rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}@media(prefers-color-scheme:dark){:root:not([data-theme]){color-scheme:dark;--color-base-100:oklch(25.33% .016 252.42);--color-base-200:oklch(23.26% .014 253.1);--color-base-300:oklch(21.15% .012 254.09);--color-base-content:oklch(97.807% .029 256.847);--color-primary:oklch(58% .233 277.117);--color-primary-content:oklch(96% .018 272.314);--color-secondary:oklch(65% .241 354.308);--color-secondary-content:oklch(94% .028 342.258);--color-accent:oklch(77% .152 181.912);--color-accent-content:oklch(38% .063 188.416);--color-neutral:oklch(14% .005 285.823);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(71% .194 13.428);--color-error-content:oklch(27% .105 12.094);--radius-selector:.5rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}}:root:has(input.theme-controller[value=light]:checked),[data-theme=light]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(98% 0 0);--color-base-300:oklch(95% 0 0);--color-base-content:oklch(21% .006 285.885);--color-primary:oklch(45% .24 277.023);--color-primary-content:oklch(93% .034 272.788);--color-secondary:oklch(65% .241 354.308);--color-secondary-content:oklch(94% .028 342.258);--color-accent:oklch(77% .152 181.912);--color-accent-content:oklch(38% .063 188.416);--color-neutral:oklch(14% .005 285.823);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(71% .194 13.428);--color-error-content:oklch(27% .105 12.094);--radius-selector:.5rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=dark]:checked),[data-theme=dark]{color-scheme:dark;--color-base-100:oklch(25.33% .016 252.42);--color-base-200:oklch(23.26% .014 253.1);--color-base-300:oklch(21.15% .012 254.09);--color-base-content:oklch(97.807% .029 256.847);--color-primary:oklch(58% .233 277.117);--color-primary-content:oklch(96% .018 272.314);--color-secondary:oklch(65% .241 354.308);--color-secondary-content:oklch(94% .028 342.258);--color-accent:oklch(77% .152 181.912);--color-accent-content:oklch(38% .063 188.416);--color-neutral:oklch(14% .005 285.823);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(71% .194 13.428);--color-error-content:oklch(27% .105 12.094);--radius-selector:.5rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=cupcake]:checked),[data-theme=cupcake]{color-scheme:light;--color-base-100:oklch(97.788% .004 56.375);--color-base-200:oklch(93.982% .007 61.449);--color-base-300:oklch(91.586% .006 53.44);--color-base-content:oklch(23.574% .066 313.189);--color-primary:oklch(85% .138 181.071);--color-primary-content:oklch(43% .078 188.216);--color-secondary:oklch(89% .061 343.231);--color-secondary-content:oklch(45% .187 3.815);--color-accent:oklch(90% .076 70.697);--color-accent-content:oklch(47% .157 37.304);--color-neutral:oklch(27% .006 286.033);--color-neutral-content:oklch(92% .004 286.32);--color-info:oklch(68% .169 237.323);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(69% .17 162.48);--color-success-content:oklch(26% .051 172.552);--color-warning:oklch(79% .184 86.047);--color-warning-content:oklch(28% .066 53.813);--color-error:oklch(64% .246 16.439);--color-error-content:oklch(27% .105 12.094);--radius-selector:1rem;--radius-field:2rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:2px;--depth:1;--noise:0}:root:has(input.theme-controller[value=bumblebee]:checked),[data-theme=bumblebee]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(97% 0 0);--color-base-300:oklch(92% 0 0);--color-base-content:oklch(20% 0 0);--color-primary:oklch(85% .199 91.936);--color-primary-content:oklch(42% .095 57.708);--color-secondary:oklch(75% .183 55.934);--color-secondary-content:oklch(40% .123 38.172);--color-accent:oklch(0% 0 0);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(37% .01 67.558);--color-neutral-content:oklch(92% .003 48.717);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(39% .09 240.876);--color-success:oklch(76% .177 163.223);--color-success-content:oklch(37% .077 168.94);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(70% .191 22.216);--color-error-content:oklch(39% .141 25.723);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=emerald]:checked),[data-theme=emerald]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(93% 0 0);--color-base-300:oklch(86% 0 0);--color-base-content:oklch(35.519% .032 262.988);--color-primary:oklch(76.662% .135 153.45);--color-primary-content:oklch(33.387% .04 162.24);--color-secondary:oklch(61.302% .202 261.294);--color-secondary-content:oklch(100% 0 0);--color-accent:oklch(72.772% .149 33.2);--color-accent-content:oklch(0% 0 0);--color-neutral:oklch(35.519% .032 262.988);--color-neutral-content:oklch(98.462% .001 247.838);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=corporate]:checked),[data-theme=corporate]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(93% 0 0);--color-base-300:oklch(86% 0 0);--color-base-content:oklch(22.389% .031 278.072);--color-primary:oklch(58% .158 241.966);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(55% .046 257.417);--color-secondary-content:oklch(100% 0 0);--color-accent:oklch(60% .118 184.704);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(0% 0 0);--color-neutral-content:oklch(100% 0 0);--color-info:oklch(60% .126 221.723);--color-info-content:oklch(100% 0 0);--color-success:oklch(62% .194 149.214);--color-success-content:oklch(100% 0 0);--color-warning:oklch(85% .199 91.936);--color-warning-content:oklch(0% 0 0);--color-error:oklch(70% .191 22.216);--color-error-content:oklch(0% 0 0);--radius-selector:.25rem;--radius-field:.25rem;--radius-box:.25rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=synthwave]:checked),[data-theme=synthwave]{color-scheme:dark;--color-base-100:oklch(15% .09 281.288);--color-base-200:oklch(20% .09 281.288);--color-base-300:oklch(25% .09 281.288);--color-base-content:oklch(78% .115 274.713);--color-primary:oklch(71% .202 349.761);--color-primary-content:oklch(28% .109 3.907);--color-secondary:oklch(82% .111 230.318);--color-secondary-content:oklch(29% .066 243.157);--color-accent:oklch(75% .183 55.934);--color-accent-content:oklch(26% .079 36.259);--color-neutral:oklch(45% .24 277.023);--color-neutral-content:oklch(87% .065 274.039);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(77% .152 181.912);--color-success-content:oklch(27% .046 192.524);--color-warning:oklch(90% .182 98.111);--color-warning-content:oklch(42% .095 57.708);--color-error:oklch(73.7% .121 32.639);--color-error-content:oklch(23.501% .096 290.329);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=retro]:checked),[data-theme=retro]{color-scheme:light;--color-base-100:oklch(91.637% .034 90.515);--color-base-200:oklch(88.272% .049 91.774);--color-base-300:oklch(84.133% .065 90.856);--color-base-content:oklch(41% .112 45.904);--color-primary:oklch(80% .114 19.571);--color-primary-content:oklch(39% .141 25.723);--color-secondary:oklch(92% .084 155.995);--color-secondary-content:oklch(44% .119 151.328);--color-accent:oklch(68% .162 75.834);--color-accent-content:oklch(41% .112 45.904);--color-neutral:oklch(44% .011 73.639);--color-neutral-content:oklch(86% .005 56.366);--color-info:oklch(58% .158 241.966);--color-info-content:oklch(96% .059 95.617);--color-success:oklch(51% .096 186.391);--color-success-content:oklch(96% .059 95.617);--color-warning:oklch(64% .222 41.116);--color-warning-content:oklch(96% .059 95.617);--color-error:oklch(70% .191 22.216);--color-error-content:oklch(40% .123 38.172);--radius-selector:.25rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=cyberpunk]:checked),[data-theme=cyberpunk]{color-scheme:light;--color-base-100:oklch(94.51% .179 104.32);--color-base-200:oklch(91.51% .179 104.32);--color-base-300:oklch(85.51% .179 104.32);--color-base-content:oklch(0% 0 0);--color-primary:oklch(74.22% .209 6.35);--color-primary-content:oklch(14.844% .041 6.35);--color-secondary:oklch(83.33% .184 204.72);--color-secondary-content:oklch(16.666% .036 204.72);--color-accent:oklch(71.86% .217 310.43);--color-accent-content:oklch(14.372% .043 310.43);--color-neutral:oklch(23.04% .065 269.31);--color-neutral-content:oklch(94.51% .179 104.32);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:0rem;--radius-field:0rem;--radius-box:0rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=valentine]:checked),[data-theme=valentine]{color-scheme:light;--color-base-100:oklch(97% .014 343.198);--color-base-200:oklch(94% .028 342.258);--color-base-300:oklch(89% .061 343.231);--color-base-content:oklch(52% .223 3.958);--color-primary:oklch(65% .241 354.308);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(62% .265 303.9);--color-secondary-content:oklch(97% .014 308.299);--color-accent:oklch(82% .111 230.318);--color-accent-content:oklch(39% .09 240.876);--color-neutral:oklch(40% .153 2.432);--color-neutral-content:oklch(89% .061 343.231);--color-info:oklch(86% .127 207.078);--color-info-content:oklch(44% .11 240.79);--color-success:oklch(84% .143 164.978);--color-success-content:oklch(43% .095 166.913);--color-warning:oklch(75% .183 55.934);--color-warning-content:oklch(26% .079 36.259);--color-error:oklch(63% .237 25.331);--color-error-content:oklch(97% .013 17.38);--radius-selector:1rem;--radius-field:2rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=halloween]:checked),[data-theme=halloween]{color-scheme:dark;--color-base-100:oklch(21% .006 56.043);--color-base-200:oklch(14% .004 49.25);--color-base-300:oklch(0% 0 0);--color-base-content:oklch(84.955% 0 0);--color-primary:oklch(77.48% .204 60.62);--color-primary-content:oklch(19.693% .004 196.779);--color-secondary:oklch(45.98% .248 305.03);--color-secondary-content:oklch(89.196% .049 305.03);--color-accent:oklch(64.8% .223 136.073);--color-accent-content:oklch(0% 0 0);--color-neutral:oklch(24.371% .046 65.681);--color-neutral-content:oklch(84.874% .009 65.681);--color-info:oklch(54.615% .215 262.88);--color-info-content:oklch(90.923% .043 262.88);--color-success:oklch(62.705% .169 149.213);--color-success-content:oklch(12.541% .033 149.213);--color-warning:oklch(66.584% .157 58.318);--color-warning-content:oklch(13.316% .031 58.318);--color-error:oklch(65.72% .199 27.33);--color-error-content:oklch(13.144% .039 27.33);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=garden]:checked),[data-theme=garden]{color-scheme:light;--color-base-100:oklch(92.951% .002 17.197);--color-base-200:oklch(86.445% .002 17.197);--color-base-300:oklch(79.938% .001 17.197);--color-base-content:oklch(16.961% .001 17.32);--color-primary:oklch(62.45% .278 3.836);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(48.495% .11 355.095);--color-secondary-content:oklch(89.699% .022 355.095);--color-accent:oklch(56.273% .054 154.39);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(24.155% .049 89.07);--color-neutral-content:oklch(92.951% .002 17.197);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=forest]:checked),[data-theme=forest]{color-scheme:dark;--color-base-100:oklch(20.84% .008 17.911);--color-base-200:oklch(18.522% .007 17.911);--color-base-300:oklch(16.203% .007 17.911);--color-base-content:oklch(83.768% .001 17.911);--color-primary:oklch(68.628% .185 148.958);--color-primary-content:oklch(0% 0 0);--color-secondary:oklch(69.776% .135 168.327);--color-secondary-content:oklch(13.955% .027 168.327);--color-accent:oklch(70.628% .119 185.713);--color-accent-content:oklch(14.125% .023 185.713);--color-neutral:oklch(30.698% .039 171.364);--color-neutral-content:oklch(86.139% .007 171.364);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:1rem;--radius-field:2rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=aqua]:checked),[data-theme=aqua]{color-scheme:dark;--color-base-100:oklch(37% .146 265.522);--color-base-200:oklch(28% .091 267.935);--color-base-300:oklch(22% .091 267.935);--color-base-content:oklch(90% .058 230.902);--color-primary:oklch(85.661% .144 198.645);--color-primary-content:oklch(40.124% .068 197.603);--color-secondary:oklch(60.682% .108 309.782);--color-secondary-content:oklch(96% .016 293.756);--color-accent:oklch(93.426% .102 94.555);--color-accent-content:oklch(18.685% .02 94.555);--color-neutral:oklch(27% .146 265.522);--color-neutral-content:oklch(80% .146 265.522);--color-info:oklch(54.615% .215 262.88);--color-info-content:oklch(90.923% .043 262.88);--color-success:oklch(62.705% .169 149.213);--color-success-content:oklch(12.541% .033 149.213);--color-warning:oklch(66.584% .157 58.318);--color-warning-content:oklch(27% .077 45.635);--color-error:oklch(73.95% .19 27.33);--color-error-content:oklch(14.79% .038 27.33);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=lofi]:checked),[data-theme=lofi]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(97% 0 0);--color-base-300:oklch(94% 0 0);--color-base-content:oklch(0% 0 0);--color-primary:oklch(15.906% 0 0);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(21.455% .001 17.278);--color-secondary-content:oklch(100% 0 0);--color-accent:oklch(26.861% 0 0);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(0% 0 0);--color-neutral-content:oklch(100% 0 0);--color-info:oklch(79.54% .103 205.9);--color-info-content:oklch(15.908% .02 205.9);--color-success:oklch(90.13% .153 164.14);--color-success-content:oklch(18.026% .03 164.14);--color-warning:oklch(88.37% .135 79.94);--color-warning-content:oklch(17.674% .027 79.94);--color-error:oklch(78.66% .15 28.47);--color-error-content:oklch(15.732% .03 28.47);--radius-selector:2rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=pastel]:checked),[data-theme=pastel]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(98.462% .001 247.838);--color-base-300:oklch(92.462% .001 247.838);--color-base-content:oklch(20% 0 0);--color-primary:oklch(90% .063 306.703);--color-primary-content:oklch(49% .265 301.924);--color-secondary:oklch(89% .058 10.001);--color-secondary-content:oklch(51% .222 16.935);--color-accent:oklch(90% .093 164.15);--color-accent-content:oklch(50% .118 165.612);--color-neutral:oklch(55% .046 257.417);--color-neutral-content:oklch(92% .013 255.508);--color-info:oklch(86% .127 207.078);--color-info-content:oklch(52% .105 223.128);--color-success:oklch(87% .15 154.449);--color-success-content:oklch(52% .154 150.069);--color-warning:oklch(83% .128 66.29);--color-warning-content:oklch(55% .195 38.402);--color-error:oklch(80% .114 19.571);--color-error-content:oklch(50% .213 27.518);--radius-selector:1rem;--radius-field:2rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:2px;--depth:0;--noise:0}:root:has(input.theme-controller[value=fantasy]:checked),[data-theme=fantasy]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(93% 0 0);--color-base-300:oklch(86% 0 0);--color-base-content:oklch(27.807% .029 256.847);--color-primary:oklch(37.45% .189 325.02);--color-primary-content:oklch(87.49% .037 325.02);--color-secondary:oklch(53.92% .162 241.36);--color-secondary-content:oklch(90.784% .032 241.36);--color-accent:oklch(75.98% .204 56.72);--color-accent-content:oklch(15.196% .04 56.72);--color-neutral:oklch(27.807% .029 256.847);--color-neutral-content:oklch(85.561% .005 256.847);--color-info:oklch(72.06% .191 231.6);--color-info-content:oklch(0% 0 0);--color-success:oklch(64.8% .15 160);--color-success-content:oklch(0% 0 0);--color-warning:oklch(84.71% .199 83.87);--color-warning-content:oklch(0% 0 0);--color-error:oklch(71.76% .221 22.18);--color-error-content:oklch(0% 0 0);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=wireframe]:checked),[data-theme=wireframe]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(97% 0 0);--color-base-300:oklch(94% 0 0);--color-base-content:oklch(20% 0 0);--color-primary:oklch(87% 0 0);--color-primary-content:oklch(26% 0 0);--color-secondary:oklch(87% 0 0);--color-secondary-content:oklch(26% 0 0);--color-accent:oklch(87% 0 0);--color-accent-content:oklch(26% 0 0);--color-neutral:oklch(87% 0 0);--color-neutral-content:oklch(26% 0 0);--color-info:oklch(44% .11 240.79);--color-info-content:oklch(90% .058 230.902);--color-success:oklch(43% .095 166.913);--color-success-content:oklch(90% .093 164.15);--color-warning:oklch(47% .137 46.201);--color-warning-content:oklch(92% .12 95.746);--color-error:oklch(44% .177 26.899);--color-error-content:oklch(88% .062 18.334);--radius-selector:0rem;--radius-field:.25rem;--radius-box:.25rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=black]:checked),[data-theme=black]{color-scheme:dark;--color-base-100:oklch(0% 0 0);--color-base-200:oklch(19% 0 0);--color-base-300:oklch(22% 0 0);--color-base-content:oklch(87.609% 0 0);--color-primary:oklch(35% 0 0);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(35% 0 0);--color-secondary-content:oklch(100% 0 0);--color-accent:oklch(35% 0 0);--color-accent-content:oklch(100% 0 0);--color-neutral:oklch(35% 0 0);--color-neutral-content:oklch(100% 0 0);--color-info:oklch(45.201% .313 264.052);--color-info-content:oklch(89.04% .062 264.052);--color-success:oklch(51.975% .176 142.495);--color-success-content:oklch(90.395% .035 142.495);--color-warning:oklch(96.798% .211 109.769);--color-warning-content:oklch(19.359% .042 109.769);--color-error:oklch(62.795% .257 29.233);--color-error-content:oklch(12.559% .051 29.233);--radius-selector:0rem;--radius-field:0rem;--radius-box:0rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=luxury]:checked),[data-theme=luxury]{color-scheme:dark;--color-base-100:oklch(14.076% .004 285.822);--color-base-200:oklch(20.219% .004 308.229);--color-base-300:oklch(23.219% .004 308.229);--color-base-content:oklch(75.687% .123 76.89);--color-primary:oklch(100% 0 0);--color-primary-content:oklch(20% 0 0);--color-secondary:oklch(27.581% .064 261.069);--color-secondary-content:oklch(85.516% .012 261.069);--color-accent:oklch(36.674% .051 338.825);--color-accent-content:oklch(87.334% .01 338.825);--color-neutral:oklch(24.27% .057 59.825);--color-neutral-content:oklch(93.203% .089 90.861);--color-info:oklch(79.061% .121 237.133);--color-info-content:oklch(15.812% .024 237.133);--color-success:oklch(78.119% .192 132.154);--color-success-content:oklch(15.623% .038 132.154);--color-warning:oklch(86.127% .136 102.891);--color-warning-content:oklch(17.225% .027 102.891);--color-error:oklch(71.753% .176 22.568);--color-error-content:oklch(14.35% .035 22.568);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=dracula]:checked),[data-theme=dracula]{color-scheme:dark;--color-base-100:oklch(28.822% .022 277.508);--color-base-200:oklch(26.805% .02 277.508);--color-base-300:oklch(24.787% .019 277.508);--color-base-content:oklch(97.747% .007 106.545);--color-primary:oklch(75.461% .183 346.812);--color-primary-content:oklch(15.092% .036 346.812);--color-secondary:oklch(74.202% .148 301.883);--color-secondary-content:oklch(14.84% .029 301.883);--color-accent:oklch(83.392% .124 66.558);--color-accent-content:oklch(16.678% .024 66.558);--color-neutral:oklch(39.445% .032 275.524);--color-neutral-content:oklch(87.889% .006 275.524);--color-info:oklch(88.263% .093 212.846);--color-info-content:oklch(17.652% .018 212.846);--color-success:oklch(87.099% .219 148.024);--color-success-content:oklch(17.419% .043 148.024);--color-warning:oklch(95.533% .134 112.757);--color-warning-content:oklch(19.106% .026 112.757);--color-error:oklch(68.22% .206 24.43);--color-error-content:oklch(13.644% .041 24.43);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=cmyk]:checked),[data-theme=cmyk]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(95% 0 0);--color-base-300:oklch(90% 0 0);--color-base-content:oklch(20% 0 0);--color-primary:oklch(71.772% .133 239.443);--color-primary-content:oklch(14.354% .026 239.443);--color-secondary:oklch(64.476% .202 359.339);--color-secondary-content:oklch(12.895% .04 359.339);--color-accent:oklch(94.228% .189 105.306);--color-accent-content:oklch(18.845% .037 105.306);--color-neutral:oklch(21.778% 0 0);--color-neutral-content:oklch(84.355% 0 0);--color-info:oklch(68.475% .094 217.284);--color-info-content:oklch(13.695% .018 217.284);--color-success:oklch(46.949% .162 321.406);--color-success-content:oklch(89.389% .032 321.406);--color-warning:oklch(71.236% .159 52.023);--color-warning-content:oklch(14.247% .031 52.023);--color-error:oklch(62.013% .208 28.717);--color-error-content:oklch(12.402% .041 28.717);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=autumn]:checked),[data-theme=autumn]{color-scheme:light;--color-base-100:oklch(95.814% 0 0);--color-base-200:oklch(89.107% 0 0);--color-base-300:oklch(82.4% 0 0);--color-base-content:oklch(19.162% 0 0);--color-primary:oklch(40.723% .161 17.53);--color-primary-content:oklch(88.144% .032 17.53);--color-secondary:oklch(61.676% .169 23.865);--color-secondary-content:oklch(12.335% .033 23.865);--color-accent:oklch(73.425% .094 60.729);--color-accent-content:oklch(14.685% .018 60.729);--color-neutral:oklch(54.367% .037 51.902);--color-neutral-content:oklch(90.873% .007 51.902);--color-info:oklch(69.224% .097 207.284);--color-info-content:oklch(13.844% .019 207.284);--color-success:oklch(60.995% .08 174.616);--color-success-content:oklch(12.199% .016 174.616);--color-warning:oklch(70.081% .164 56.844);--color-warning-content:oklch(14.016% .032 56.844);--color-error:oklch(53.07% .241 24.16);--color-error-content:oklch(90.614% .048 24.16);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=business]:checked),[data-theme=business]{color-scheme:dark;--color-base-100:oklch(24.353% 0 0);--color-base-200:oklch(22.648% 0 0);--color-base-300:oklch(20.944% 0 0);--color-base-content:oklch(84.87% 0 0);--color-primary:oklch(41.703% .099 251.473);--color-primary-content:oklch(88.34% .019 251.473);--color-secondary:oklch(64.092% .027 229.389);--color-secondary-content:oklch(12.818% .005 229.389);--color-accent:oklch(67.271% .167 35.791);--color-accent-content:oklch(13.454% .033 35.791);--color-neutral:oklch(27.441% .013 253.041);--color-neutral-content:oklch(85.488% .002 253.041);--color-info:oklch(62.616% .143 240.033);--color-info-content:oklch(12.523% .028 240.033);--color-success:oklch(70.226% .094 156.596);--color-success-content:oklch(14.045% .018 156.596);--color-warning:oklch(77.482% .115 81.519);--color-warning-content:oklch(15.496% .023 81.519);--color-error:oklch(51.61% .146 29.674);--color-error-content:oklch(90.322% .029 29.674);--radius-selector:0rem;--radius-field:.25rem;--radius-box:.25rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=acid]:checked),[data-theme=acid]{color-scheme:light;--color-base-100:oklch(98% 0 0);--color-base-200:oklch(95% 0 0);--color-base-300:oklch(91% 0 0);--color-base-content:oklch(0% 0 0);--color-primary:oklch(71.9% .357 330.759);--color-primary-content:oklch(14.38% .071 330.759);--color-secondary:oklch(73.37% .224 48.25);--color-secondary-content:oklch(14.674% .044 48.25);--color-accent:oklch(92.78% .264 122.962);--color-accent-content:oklch(18.556% .052 122.962);--color-neutral:oklch(21.31% .128 278.68);--color-neutral-content:oklch(84.262% .025 278.68);--color-info:oklch(60.72% .227 252.05);--color-info-content:oklch(12.144% .045 252.05);--color-success:oklch(85.72% .266 158.53);--color-success-content:oklch(17.144% .053 158.53);--color-warning:oklch(91.01% .212 100.5);--color-warning-content:oklch(18.202% .042 100.5);--color-error:oklch(64.84% .293 29.349);--color-error-content:oklch(12.968% .058 29.349);--radius-selector:1rem;--radius-field:1rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=lemonade]:checked),[data-theme=lemonade]{color-scheme:light;--color-base-100:oklch(98.71% .02 123.72);--color-base-200:oklch(91.8% .018 123.72);--color-base-300:oklch(84.89% .017 123.72);--color-base-content:oklch(19.742% .004 123.72);--color-primary:oklch(58.92% .199 134.6);--color-primary-content:oklch(11.784% .039 134.6);--color-secondary:oklch(77.75% .196 111.09);--color-secondary-content:oklch(15.55% .039 111.09);--color-accent:oklch(85.39% .201 100.73);--color-accent-content:oklch(17.078% .04 100.73);--color-neutral:oklch(30.98% .075 108.6);--color-neutral-content:oklch(86.196% .015 108.6);--color-info:oklch(86.19% .047 224.14);--color-info-content:oklch(17.238% .009 224.14);--color-success:oklch(86.19% .047 157.85);--color-success-content:oklch(17.238% .009 157.85);--color-warning:oklch(86.19% .047 102.15);--color-warning-content:oklch(17.238% .009 102.15);--color-error:oklch(86.19% .047 25.85);--color-error-content:oklch(17.238% .009 25.85);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=night]:checked),[data-theme=night]{color-scheme:dark;--color-base-100:oklch(20.768% .039 265.754);--color-base-200:oklch(19.314% .037 265.754);--color-base-300:oklch(17.86% .034 265.754);--color-base-content:oklch(84.153% .007 265.754);--color-primary:oklch(75.351% .138 232.661);--color-primary-content:oklch(15.07% .027 232.661);--color-secondary:oklch(68.011% .158 276.934);--color-secondary-content:oklch(13.602% .031 276.934);--color-accent:oklch(72.36% .176 350.048);--color-accent-content:oklch(14.472% .035 350.048);--color-neutral:oklch(27.949% .036 260.03);--color-neutral-content:oklch(85.589% .007 260.03);--color-info:oklch(68.455% .148 237.251);--color-info-content:oklch(0% 0 0);--color-success:oklch(78.452% .132 181.911);--color-success-content:oklch(15.69% .026 181.911);--color-warning:oklch(83.242% .139 82.95);--color-warning-content:oklch(16.648% .027 82.95);--color-error:oklch(71.785% .17 13.118);--color-error-content:oklch(14.357% .034 13.118);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=coffee]:checked),[data-theme=coffee]{color-scheme:dark;--color-base-100:oklch(24% .023 329.708);--color-base-200:oklch(21% .021 329.708);--color-base-300:oklch(16% .019 329.708);--color-base-content:oklch(72.354% .092 79.129);--color-primary:oklch(71.996% .123 62.756);--color-primary-content:oklch(14.399% .024 62.756);--color-secondary:oklch(34.465% .029 199.194);--color-secondary-content:oklch(86.893% .005 199.194);--color-accent:oklch(42.621% .074 224.389);--color-accent-content:oklch(88.524% .014 224.389);--color-neutral:oklch(16.51% .015 326.261);--color-neutral-content:oklch(83.302% .003 326.261);--color-info:oklch(79.49% .063 184.558);--color-info-content:oklch(15.898% .012 184.558);--color-success:oklch(74.722% .072 131.116);--color-success-content:oklch(14.944% .014 131.116);--color-warning:oklch(88.15% .14 87.722);--color-warning-content:oklch(17.63% .028 87.722);--color-error:oklch(77.318% .128 31.871);--color-error-content:oklch(15.463% .025 31.871);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=winter]:checked),[data-theme=winter]{color-scheme:light;--color-base-100:oklch(100% 0 0);--color-base-200:oklch(97.466% .011 259.822);--color-base-300:oklch(93.268% .016 262.751);--color-base-content:oklch(41.886% .053 255.824);--color-primary:oklch(56.86% .255 257.57);--color-primary-content:oklch(91.372% .051 257.57);--color-secondary:oklch(42.551% .161 282.339);--color-secondary-content:oklch(88.51% .032 282.339);--color-accent:oklch(59.939% .191 335.171);--color-accent-content:oklch(11.988% .038 335.171);--color-neutral:oklch(19.616% .063 257.651);--color-neutral-content:oklch(83.923% .012 257.651);--color-info:oklch(88.127% .085 214.515);--color-info-content:oklch(17.625% .017 214.515);--color-success:oklch(80.494% .077 197.823);--color-success-content:oklch(16.098% .015 197.823);--color-warning:oklch(89.172% .045 71.47);--color-warning-content:oklch(17.834% .009 71.47);--color-error:oklch(73.092% .11 20.076);--color-error-content:oklch(14.618% .022 20.076);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=dim]:checked),[data-theme=dim]{color-scheme:dark;--color-base-100:oklch(30.857% .023 264.149);--color-base-200:oklch(28.036% .019 264.182);--color-base-300:oklch(26.346% .018 262.177);--color-base-content:oklch(82.901% .031 222.959);--color-primary:oklch(86.133% .141 139.549);--color-primary-content:oklch(17.226% .028 139.549);--color-secondary:oklch(73.375% .165 35.353);--color-secondary-content:oklch(14.675% .033 35.353);--color-accent:oklch(74.229% .133 311.379);--color-accent-content:oklch(14.845% .026 311.379);--color-neutral:oklch(24.731% .02 264.094);--color-neutral-content:oklch(82.901% .031 222.959);--color-info:oklch(86.078% .142 206.182);--color-info-content:oklch(17.215% .028 206.182);--color-success:oklch(86.171% .142 166.534);--color-success-content:oklch(17.234% .028 166.534);--color-warning:oklch(86.163% .142 94.818);--color-warning-content:oklch(17.232% .028 94.818);--color-error:oklch(82.418% .099 33.756);--color-error-content:oklch(16.483% .019 33.756);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=nord]:checked),[data-theme=nord]{color-scheme:light;--color-base-100:oklch(95.127% .007 260.731);--color-base-200:oklch(93.299% .01 261.788);--color-base-300:oklch(89.925% .016 262.749);--color-base-content:oklch(32.437% .022 264.182);--color-primary:oklch(59.435% .077 254.027);--color-primary-content:oklch(11.887% .015 254.027);--color-secondary:oklch(69.651% .059 248.687);--color-secondary-content:oklch(13.93% .011 248.687);--color-accent:oklch(77.464% .062 217.469);--color-accent-content:oklch(15.492% .012 217.469);--color-neutral:oklch(45.229% .035 264.131);--color-neutral-content:oklch(89.925% .016 262.749);--color-info:oklch(69.207% .062 332.664);--color-info-content:oklch(13.841% .012 332.664);--color-success:oklch(76.827% .074 131.063);--color-success-content:oklch(15.365% .014 131.063);--color-warning:oklch(85.486% .089 84.093);--color-warning-content:oklch(17.097% .017 84.093);--color-error:oklch(60.61% .12 15.341);--color-error-content:oklch(12.122% .024 15.341);--radius-selector:1rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=sunset]:checked),[data-theme=sunset]{color-scheme:dark;--color-base-100:oklch(22% .019 237.69);--color-base-200:oklch(20% .019 237.69);--color-base-300:oklch(18% .019 237.69);--color-base-content:oklch(77.383% .043 245.096);--color-primary:oklch(74.703% .158 39.947);--color-primary-content:oklch(14.94% .031 39.947);--color-secondary:oklch(72.537% .177 2.72);--color-secondary-content:oklch(14.507% .035 2.72);--color-accent:oklch(71.294% .166 299.844);--color-accent-content:oklch(14.258% .033 299.844);--color-neutral:oklch(26% .019 237.69);--color-neutral-content:oklch(70% .019 237.69);--color-info:oklch(85.559% .085 206.015);--color-info-content:oklch(17.111% .017 206.015);--color-success:oklch(85.56% .085 144.778);--color-success-content:oklch(17.112% .017 144.778);--color-warning:oklch(85.569% .084 74.427);--color-warning-content:oklch(17.113% .016 74.427);--color-error:oklch(85.511% .078 16.886);--color-error-content:oklch(17.102% .015 16.886);--radius-selector:1rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:0;--noise:0}:root:has(input.theme-controller[value=caramellatte]:checked),[data-theme=caramellatte]{color-scheme:light;--color-base-100:oklch(98% .016 73.684);--color-base-200:oklch(95% .038 75.164);--color-base-300:oklch(90% .076 70.697);--color-base-content:oklch(40% .123 38.172);--color-primary:oklch(0% 0 0);--color-primary-content:oklch(100% 0 0);--color-secondary:oklch(22.45% .075 37.85);--color-secondary-content:oklch(90% .076 70.697);--color-accent:oklch(46.44% .111 37.85);--color-accent-content:oklch(90% .076 70.697);--color-neutral:oklch(55% .195 38.402);--color-neutral-content:oklch(98% .016 73.684);--color-info:oklch(42% .199 265.638);--color-info-content:oklch(90% .076 70.697);--color-success:oklch(43% .095 166.913);--color-success-content:oklch(90% .076 70.697);--color-warning:oklch(82% .189 84.429);--color-warning-content:oklch(41% .112 45.904);--color-error:oklch(70% .191 22.216);--color-error-content:oklch(39% .141 25.723);--radius-selector:2rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:2px;--depth:1;--noise:1}:root:has(input.theme-controller[value=abyss]:checked),[data-theme=abyss]{color-scheme:dark;--color-base-100:oklch(20% .08 209);--color-base-200:oklch(15% .08 209);--color-base-300:oklch(10% .08 209);--color-base-content:oklch(90% .076 70.697);--color-primary:oklch(92% .2653 125);--color-primary-content:oklch(50% .2653 125);--color-secondary:oklch(83.27% .0764 298.3);--color-secondary-content:oklch(43.27% .0764 298.3);--color-accent:oklch(43% 0 0);--color-accent-content:oklch(98% 0 0);--color-neutral:oklch(30% .08 209);--color-neutral-content:oklch(90% .076 70.697);--color-info:oklch(74% .16 232.661);--color-info-content:oklch(29% .066 243.157);--color-success:oklch(79% .209 151.711);--color-success-content:oklch(26% .065 152.934);--color-warning:oklch(84.8% .1962 84.62);--color-warning-content:oklch(44.8% .1962 84.62);--color-error:oklch(65% .1985 24.22);--color-error-content:oklch(27% .1985 24.22);--radius-selector:2rem;--radius-field:.25rem;--radius-box:.5rem;--size-selector:.25rem;--size-field:.25rem;--border:1px;--depth:1;--noise:0}:root:has(input.theme-controller[value=silk]:checked),[data-theme=silk]{color-scheme:light;--color-base-100:oklch(97% .0035 67.78);--color-base-200:oklch(95% .0081 61.42);--color-base-300:oklch(90% .0081 61.42);--color-base-content:oklch(40% .0081 61.42);--color-primary:oklch(23.27% .0249 284.3);--color-primary-content:oklch(94.22% .2505 117.44);--color-secondary:oklch(23.27% .0249 284.3);--color-secondary-content:oklch(73.92% .2135 50.94);--color-accent:oklch(23.27% .0249 284.3);--color-accent-content:oklch(88.92% .2061 189.9);--color-neutral:oklch(20% 0 0);--color-neutral-content:oklch(80% .0081 61.42);--color-info:oklch(80.39% .1148 241.68);--color-info-content:oklch(30.39% .1148 241.68);--color-success:oklch(83.92% .0901 136.87);--color-success-content:oklch(23.92% .0901 136.87);--color-warning:oklch(83.92% .1085 80);--color-warning-content:oklch(43.92% .1085 80);--color-error:oklch(75.1% .1814 22.37);--color-error-content:oklch(35.1% .1814 22.37);--radius-selector:2rem;--radius-field:.5rem;--radius-box:1rem;--size-selector:.25rem;--size-field:.25rem;--border:2px;--depth:1;--noise:0}:root{--fx-noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.34' numOctaves='4' stitchTiles='stitch'%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23a)' opacity='0.2'%3E%3C/rect%3E%3C/svg%3E");scrollbar-color:currentColor #0000}@supports (color:color-mix(in lab,red,red)){:root{scrollbar-color:color-mix(in oklch,currentColor 35%,#0000)#0000}}@property --radialprogress{syntax: "<percentage>"; inherits: true; initial-value: 0%;}:root:not(span){overflow:var(--page-overflow)}:root{--page-scroll-bg-on:linear-gradient(var(--root-bg),var(--root-bg))var(--root-bg)}@supports (color:color-mix(in lab,red,red)){:root{--page-scroll-bg-on:linear-gradient(var(--root-bg),var(--root-bg))color-mix(in srgb,var(--root-bg),oklch(0% 0 0) calc(var(--page-has-backdrop,0)*40%))}}:root{--page-scroll-transition-on:background-color .3s ease-out;transition:var(--page-scroll-transition);scrollbar-gutter:var(--page-scroll-gutter,unset);scrollbar-gutter:if(style(--page-has-scroll: 1): var(--page-scroll-gutter,unset); else: unset)}:root:root{background:var(--page-scroll-bg,var(--root-bg,var(--color-base-100)))}@keyframes set-page-has-scroll{0%,to{--page-has-scroll:1}}:root,[data-theme]{background-color:var(--root-bg,var(--color-base-100));color:var(--color-base-content)}:where(:root,[data-theme]){--root-bg:var(--color-base-100)}}@layer components;@layer utilities{@layer daisyui.l1.l2.l3{.diff{webkit-user-select:none;-webkit-user-select:none;user-select:none;direction:ltr;grid-template-rows:1fr 1.8rem 1fr;grid-template-columns:auto 1fr;width:100%;display:grid;position:relative;overflow:hidden;container-type:inline-size}.diff:focus-visible,.diff:has(.diff-item-1:focus-visible){outline-style:var(--tw-outline-style);outline-offset:1px;outline-width:2px;outline-color:var(--color-base-content)}.diff:focus-visible .diff-resizer{min-width:95cqi;max-width:95cqi}.diff:has(.diff-item-1:focus-visible){outline-style:var(--tw-outline-style);outline-offset:1px;outline-width:2px}.diff:has(.diff-item-1:focus-visible) .diff-resizer{min-width:5cqi;max-width:5cqi}@supports (-webkit-overflow-scrolling:touch) and (overflow:-webkit-paged-x){.diff:focus .diff-resizer{min-width:5cqi;max-width:5cqi}.diff:has(.diff-item-1:focus) .diff-resizer{min-width:95cqi;max-width:95cqi}}.modal{pointer-events:none;visibility:hidden;width:100%;max-width:none;height:100%;max-height:none;color:inherit;transition:visibility .3s allow-discrete,background-color .3s ease-out,opacity .1s ease-out;overscroll-behavior:contain;z-index:999;scrollbar-gutter:auto;background-color:#0000;place-items:center;margin:0;padding:0;display:grid;position:fixed;inset:0;overflow:clip}.modal::backdrop{display:none}.tooltip{--tt-bg:var(--color-neutral);--tt-off: calc(100% + .5rem) ;--tt-tail: calc(100% + 1px + .25rem) ;display:inline-block;position:relative}.tooltip>.tooltip-content,.tooltip[data-tip]:before{border-radius:var(--radius-field);text-align:center;white-space:normal;max-width:20rem;color:var(--color-neutral-content);opacity:0;background-color:var(--tt-bg);pointer-events:none;z-index:2;--tw-content:attr(data-tip);content:var(--tw-content);width:max-content;padding-block:.25rem;padding-inline:.5rem;font-size:.875rem;line-height:1.25;position:absolute}.tooltip:after{opacity:0;background-color:var(--tt-bg);content:"";pointer-events:none;--mask-tooltip:url("data:image/svg+xml,%3Csvg width='10' height='4' viewBox='0 0 8 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.500009 1C3.5 1 3.00001 4 5.00001 4C7 4 6.5 1 9.5 1C10 1 10 0.499897 10 0H0C-1.99338e-08 0.5 0 1 0.500009 1Z' fill='black'/%3E%3C/svg%3E%0A");width:.625rem;height:.25rem;-webkit-mask-position:-1px 0;mask-position:-1px 0;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-image:var(--mask-tooltip);mask-image:var(--mask-tooltip);display:block;position:absolute}@media(prefers-reduced-motion:no-preference){.tooltip>.tooltip-content,.tooltip[data-tip]:before,.tooltip:after{transition:opacity .2s cubic-bezier(.4,0,.2,1) 75ms,transform .2s cubic-bezier(.4,0,.2,1) 75ms}}:is(.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))).tooltip-open,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):hover,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):has(:focus-visible))>.tooltip-content,:is(.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))).tooltip-open,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):hover,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):has(:focus-visible))[data-tip]:before,:is(.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))).tooltip-open,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):hover,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):has(:focus-visible)):after{opacity:1;--tt-pos:0rem}@media(prefers-reduced-motion:no-preference){:is(.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))).tooltip-open,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):hover,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):has(:focus-visible))>.tooltip-content,:is(.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))).tooltip-open,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):hover,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):has(:focus-visible))[data-tip]:before,:is(.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))).tooltip-open,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):hover,.tooltip:is([data-tip]:not([data-tip=""]),:has(.tooltip-content:not(:empty))):has(:focus-visible)):after{transition:opacity .2s cubic-bezier(.4,0,.2,1),transform .2s cubic-bezier(.4,0,.2,1)}}.tab{cursor:pointer;appearance:none;text-align:center;webkit-user-select:none;-webkit-user-select:none;user-select:none;flex-wrap:wrap;justify-content:center;align-items:center;display:inline-flex;position:relative}@media(hover:hover){.tab:hover{color:var(--color-base-content)}}.tab{--tab-p:.75rem;--tab-bg:var(--color-base-100);--tab-border-color:var(--color-base-300);--tab-radius-ss:0;--tab-radius-se:0;--tab-radius-es:0;--tab-radius-ee:0;--tab-order:0;--tab-radius-min:calc(.75rem - var(--border));--tab-radius-limit:min(var(--radius-field),var(--tab-radius-min));--tab-radius-grad:#0000 calc(69% - var(--border)),var(--tab-border-color)calc(calc(69% - var(--border)) + .25px),var(--tab-border-color)calc(calc(69% - var(--border)) + var(--border)),var(--tab-bg)calc(calc(69% - var(--border)) + var(--border) + .25px);order:var(--tab-order);height:var(--tab-height);border-color:#0000;padding-inline-start:var(--tab-p);padding-inline-end:var(--tab-p);font-size:.875rem}.tab:is(input[type=radio]){min-width:fit-content}.tab:is(input[type=radio]):after{--tw-content:attr(aria-label);content:var(--tw-content)}.tab:is(label){position:relative}.tab:is(label) input{cursor:pointer;appearance:none;opacity:0;position:absolute;inset:0}:is(.tab:checked,.tab:is(label:has(:checked)),.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]))+.tab-content{display:block}.tab:not(:checked,label:has(:checked),:hover,.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]){color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.tab:not(:checked,label:has(:checked),:hover,.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]){color:color-mix(in oklab,var(--color-base-content)50%,transparent)}}.tab:not(input):empty{cursor:default;flex-grow:1}.tab:focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.tab:focus{outline-offset:2px;outline:2px solid #0000}}.tab:focus-visible,.tab:is(label:has(:checked:focus-visible)){outline-offset:-5px;outline:2px solid}.tab[disabled]{pointer-events:none;opacity:.4}.menu{--menu-active-fg:var(--color-neutral-content);--menu-active-bg:var(--color-neutral);flex-flow:column wrap;width:fit-content;padding:.5rem;font-size:.875rem;display:flex}.menu :where(li ul){white-space:nowrap;margin-inline-start:1rem;padding-inline-start:.5rem;position:relative}.menu :where(li ul):before{background-color:var(--color-base-content);opacity:.1;width:var(--border);content:"";inset-inline-start:0;position:absolute;top:.75rem;bottom:.75rem}.menu :where(li>.menu-dropdown:not(.menu-dropdown-show)){display:none}.menu :where(li:not(.menu-title)>:not(ul,details,.menu-title,.btn)),.menu :where(li:not(.menu-title)>details>summary:not(.menu-title)){border-radius:var(--radius-field);text-align:start;text-wrap:balance;-webkit-user-select:none;user-select:none;grid-auto-columns:minmax(auto,max-content) auto max-content;grid-auto-flow:column;align-content:flex-start;align-items:center;gap:.5rem;padding-block:.375rem;padding-inline:.75rem;transition-property:color,background-color,box-shadow;transition-duration:.2s;transition-timing-function:cubic-bezier(0,0,.2,1);display:grid}.menu :where(li>details>summary){--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.menu :where(li>details>summary){outline-offset:2px;outline:2px solid #0000}}.menu :where(li>details>summary)::-webkit-details-marker{display:none}:is(.menu :where(li>details>summary),.menu :where(li>.menu-dropdown-toggle)):after{content:"";transform-origin:50%;pointer-events:none;justify-self:flex-end;width:.375rem;height:.375rem;transition-property:rotate,translate;transition-duration:.2s;display:block;translate:0 -1px;rotate:-135deg;box-shadow:inset 2px 2px}.menu details{interpolate-size:allow-keywords;overflow:hidden}.menu details::details-content{block-size:0}@media(prefers-reduced-motion:no-preference){.menu details::details-content{transition-behavior:allow-discrete;transition-property:block-size,content-visibility;transition-duration:.2s;transition-timing-function:cubic-bezier(0,0,.2,1)}}.menu details[open]::details-content{block-size:auto}.menu :where(li>details[open]>summary):after,.menu :where(li>.menu-dropdown-toggle.menu-dropdown-show):after{translate:0 1px;rotate:45deg}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn).menu-focus,.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn):focus-visible{cursor:pointer;background-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn).menu-focus,.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn):focus-visible{background-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn).menu-focus,.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn):focus-visible{color:var(--color-base-content);--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn).menu-focus,.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title),li:not(.menu-title,.disabled)>details>summary:not(.menu-title)):not(.menu-active,:active,.btn):focus-visible{outline-offset:2px;outline:2px solid #0000}}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){cursor:pointer;background-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){background-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){outline-offset:2px;outline:2px solid #0000}}.menu :where(li:not(.menu-title,.disabled)>:not(ul,details,.menu-title):not(.menu-active,:active,.btn):hover,li:not(.menu-title,.disabled)>details>summary:not(.menu-title):not(.menu-active,:active,.btn):hover){box-shadow:inset 0 1px #00000003,inset 0 -1px #ffffff03}.menu :where(li:empty){background-color:var(--color-base-content);opacity:.1;height:1px;margin:.5rem 1rem}.menu :where(li){flex-flow:column wrap;flex-shrink:0;align-items:stretch;display:flex;position:relative}.menu :where(li) .badge{justify-self:flex-end}.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active{outline-offset:2px;outline:2px solid #0000}}.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active{color:var(--menu-active-fg);background-color:var(--menu-active-bg);background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise)}:is(.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active):not(:is(.menu :where(li)>:not(ul,.menu-title,details,.btn):active,.menu :where(li)>:not(ul,.menu-title,details,.btn).menu-active,.menu :where(li)>details>summary:active):active){box-shadow:0 2px calc(var(--depth)*3px) -2px var(--menu-active-bg)}.menu :where(li).menu-disabled{pointer-events:none;color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.menu :where(li).menu-disabled{color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.menu .dropdown:focus-within .menu-dropdown-toggle:after{translate:0 1px;rotate:45deg}.menu .dropdown-content{margin-top:.5rem;padding:.5rem}.menu .dropdown-content:before{display:none}.dropdown{position-area:var(--anchor-v,bottom)var(--anchor-h,span-right);display:inline-block;position:relative}.dropdown>:not(:has(~[class*=dropdown-content])):focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.dropdown>:not(:has(~[class*=dropdown-content])):focus{outline-offset:2px;outline:2px solid #0000}}.dropdown .dropdown-content{position:absolute}.dropdown.dropdown-close .dropdown-content,.dropdown:not(details,.dropdown-open,.dropdown-hover:hover,:focus-within) .dropdown-content,.dropdown.dropdown-hover:not(:hover) [tabindex]:first-child:focus:not(:focus-visible)~.dropdown-content{transform-origin:top;opacity:0;display:none;scale:95%}.dropdown[popover],.dropdown .dropdown-content{z-index:999}@media(prefers-reduced-motion:no-preference){.dropdown[popover],.dropdown .dropdown-content{transition-behavior:allow-discrete;transition-property:opacity,scale,display;transition-duration:.2s;transition-timing-function:cubic-bezier(.4,0,.2,1);animation:.2s dropdown}}@starting-style{.dropdown[popover],.dropdown .dropdown-content{opacity:0;scale:95%}}:is(.dropdown:not(.dropdown-close).dropdown-open,.dropdown:not(.dropdown-close):not(.dropdown-hover):focus,.dropdown:not(.dropdown-close):focus-within)>[tabindex]:first-child{pointer-events:none}:is(.dropdown:not(.dropdown-close).dropdown-open,.dropdown:not(.dropdown-close):not(.dropdown-hover):focus,.dropdown:not(.dropdown-close):focus-within) .dropdown-content,.dropdown:not(.dropdown-close).dropdown-hover:hover .dropdown-content{opacity:1;scale:100%}.dropdown:is(details) summary::-webkit-details-marker{display:none}.dropdown:where([popover]){background:0 0}.dropdown[popover]{color:inherit;position:fixed}@supports not (position-area:bottom){.dropdown[popover]{margin:auto}.dropdown[popover].dropdown-close{transform-origin:top;opacity:0;display:none;scale:95%}.dropdown[popover].dropdown-open:not(:popover-open){transform-origin:top;opacity:0;display:none;scale:95%}.dropdown[popover]::backdrop{background-color:oklab(0% none none/.3)}}:is(.dropdown[popover].dropdown-close,.dropdown[popover]:not(.dropdown-open,:popover-open)){transform-origin:top;opacity:0;display:none;scale:95%}:where(.btn){width:unset}.btn{cursor:pointer;text-align:center;vertical-align:middle;outline-offset:2px;webkit-user-select:none;-webkit-user-select:none;user-select:none;padding-inline:var(--btn-p);color:var(--btn-fg);--tw-prose-links:var(--btn-fg);height:var(--size);font-size:var(--fontsize,.875rem);outline-color:var(--btn-color,var(--color-base-content));background-color:var(--btn-bg);background-size:auto,calc(var(--noise)*100%);background-image:none,var(--btn-noise);border-width:var(--border);border-style:solid;border-color:var(--btn-border);text-shadow:0 .5px oklch(100% 0 0/calc(var(--depth)*.15));touch-action:manipulation;box-shadow:0 .5px 0 .5px oklch(100% 0 0/calc(var(--depth)*6%)) inset,var(--btn-shadow);--size:calc(var(--size-field,.25rem)*10);--btn-bg:var(--btn-color,var(--color-base-200));--btn-fg:var(--color-base-content);--btn-p:1rem;--btn-border:var(--btn-bg);border-start-start-radius:var(--join-ss,var(--radius-field));border-start-end-radius:var(--join-se,var(--radius-field));border-end-end-radius:var(--join-ee,var(--radius-field));border-end-start-radius:var(--join-es,var(--radius-field));flex-wrap:nowrap;flex-shrink:0;justify-content:center;align-items:center;gap:.375rem;font-weight:600;transition-property:color,background-color,border-color,box-shadow;transition-duration:.2s;transition-timing-function:cubic-bezier(0,0,.2,1);display:inline-flex}@supports (color:color-mix(in lab,red,red)){.btn{--btn-border:color-mix(in oklab,var(--btn-bg),#000 calc(var(--depth)*5%))}}.btn{--btn-shadow:0 3px 2px -2px var(--btn-bg),0 4px 3px -2px var(--btn-bg)}@supports (color:color-mix(in lab,red,red)){.btn{--btn-shadow:0 3px 2px -2px color-mix(in oklab,var(--btn-bg)calc(var(--depth)*30%),#0000),0 4px 3px -2px color-mix(in oklab,var(--btn-bg)calc(var(--depth)*30%),#0000)}}.btn{--btn-noise:var(--fx-noise)}@media(hover:hover){.btn:hover{--btn-bg:var(--btn-color,var(--color-base-200))}@supports (color:color-mix(in lab,red,red)){.btn:hover{--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-200)),#000 7%)}}}.btn:focus-visible,.btn:has(:focus-visible){isolation:isolate;outline-width:2px;outline-style:solid}.btn:active:not(.btn-active){--btn-bg:var(--btn-color,var(--color-base-200));translate:0 .5px}@supports (color:color-mix(in lab,red,red)){.btn:active:not(.btn-active){--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-200)),#000 5%)}}.btn:active:not(.btn-active){--btn-border:var(--btn-color,var(--color-base-200))}@supports (color:color-mix(in lab,red,red)){.btn:active:not(.btn-active){--btn-border:color-mix(in oklab,var(--btn-color,var(--color-base-200)),#000 7%)}}.btn:active:not(.btn-active){--btn-shadow:0 0 0 0 oklch(0% 0 0/0),0 0 0 0 oklch(0% 0 0/0)}.btn:is(input[type=checkbox],input[type=radio]){appearance:none}.btn:is(input[type=checkbox],input[type=radio]):after{--tw-content:attr(aria-label);content:var(--tw-content)}.btn:where(input:checked:not(.filter .btn)){--btn-color:var(--color-primary);--btn-fg:var(--color-primary-content);isolation:isolate}.loading{pointer-events:none;aspect-ratio:1;vertical-align:middle;width:calc(var(--size-selector,.25rem)*6);background-color:currentColor;display:inline-block;-webkit-mask-image:url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");-webkit-mask-position:50%;mask-position:50%;-webkit-mask-size:100%;mask-size:100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}.radial-progress{height:var(--size);width:var(--size);vertical-align:middle;box-sizing:content-box;--value:0;--size:5rem;--thickness:calc(var(--size)/10);--radialprogress:calc(var(--value)*1%);background-color:#0000;border-radius:3.40282e38px;place-content:center;transition:--radialprogress .3s linear;display:inline-grid;position:relative}.radial-progress:before{content:"";background:radial-gradient(farthest-side,currentColor 98%,#0000)top/var(--thickness)var(--thickness)no-repeat,conic-gradient(currentColor var(--radialprogress),#0000 0);webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - var(--thickness)),#000 calc(100% + .5px - var(--thickness)));-webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - var(--thickness)),#000 calc(100% + .5px - var(--thickness)));mask:radial-gradient(farthest-side,#0000 calc(100% - var(--thickness)),#000 calc(100% + .5px - var(--thickness)));border-radius:3.40282e38px;position:absolute;inset:0}.radial-progress:after{content:"";inset:calc(50% - var(--thickness)/2);transform:rotate(calc(var(--value)*3.6deg - 90deg))translate(calc(var(--size)/2 - 50%));background-color:currentColor;border-radius:3.40282e38px;transition:transform .3s linear;position:absolute}.list{flex-direction:column;font-size:.875rem;display:flex}.list .list-row{--list-grid-cols:minmax(0,auto)1fr;border-radius:var(--radius-box);word-break:break-word;grid-auto-flow:column;grid-template-columns:var(--list-grid-cols);gap:1rem;padding:1rem;display:grid;position:relative}:is(.list>:not(:last-child).list-row,.list>:not(:last-child) .list-row):after{content:"";border-bottom:var(--border)solid;inset-inline:var(--radius-box);border-color:var(--color-base-content);position:absolute;bottom:0}@supports (color:color-mix(in lab,red,red)){:is(.list>:not(:last-child).list-row,.list>:not(:last-child) .list-row):after{border-color:color-mix(in oklab,var(--color-base-content)5%,transparent)}}.toast{translate:var(--toast-x,0)var(--toast-y,0);inset-inline:auto 1rem;background-color:#0000;flex-direction:column;gap:.5rem;width:max-content;max-width:calc(100vw - 2rem);display:flex;position:fixed;top:auto;bottom:1rem}@media(prefers-reduced-motion:no-preference){.toast>*{animation:.25s ease-out toast}}.toggle{border:var(--border)solid currentColor;color:var(--input-color);cursor:pointer;appearance:none;vertical-align:middle;webkit-user-select:none;-webkit-user-select:none;user-select:none;--radius-selector-max:calc(var(--radius-selector) + var(--radius-selector) + var(--radius-selector));border-radius:calc(var(--radius-selector) + min(var(--toggle-p),var(--radius-selector-max)) + min(var(--border),var(--radius-selector-max)));padding:var(--toggle-p);flex-shrink:0;grid-template-columns:0fr 1fr 1fr;place-content:center;display:inline-grid;position:relative;box-shadow:inset 0 1px}@supports (color:color-mix(in lab,red,red)){.toggle{box-shadow:0 1px color-mix(in oklab,currentColor calc(var(--depth)*10%),#0000) inset}}.toggle{--input-color:var(--color-base-content);transition:color .3s,grid-template-columns .2s}@supports (color:color-mix(in lab,red,red)){.toggle{--input-color:color-mix(in oklab,var(--color-base-content)50%,#0000)}}.toggle{--toggle-p:calc(var(--size)*.125);--size:calc(var(--size-selector,.25rem)*6);width:calc((var(--size)*2) - (var(--border) + var(--toggle-p))*2);height:var(--size)}.toggle>*{z-index:1;cursor:pointer;appearance:none;background-color:#0000;border:none;grid-column:2/span 1;grid-row-start:1;height:100%;padding:.125rem;transition:opacity .2s,rotate .4s}.toggle>:focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.toggle>:focus{outline-offset:2px;outline:2px solid #0000}}.toggle>:nth-child(2){color:var(--color-base-100);rotate:none}.toggle>:nth-child(3){color:var(--color-base-100);opacity:0;rotate:-15deg}.toggle:has(:checked)>:nth-child(2){opacity:0;rotate:15deg}.toggle:has(:checked)>:nth-child(3){opacity:1;rotate:none}.toggle:before{aspect-ratio:1;border-radius:var(--radius-selector);--tw-content:"";content:var(--tw-content);height:100%;box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px currentColor;background-color:currentColor;grid-row-start:1;grid-column-start:2;transition:background-color .1s,translate .2s,inset-inline-start .2s;position:relative;inset-inline-start:0;translate:0}@supports (color:color-mix(in lab,red,red)){.toggle:before{box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px color-mix(in oklab,currentColor calc(var(--depth)*10%),#0000)}}.toggle:before{background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise)}@media(forced-colors:active){.toggle:before{outline-style:var(--tw-outline-style);outline-offset:-1px;outline-width:1px}}@media print{.toggle:before{outline-offset:-1rem;outline:.25rem solid}}.toggle:focus-visible,.toggle:has(:focus-visible){outline-offset:2px;outline:2px solid}.toggle:checked,.toggle[aria-checked=true],.toggle:has(>input:checked){background-color:var(--color-base-100);--input-color:var(--color-base-content);grid-template-columns:1fr 1fr 0fr}:is(.toggle:checked,.toggle[aria-checked=true],.toggle:has(>input:checked)):before{background-color:currentColor}@starting-style{:is(.toggle:checked,.toggle[aria-checked=true],.toggle:has(>input:checked)):before{opacity:0}}.toggle:indeterminate{grid-template-columns:.5fr 1fr .5fr}.toggle:disabled{cursor:not-allowed;opacity:.3}.toggle:disabled:before{border:var(--border)solid currentColor;background-color:#0000}.input{cursor:text;border:var(--border)solid #0000;appearance:none;background-color:var(--color-base-100);vertical-align:middle;white-space:nowrap;width:clamp(3rem,20rem,100%);height:var(--size);font-size:max(var(--font-size,.875rem),.875rem);touch-action:manipulation;border-color:var(--input-color);box-shadow:0 1px var(--input-color) inset,0 -1px oklch(100% 0 0/calc(var(--depth)*.1)) inset;border-start-start-radius:var(--join-ss,var(--radius-field));border-start-end-radius:var(--join-se,var(--radius-field));border-end-end-radius:var(--join-ee,var(--radius-field));border-end-start-radius:var(--join-es,var(--radius-field));flex-shrink:1;align-items:center;gap:.5rem;padding-inline:.75rem;display:inline-flex;position:relative}@supports (color:color-mix(in lab,red,red)){.input{box-shadow:0 1px color-mix(in oklab,var(--input-color)calc(var(--depth)*10%),#0000) inset,0 -1px oklch(100% 0 0/calc(var(--depth)*.1)) inset}}.input{--size:calc(var(--size-field,.25rem)*10);--input-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.input{--input-color:color-mix(in oklab,var(--color-base-content)20%,#0000)}}.input:where(input){display:inline-flex}.input :where(input){appearance:none;background-color:#0000;border:none;width:100%;height:100%;display:inline-flex}.input :where(input):focus,.input :where(input):focus-within{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.input :where(input):focus,.input :where(input):focus-within{outline-offset:2px;outline:2px solid #0000}}.input :where(input[type=url]),.input :where(input[type=email]){direction:ltr}.input :where(input[type=date]){display:inline-flex}.input:focus,.input:focus-within{--input-color:var(--color-base-content);box-shadow:0 1px var(--input-color)}@supports (color:color-mix(in lab,red,red)){.input:focus,.input:focus-within{box-shadow:0 1px color-mix(in oklab,var(--input-color)calc(var(--depth)*10%),#0000)}}.input:focus,.input:focus-within{outline:2px solid var(--input-color);outline-offset:2px;isolation:isolate;z-index:1}@media(pointer:coarse){@supports (-webkit-touch-callout:none){.input:focus,.input:focus-within{--font-size:1rem}}}.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input{cursor:not-allowed;border-color:var(--color-base-200);background-color:var(--color-base-200);color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input{color:color-mix(in oklab,var(--color-base-content)40%,transparent)}}:is(.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input)::placeholder{color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){:is(.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input)::placeholder{color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.input:has(>input[disabled]),.input:is(:disabled,[disabled]),fieldset:disabled .input{box-shadow:none}.input:has(>input[disabled])>input[disabled]{cursor:not-allowed}.input::-webkit-date-and-time-value{text-align:inherit}.input[type=number]::-webkit-inner-spin-button{margin-block:-.75rem;margin-inline-end:-.75rem}.input::-webkit-calendar-picker-indicator{position:absolute;inset-inline-end:.75em}.input:has(>input[type=date]) :where(input[type=date]){webkit-appearance:none;appearance:none;display:inline-flex}.input:has(>input[type=date]) input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;width:1em;height:1em;position:absolute;inset-inline-end:.75em}.table{border-collapse:separate;--tw-border-spacing-x: 0rem ;--tw-border-spacing-y: 0rem ;width:100%;border-spacing:var(--tw-border-spacing-x)var(--tw-border-spacing-y);border-radius:var(--radius-box);text-align:left;font-size:.875rem;position:relative}.table:where(:dir(rtl),[dir=rtl],[dir=rtl] *){text-align:right}@media(hover:hover){:is(.table tr.row-hover,.table tr.row-hover:nth-child(2n)):hover{background-color:var(--color-base-200)}}.table :where(th,td){vertical-align:middle;padding-block:.75rem;padding-inline:1rem}.table :where(thead,tfoot){white-space:nowrap;color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.table :where(thead,tfoot){color:color-mix(in oklab,var(--color-base-content)60%,transparent)}}.table :where(thead,tfoot){font-size:.875rem;font-weight:600}.table :where(tfoot tr:first-child :is(td,th)){border-top:var(--border)solid var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.table :where(tfoot tr:first-child :is(td,th)){border-top:var(--border)solid color-mix(in oklch,var(--color-base-content)5%,#0000)}}.table :where(.table-pin-rows thead tr){z-index:1;background-color:var(--color-base-100);position:sticky;top:0}.table :where(.table-pin-rows tfoot tr){z-index:1;background-color:var(--color-base-100);position:sticky;bottom:0}.table :where(.table-pin-cols tr th){background-color:var(--color-base-100);position:sticky;left:0;right:0}.table :where(thead tr :is(td,th),tbody tr:not(:last-child) :is(td,th)){border-bottom:var(--border)solid var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.table :where(thead tr :is(td,th),tbody tr:not(:last-child) :is(td,th)){border-bottom:var(--border)solid color-mix(in oklch,var(--color-base-content)5%,#0000)}}.range{appearance:none;webkit-appearance:none;--range-thumb:var(--color-base-100);--range-thumb-size:calc(var(--size-selector,.25rem)*6);--range-progress:currentColor;--range-fill:1;--range-p:.25rem;--range-bg:currentColor}@supports (color:color-mix(in lab,red,red)){.range{--range-bg:color-mix(in oklab,currentColor 10%,#0000)}}.range{cursor:pointer;vertical-align:middle;--radius-selector-max:calc(var(--radius-selector) + var(--radius-selector) + var(--radius-selector));border-radius:calc(var(--radius-selector) + min(var(--range-p),var(--radius-selector-max)));width:clamp(3rem,20rem,100%);height:var(--range-thumb-size);background-color:#0000;border:none;overflow:hidden}[dir=rtl] .range{--range-dir:-1}.range:focus{outline:none}.range:focus-visible{outline-offset:2px;outline:2px solid}.range::-webkit-slider-runnable-track{background-color:var(--range-bg);border-radius:var(--radius-selector);width:100%;height:calc(var(--range-thumb-size)*.5)}@media(forced-colors:active){.range::-webkit-slider-runnable-track{border:1px solid}.range::-moz-range-track{border:1px solid}}.range::-webkit-slider-thumb{box-sizing:border-box;border-radius:calc(var(--radius-selector) + min(var(--range-p),var(--radius-selector-max)));background-color:var(--range-thumb);height:var(--range-thumb-size);width:var(--range-thumb-size);border:var(--range-p)solid;appearance:none;webkit-appearance:none;color:var(--range-progress);box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px currentColor,0 0 0 2rem var(--range-thumb) inset,calc((var(--range-dir,1)*-100rem) - (var(--range-dir,1)*var(--range-thumb-size)/2)) 0 0 calc(100rem*var(--range-fill));position:relative;top:50%;transform:translateY(-50%)}@supports (color:color-mix(in lab,red,red)){.range::-webkit-slider-thumb{box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px color-mix(in oklab,currentColor calc(var(--depth)*10%),#0000),0 0 0 2rem var(--range-thumb) inset,calc((var(--range-dir,1)*-100rem) - (var(--range-dir,1)*var(--range-thumb-size)/2)) 0 0 calc(100rem*var(--range-fill))}}.range::-moz-range-track{background-color:var(--range-bg);border-radius:var(--radius-selector);width:100%;height:calc(var(--range-thumb-size)*.5)}.range::-moz-range-thumb{box-sizing:border-box;border-radius:calc(var(--radius-selector) + min(var(--range-p),var(--radius-selector-max)));height:var(--range-thumb-size);width:var(--range-thumb-size);border:var(--range-p)solid;color:var(--range-progress);box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px currentColor,0 0 0 2rem var(--range-thumb) inset,calc((var(--range-dir,1)*-100rem) - (var(--range-dir,1)*var(--range-thumb-size)/2)) 0 0 calc(100rem*var(--range-fill));background-color:currentColor;position:relative;top:50%}@supports (color:color-mix(in lab,red,red)){.range::-moz-range-thumb{box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px color-mix(in oklab,currentColor calc(var(--depth)*10%),#0000),0 0 0 2rem var(--range-thumb) inset,calc((var(--range-dir,1)*-100rem) - (var(--range-dir,1)*var(--range-thumb-size)/2)) 0 0 calc(100rem*var(--range-fill))}}.range:disabled{cursor:not-allowed;opacity:.3}.diff-resizer{isolation:isolate;z-index:2;resize:horizontal;opacity:0;cursor:ew-resize;transform-origin:100% 100%;clip-path:inset(calc(100% - .75rem) 0 0 calc(100% - .75rem));grid-row-start:2;grid-column-start:1;width:50cqi;min-width:1rem;max-width:calc(100cqi - 1rem);height:.75rem;transition:min-width .3s ease-out,max-width .3s ease-out;position:relative;overflow:hidden;transform:scaleY(5)translate(.32rem,50%)}.select{border:var(--border)solid #0000;appearance:none;background-color:var(--color-base-100);vertical-align:middle;width:clamp(3rem,20rem,100%);height:var(--size);touch-action:manipulation;white-space:nowrap;text-overflow:ellipsis;box-shadow:0 1px var(--input-color) inset,0 -1px oklch(100% 0 0/calc(var(--depth)*.1)) inset;background-image:linear-gradient(45deg,#0000 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,#0000 50%);background-position:calc(100% - 20px) calc(1px + 50%),calc(100% - 16.1px) calc(1px + 50%);background-repeat:no-repeat;background-size:4px 4px,4px 4px;border-start-start-radius:var(--join-ss,var(--radius-field));border-start-end-radius:var(--join-se,var(--radius-field));border-end-end-radius:var(--join-ee,var(--radius-field));border-end-start-radius:var(--join-es,var(--radius-field));flex-shrink:1;align-items:center;gap:.375rem;padding-inline:.75rem 1.75rem;font-size:.875rem;display:inline-flex;position:relative;overflow:hidden}@supports (color:color-mix(in lab,red,red)){.select{box-shadow:0 1px color-mix(in oklab,var(--input-color)calc(var(--depth)*10%),#0000) inset,0 -1px oklch(100% 0 0/calc(var(--depth)*.1)) inset}}.select{border-color:var(--input-color);--input-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.select{--input-color:color-mix(in oklab,var(--color-base-content)20%,#0000)}}.select{--size:calc(var(--size-field,.25rem)*10)}[dir=rtl] .select{background-position:12px calc(1px + 50%),16px calc(1px + 50%)}[dir=rtl] .select::picker(select){translate:.5rem}[dir=rtl] .select select::picker(select){translate:.5rem}.select[multiple]{background-image:none;height:auto;padding-block:.75rem;padding-inline-end:.75rem;overflow:auto}.select select{appearance:none;width:calc(100% + 2.75rem);height:calc(100% - calc(var(--border)*2));background:inherit;border-radius:inherit;border-style:none;align-items:center;margin-inline:-.75rem -1.75rem;padding-inline:.75rem 1.75rem}.select select:focus,.select select:focus-within{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.select select:focus,.select select:focus-within{outline-offset:2px;outline:2px solid #0000}}.select select:not(:last-child){background-image:none;margin-inline-end:-1.375rem}.select:focus,.select:focus-within{--input-color:var(--color-base-content);box-shadow:0 1px var(--input-color)}@supports (color:color-mix(in lab,red,red)){.select:focus,.select:focus-within{box-shadow:0 1px color-mix(in oklab,var(--input-color)calc(var(--depth)*10%),#0000)}}.select:focus,.select:focus-within{outline:2px solid var(--input-color);outline-offset:2px;isolation:isolate;z-index:1}.select:has(>select[disabled]),.select:is(:disabled,[disabled]),fieldset:disabled .select{cursor:not-allowed;border-color:var(--color-base-200);background-color:var(--color-base-200);color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.select:has(>select[disabled]),.select:is(:disabled,[disabled]),fieldset:disabled .select{color:color-mix(in oklab,var(--color-base-content)40%,transparent)}}:is(.select:has(>select[disabled]),.select:is(:disabled,[disabled]),fieldset:disabled .select)::placeholder{color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){:is(.select:has(>select[disabled]),.select:is(:disabled,[disabled]),fieldset:disabled .select)::placeholder{color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.select:has(>select[disabled])>select[disabled]{cursor:not-allowed}@supports (appearance:base-select){.select,.select select{appearance:base-select}:is(.select,.select select)::picker(select){appearance:base-select}}:is(.select,.select select)::picker(select){color:inherit;border:var(--border)solid var(--color-base-200);border-radius:var(--radius-box);background-color:inherit;max-height:min(24rem,70dvh);box-shadow:0 2px calc(var(--depth)*3px) -2px #0003;box-shadow:0 20px 25px -5px rgb(0 0 0/calc(var(--depth)*.1)),0 8px 10px -6px rgb(0 0 0/calc(var(--depth)*.1));margin-block:.5rem;margin-inline:.5rem;padding:.5rem;translate:-.5rem}:is(.select,.select select)::picker-icon{display:none}:is(.select,.select select) optgroup{padding-top:.5em}:is(.select,.select select) optgroup option:first-child{margin-top:.5em}:is(.select,.select select) option{border-radius:var(--radius-field);white-space:normal;padding-block:.375rem;padding-inline:.75rem;transition-property:color,background-color;transition-duration:.2s;transition-timing-function:cubic-bezier(0,0,.2,1)}:is(.select,.select select) option:not(:disabled):hover,:is(.select,.select select) option:not(:disabled):focus-visible{cursor:pointer;background-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){:is(.select,.select select) option:not(:disabled):hover,:is(.select,.select select) option:not(:disabled):focus-visible{background-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}:is(.select,.select select) option:not(:disabled):hover,:is(.select,.select select) option:not(:disabled):focus-visible{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){:is(.select,.select select) option:not(:disabled):hover,:is(.select,.select select) option:not(:disabled):focus-visible{outline-offset:2px;outline:2px solid #0000}}:is(.select,.select select) option:not(:disabled):active{background-color:var(--color-neutral);color:var(--color-neutral-content);box-shadow:0 2px calc(var(--depth)*3px) -2px var(--color-neutral)}.timeline{display:flex;position:relative}.timeline>li{grid-template-rows:var(--timeline-row-start,minmax(0,1fr))auto var(--timeline-row-end,minmax(0,1fr));grid-template-columns:var(--timeline-col-start,minmax(0,1fr))auto var(--timeline-col-end,minmax(0,1fr));flex-shrink:0;align-items:center;display:grid;position:relative}.timeline>li>hr{border:none;width:100%}.timeline>li>hr:first-child{grid-row-start:2;grid-column-start:1}.timeline>li>hr:last-child{grid-area:2/3/auto/none}@media print{.timeline>li>hr{border:.1px solid var(--color-base-300)}}.timeline :where(hr){background-color:var(--color-base-300);height:.25rem}.timeline:has(.timeline-middle hr):first-child{border-start-start-radius:0;border-start-end-radius:var(--radius-selector);border-end-end-radius:var(--radius-selector);border-end-start-radius:0}.timeline:has(.timeline-middle hr):last-child,.timeline:not(:has(.timeline-middle)) :first-child hr:last-child{border-start-start-radius:var(--radius-selector);border-start-end-radius:0;border-end-end-radius:0;border-end-start-radius:var(--radius-selector)}.timeline:not(:has(.timeline-middle)) :last-child hr:first-child{border-start-start-radius:0;border-start-end-radius:var(--radius-selector);border-end-end-radius:var(--radius-selector);border-end-start-radius:0}.avatar{vertical-align:middle;display:inline-flex;position:relative}.avatar>div{aspect-ratio:1;display:block;overflow:hidden}.avatar img{object-fit:cover;width:100%;height:100%}.checkbox{border:var(--border)solid var(--input-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.checkbox{border:var(--border)solid var(--input-color,color-mix(in oklab,var(--color-base-content)20%,#0000))}}.checkbox{cursor:pointer;appearance:none;border-radius:var(--radius-selector);vertical-align:middle;color:var(--color-base-content);box-shadow:0 1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 0 #0000 inset,0 0 #0000;--size:calc(var(--size-selector,.25rem)*6);width:var(--size);height:var(--size);background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise);flex-shrink:0;padding:.25rem;transition:background-color .2s,box-shadow .2s;display:inline-block;position:relative}.checkbox:before{--tw-content:"";content:var(--tw-content);opacity:0;clip-path:polygon(20% 100%,20% 80%,50% 80%,50% 80%,70% 80%,70% 100%);width:100%;height:100%;box-shadow:0 3px oklch(100% 0 0/calc(var(--depth)*.1)) inset;background-color:currentColor;font-size:1rem;line-height:.75;transition:clip-path .3s .1s,opacity .1s .1s,rotate .3s .1s,translate .3s .1s;display:block;rotate:45deg}.checkbox:focus-visible{outline:2px solid var(--input-color,currentColor);outline-offset:2px}.checkbox:checked,.checkbox[aria-checked=true]{background-color:var(--input-color,#0000);box-shadow:0 0 #0000 inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px oklch(0% 0 0/calc(var(--depth)*.1))}:is(.checkbox:checked,.checkbox[aria-checked=true]):before{clip-path:polygon(20% 100%,20% 80%,50% 80%,50% 0%,70% 0%,70% 100%);opacity:1}@media(forced-colors:active){:is(.checkbox:checked,.checkbox[aria-checked=true]):before{--tw-content:"✔︎";clip-path:none;background-color:#0000;rotate:none}}@media print{:is(.checkbox:checked,.checkbox[aria-checked=true]):before{--tw-content:"✔︎";clip-path:none;background-color:#0000;rotate:none}}.checkbox:indeterminate{background-color:var(--input-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.checkbox:indeterminate{background-color:var(--input-color,color-mix(in oklab,var(--color-base-content)20%,#0000))}}.checkbox:indeterminate:before{opacity:1;clip-path:polygon(20% 100%,20% 80%,50% 80%,50% 80%,80% 80%,80% 100%);translate:0 -35%;rotate:none}.radio{cursor:pointer;appearance:none;vertical-align:middle;border:var(--border)solid var(--input-color,currentColor);border-radius:3.40282e38px;flex-shrink:0;padding:.25rem;display:inline-block;position:relative}@supports (color:color-mix(in lab,red,red)){.radio{border:var(--border)solid var(--input-color,color-mix(in srgb,currentColor 20%,#0000))}}.radio{box-shadow:0 1px oklch(0% 0 0/calc(var(--depth)*.1)) inset;--size:calc(var(--size-selector,.25rem)*6);width:var(--size);height:var(--size);color:var(--input-color,currentColor)}.radio:before{--tw-content:"";content:var(--tw-content);background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise);border-radius:3.40282e38px;width:100%;height:100%;display:block}.radio:focus-visible{outline:2px solid}.radio:checked,.radio[aria-checked=true]{background-color:var(--color-base-100);border-color:currentColor}@media(prefers-reduced-motion:no-preference){.radio:checked,.radio[aria-checked=true]{animation:.2s ease-out radio}}:is(.radio:checked,.radio[aria-checked=true]):before{box-shadow:0 -1px oklch(0% 0 0/calc(var(--depth)*.1)) inset,0 8px 0 -4px oklch(100% 0 0/calc(var(--depth)*.1)) inset,0 1px oklch(0% 0 0/calc(var(--depth)*.1));background-color:currentColor}@media(forced-colors:active){:is(.radio:checked,.radio[aria-checked=true]):before{outline-style:var(--tw-outline-style);outline-offset:-1px;outline-width:1px}}@media print{:is(.radio:checked,.radio[aria-checked=true]):before{outline-offset:-1rem;outline:.25rem solid}}.rating{vertical-align:middle;display:inline-flex;position:relative}.rating input{appearance:none;border:none}.rating :where(*){background-color:var(--color-base-content);opacity:.2;border-radius:0;width:1.5rem;height:1.5rem}@media(prefers-reduced-motion:no-preference){.rating :where(*){animation:.25s ease-out rating}}.rating :where(*):is(input){cursor:pointer}.rating .rating-hidden{background-color:#0000;width:.5rem}.rating input[type=radio]:checked{background-image:none}.rating :checked,.rating [aria-checked=true],.rating [aria-current=true],.rating :has(~:checked,~[aria-checked=true],~[aria-current=true]){opacity:1}.rating :focus-visible{scale:1.1}@media(prefers-reduced-motion:no-preference){.rating :focus-visible{transition:scale .2s ease-out}}.rating :active:focus{animation:none;scale:1.1}.card{border-radius:var(--radius-box);outline-offset:2px;outline:0 solid #0000;flex-direction:column;transition:outline .2s ease-in-out;display:flex;position:relative}.card:focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.card:focus{outline-offset:2px;outline:2px solid #0000}}.card:focus-visible{outline-color:currentColor}.card :where(figure:first-child){border-start-start-radius:inherit;border-start-end-radius:inherit;border-end-end-radius:unset;border-end-start-radius:unset;overflow:hidden}.card :where(figure:last-child){border-start-start-radius:unset;border-start-end-radius:unset;border-end-end-radius:inherit;border-end-start-radius:inherit;overflow:hidden}.card figure{justify-content:center;align-items:center;display:flex}.card:has(>input:is(input[type=checkbox],input[type=radio])){cursor:pointer;-webkit-user-select:none;user-select:none}.card:has(>:checked){outline:2px solid}.progress{appearance:none;border-radius:var(--radius-box);background-color:currentColor;width:100%;height:.5rem;position:relative;overflow:hidden}@supports (color:color-mix(in lab,red,red)){.progress{background-color:color-mix(in oklab,currentcolor 20%,transparent)}}.progress{color:var(--color-base-content)}.progress:indeterminate{background-image:repeating-linear-gradient(90deg,currentColor -1% 10%,#0000 10% 90%);background-position-x:15%;background-size:200%}@media(prefers-reduced-motion:no-preference){.progress:indeterminate{animation:5s ease-in-out infinite progress}}@supports ((-moz-appearance:none)){.progress:indeterminate::-moz-progress-bar{background-color:#0000}@media(prefers-reduced-motion:no-preference){.progress:indeterminate::-moz-progress-bar{background-image:repeating-linear-gradient(90deg,currentColor -1% 10%,#0000 10% 90%);background-position-x:15%;background-size:200%;animation:5s ease-in-out infinite progress}}.progress::-moz-progress-bar{border-radius:var(--radius-box);background-color:currentColor}}@supports ((-webkit-appearance:none)){.progress::-webkit-progress-bar{border-radius:var(--radius-box);background-color:#0000}.progress::-webkit-progress-value{border-radius:var(--radius-box);background-color:currentColor}}.textarea{border:var(--border)solid #0000;appearance:none;border-radius:var(--radius-field);background-color:var(--color-base-100);vertical-align:middle;width:clamp(3rem,20rem,100%);min-height:5rem;font-size:max(var(--font-size,.875rem),.875rem);touch-action:manipulation;border-color:var(--input-color);box-shadow:0 1px var(--input-color) inset,0 -1px oklch(100% 0 0/calc(var(--depth)*.1)) inset;flex-shrink:1;padding-block:.5rem;padding-inline:.75rem}@supports (color:color-mix(in lab,red,red)){.textarea{box-shadow:0 1px color-mix(in oklab,var(--input-color)calc(var(--depth)*10%),#0000) inset,0 -1px oklch(100% 0 0/calc(var(--depth)*.1)) inset}}.textarea{--input-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.textarea{--input-color:color-mix(in oklab,var(--color-base-content)20%,#0000)}}.textarea textarea{appearance:none;background-color:#0000;border:none}.textarea textarea:focus,.textarea textarea:focus-within{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.textarea textarea:focus,.textarea textarea:focus-within{outline-offset:2px;outline:2px solid #0000}}.textarea:focus,.textarea:focus-within{--input-color:var(--color-base-content);box-shadow:0 1px var(--input-color)}@supports (color:color-mix(in lab,red,red)){.textarea:focus,.textarea:focus-within{box-shadow:0 1px color-mix(in oklab,var(--input-color)calc(var(--depth)*10%),#0000)}}.textarea:focus,.textarea:focus-within{outline:2px solid var(--input-color);outline-offset:2px;isolation:isolate}@media(pointer:coarse){@supports (-webkit-touch-callout:none){.textarea:focus,.textarea:focus-within{--font-size:1rem}}}.textarea:has(>textarea[disabled]),.textarea:is(:disabled,[disabled]){cursor:not-allowed;border-color:var(--color-base-200);background-color:var(--color-base-200);color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.textarea:has(>textarea[disabled]),.textarea:is(:disabled,[disabled]){color:color-mix(in oklab,var(--color-base-content)40%,transparent)}}:is(.textarea:has(>textarea[disabled]),.textarea:is(:disabled,[disabled]))::placeholder{color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){:is(.textarea:has(>textarea[disabled]),.textarea:is(:disabled,[disabled]))::placeholder{color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.textarea:has(>textarea[disabled]),.textarea:is(:disabled,[disabled]){box-shadow:none}.textarea:has(>textarea[disabled])>textarea[disabled]{cursor:not-allowed}.stack{grid-template-rows:3px 4px 1fr 4px 3px;grid-template-columns:3px 4px 1fr 4px 3px;display:inline-grid}.stack>*{width:100%;height:100%}.stack>:nth-child(n+2){opacity:.7;width:100%}.stack>:nth-child(2){z-index:2;opacity:.9}.stack>:first-child{z-index:3;width:100%}.modal-backdrop{color:#0000;z-index:-1;grid-row-start:1;grid-column-start:1;place-self:stretch stretch;display:grid}.modal-backdrop button{cursor:pointer}.tab-content{order:var(--tabcontent-order);--tabcontent-radius-ss:var(--radius-box);--tabcontent-radius-se:var(--radius-box);--tabcontent-radius-es:var(--radius-box);--tabcontent-radius-ee:var(--radius-box);--tabcontent-order:1;width:100%;height:calc(100% - var(--tab-height) + var(--border));margin:var(--tabcontent-margin);border-color:#0000;border-width:var(--border);border-start-start-radius:var(--tabcontent-radius-ss);border-start-end-radius:var(--tabcontent-radius-se);border-end-end-radius:var(--tabcontent-radius-ee);border-end-start-radius:var(--tabcontent-radius-es);display:none}.modal-box{background-color:var(--color-base-100);border-top-left-radius:var(--modal-tl,var(--radius-box));border-top-right-radius:var(--modal-tr,var(--radius-box));border-bottom-left-radius:var(--modal-bl,var(--radius-box));border-bottom-right-radius:var(--modal-br,var(--radius-box));opacity:0;overscroll-behavior:contain;grid-row-start:1;grid-column-start:1;width:91.6667%;max-width:32rem;max-height:100vh;padding:1.5rem;transition:translate .3s ease-out,scale .3s ease-out,opacity .2s ease-out 50ms,box-shadow .3s ease-out;overflow-y:auto;scale:95%;box-shadow:0 25px 50px -12px #00000040}.timeline-middle{grid-row-start:2;grid-column-start:2}.divider{white-space:nowrap;height:1rem;margin:var(--divider-m,1rem 0);--divider-color:var(--color-base-content);flex-direction:row;align-self:stretch;align-items:center;display:flex}@supports (color:color-mix(in lab,red,red)){.divider{--divider-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.divider:before,.divider:after{content:"";background-color:var(--divider-color);flex-grow:1;width:100%;height:.125rem}@media print{.divider:before,.divider:after{border:.5px solid}}.divider:not(:empty){gap:1rem}.filter{flex-wrap:wrap;display:flex}.filter input[type=radio]{width:auto}.filter input{opacity:1;transition:margin .1s,opacity .3s,padding .3s,border-width .1s;overflow:hidden;scale:1}.filter input:not(:last-child){margin-inline-end:.25rem}.filter input.filter-reset{aspect-ratio:1}.filter input.filter-reset:after{--tw-content:"×";content:var(--tw-content)}.filter:not(:has(input:checked:not(.filter-reset))) .filter-reset,.filter:not(:has(input:checked:not(.filter-reset))) input[type=reset],.filter:has(input:checked:not(.filter-reset)) input:not(:checked,.filter-reset,input[type=reset]){opacity:0;border-width:0;width:0;margin-inline:0;padding-inline:0;scale:0}.label{white-space:nowrap;color:currentColor;align-items:center;gap:.375rem;display:inline-flex}@supports (color:color-mix(in lab,red,red)){.label{color:color-mix(in oklab,currentcolor 60%,transparent)}}.label:has(input){cursor:pointer}.label:is(.input>*,.select>*){white-space:nowrap;height:calc(100% - .5rem);font-size:inherit;align-items:center;padding-inline:.75rem;display:flex}.label:is(.input>*,.select>*):first-child{border-inline-end:var(--border)solid currentColor;margin-inline:-.75rem .75rem}@supports (color:color-mix(in lab,red,red)){.label:is(.input>*,.select>*):first-child{border-inline-end:var(--border)solid color-mix(in oklab,currentColor 10%,#0000)}}.label:is(.input>*,.select>*):last-child{border-inline-start:var(--border)solid currentColor;margin-inline:.75rem -.75rem}@supports (color:color-mix(in lab,red,red)){.label:is(.input>*,.select>*):last-child{border-inline-start:var(--border)solid color-mix(in oklab,currentColor 10%,#0000)}}.modal-action{justify-content:flex-end;gap:.5rem;margin-top:1.5rem;display:flex}.status{aspect-ratio:1;border-radius:var(--radius-selector);background-color:var(--color-base-content);width:.5rem;height:.5rem;display:inline-block}@supports (color:color-mix(in lab,red,red)){.status{background-color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.status{vertical-align:middle;color:#0000004d;background-position:50%;background-repeat:no-repeat}@supports (color:color-mix(in lab,red,red)){.status{color:color-mix(in oklab,var(--color-black)30%,transparent)}}.status{background-image:radial-gradient(circle at 35% 30%,oklch(1 0 0/calc(var(--depth)*.5)),#0000);box-shadow:0 2px 3px -1px}@supports (color:color-mix(in lab,red,red)){.status{box-shadow:0 2px 3px -1px color-mix(in oklab,currentColor calc(var(--depth)*100%),#0000)}}.badge{border-radius:var(--radius-selector);vertical-align:middle;color:var(--badge-fg);border:var(--border)solid var(--badge-color,var(--color-base-200));width:fit-content;padding-inline:calc(.25rem*3 - var(--border));background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise);background-color:var(--badge-bg);--badge-bg:var(--badge-color,var(--color-base-100));--badge-fg:var(--color-base-content);--size:calc(var(--size-selector,.25rem)*6);height:var(--size);justify-content:center;align-items:center;gap:.5rem;font-size:.875rem;display:inline-flex}.tabs{--tabs-height:auto;--tabs-direction:row;--tab-height:calc(var(--size-field,.25rem)*10);height:var(--tabs-height);flex-wrap:wrap;flex-direction:var(--tabs-direction);display:flex}.footer{grid-auto-flow:row;place-items:start;gap:2.5rem 1rem;width:100%;font-size:.875rem;line-height:1.25rem;display:grid}.footer>*{place-items:start;gap:.5rem;display:grid}.footer.footer-center{text-align:center;grid-auto-flow:column dense;place-items:center}.footer.footer-center>*{place-items:center}.card-body{padding:var(--card-p,1.5rem);font-size:var(--card-fs,.875rem);flex-direction:column;flex:auto;gap:.5rem;display:flex}.card-body :where(p){flex-grow:1}.alert{--alert-border-color:var(--color-base-200);border-radius:var(--radius-box);color:var(--color-base-content);background-color:var(--alert-color,var(--color-base-200));text-align:start;background-size:auto,calc(var(--noise)*100%);background-image:none,var(--fx-noise);box-shadow:0 3px 0 -2px oklch(100% 0 0/calc(var(--depth)*.08)) inset,0 1px #000,0 4px 3px -2px oklch(0% 0 0/calc(var(--depth)*.08));border-style:solid;grid-template-columns:auto;grid-auto-flow:column;justify-content:start;place-items:center start;gap:1rem;padding-block:.75rem;padding-inline:1rem;font-size:.875rem;line-height:1.25rem;display:grid}@supports (color:color-mix(in lab,red,red)){.alert{box-shadow:0 3px 0 -2px oklch(100% 0 0/calc(var(--depth)*.08)) inset,0 1px color-mix(in oklab,color-mix(in oklab,#000 20%,var(--alert-color,var(--color-base-200)))calc(var(--depth)*20%),#0000),0 4px 3px -2px oklch(0% 0 0/calc(var(--depth)*.08))}}.alert:has(:nth-child(2)){grid-template-columns:auto minmax(auto,1fr)}.skeleton{border-radius:var(--radius-box);background-color:var(--color-base-300)}@media(prefers-reduced-motion:reduce){.skeleton{transition-duration:15s}}.skeleton{will-change:background-position;background-image:linear-gradient(105deg,#0000 0% 40%,var(--color-base-100)50%,#0000 60% 100%);background-position-x:-50%;background-size:200%}@media(prefers-reduced-motion:no-preference){.skeleton{animation:1.8s ease-in-out infinite skeleton}}.link{cursor:pointer;text-decoration-line:underline}.link:focus{--tw-outline-style:none;outline-style:none}@media(forced-colors:active){.link:focus{outline-offset:2px;outline:2px solid #0000}}.link:focus-visible{outline-offset:2px;outline:2px solid}.menu-title{color:var(--color-base-content);padding-block:.5rem;padding-inline:.75rem}@supports (color:color-mix(in lab,red,red)){.menu-title{color:color-mix(in oklab,var(--color-base-content)40%,transparent)}}.menu-title{font-size:.875rem;font-weight:600}}@layer daisyui.l1.l2{.modal.modal-open,.modal[open],.modal:target,.modal-toggle:checked+.modal{pointer-events:auto;visibility:visible;opacity:1;transition:visibility 0s allow-discrete,background-color .3s ease-out,opacity .1s ease-out;background-color:#0006}:is(.modal.modal-open,.modal[open],.modal:target,.modal-toggle:checked+.modal) .modal-box{opacity:1;translate:0;scale:1}:root:has(:is(.modal.modal-open,.modal[open],.modal:target,.modal-toggle:checked+.modal)){--page-has-backdrop:1;--page-overflow:hidden;--page-scroll-bg:var(--page-scroll-bg-on);--page-scroll-gutter:stable;--page-scroll-transition:var(--page-scroll-transition-on);animation:forwards set-page-has-scroll;animation-timeline:scroll()}@starting-style{.modal.modal-open,.modal[open],.modal:target,.modal-toggle:checked+.modal{opacity:0}}.tooltip>.tooltip-content,.tooltip[data-tip]:before{transform:translate(-50%)translateY(var(--tt-pos,.25rem));inset:auto auto var(--tt-off)50%}.tooltip:after{transform:translate(-50%)translateY(var(--tt-pos,.25rem));inset:auto auto var(--tt-tail)50%}.btn:disabled:not(.btn-link,.btn-ghost){background-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn:disabled:not(.btn-link,.btn-ghost){background-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.btn:disabled:not(.btn-link,.btn-ghost){box-shadow:none}.btn:disabled{pointer-events:none;--btn-border:#0000;--btn-noise:none;--btn-fg:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn:disabled{--btn-fg:color-mix(in oklch,var(--color-base-content)20%,#0000)}}.btn[disabled]:not(.btn-link,.btn-ghost){background-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn[disabled]:not(.btn-link,.btn-ghost){background-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.btn[disabled]:not(.btn-link,.btn-ghost){box-shadow:none}.btn[disabled]{pointer-events:none;--btn-border:#0000;--btn-noise:none;--btn-fg:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.btn[disabled]{--btn-fg:color-mix(in oklch,var(--color-base-content)20%,#0000)}}.tabs-lift{--tabs-height:auto;--tabs-direction:row}.tabs-lift>.tab{--tab-border:0 0 var(--border)0;--tab-radius-ss:var(--tab-radius-limit);--tab-radius-se:var(--tab-radius-limit);--tab-radius-es:0;--tab-radius-ee:0;--tab-paddings:var(--border)var(--tab-p)0 var(--tab-p);--tab-border-colors:#0000 #0000 var(--tab-border-color)#0000;--tab-corner-width:calc(100% + var(--tab-radius-limit)*2);--tab-corner-height:var(--tab-radius-limit);--tab-corner-position:top left,top right;border-width:var(--tab-border);padding:var(--tab-paddings);border-color:var(--tab-border-colors);border-start-start-radius:var(--tab-radius-ss);border-start-end-radius:var(--tab-radius-se);border-end-end-radius:var(--tab-radius-ee);border-end-start-radius:var(--tab-radius-es)}.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked)){--tab-border:var(--border)var(--border)0 var(--border);--tab-border-colors:var(--tab-border-color)var(--tab-border-color)#0000 var(--tab-border-color);--tab-paddings:0 calc(var(--tab-p) - var(--border))var(--border)calc(var(--tab-p) - var(--border));--tab-inset:auto auto 0 auto;--radius-start:radial-gradient(circle at top left,var(--tab-radius-grad));--radius-end:radial-gradient(circle at top right,var(--tab-radius-grad));background-color:var(--tab-bg)}:is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):before{z-index:1;content:"";width:var(--tab-corner-width);height:var(--tab-corner-height);background-position:var(--tab-corner-position);background-image:var(--radius-start),var(--radius-end);background-size:var(--tab-radius-limit)var(--tab-radius-limit);inset:var(--tab-inset);background-repeat:no-repeat;display:block;position:absolute}:is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):first-child:before{--radius-start:none}[dir=rtl] :is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):first-child:before{transform:rotateY(180deg)}:is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):last-child:before{--radius-end:none}[dir=rtl] :is(.tabs-lift>.tab:is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]):not(.tab-disabled,[disabled]),.tabs-lift>.tab:is(input:checked,label:has(:checked))):last-child:before{transform:rotateY(180deg)}.tabs-lift:has(>.tab-content)>.tab:first-child:not(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]){--tab-border-colors:var(--tab-border-color)var(--tab-border-color)#0000 var(--tab-border-color)}.tabs-lift>.tab-content{--tabcontent-margin:calc(-1*var(--border))0 0 0;--tabcontent-radius-ss:0;--tabcontent-radius-se:var(--radius-box);--tabcontent-radius-es:var(--radius-box);--tabcontent-radius-ee:var(--radius-box)}:is(.tabs-lift :checked,.tabs-lift label:has(:checked),.tabs-lift :is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]))+.tab-content:first-child,:is(.tabs-lift :checked,.tabs-lift label:has(:checked),.tabs-lift :is(.tab-active,[aria-selected=true],[aria-current=true],[aria-current=page]))+.tab-content:nth-child(n+3){--tabcontent-radius-ss:var(--radius-box)}.list .list-row:has(.list-col-grow:first-child){--list-grid-cols:1fr}.list .list-row:has(.list-col-grow:nth-child(2)){--list-grid-cols:minmax(0,auto)1fr}.list .list-row:has(.list-col-grow:nth-child(3)){--list-grid-cols:minmax(0,auto)minmax(0,auto)1fr}.list .list-row:has(.list-col-grow:nth-child(4)){--list-grid-cols:minmax(0,auto)minmax(0,auto)minmax(0,auto)1fr}.list .list-row:has(.list-col-grow:nth-child(5)){--list-grid-cols:minmax(0,auto)minmax(0,auto)minmax(0,auto)minmax(0,auto)1fr}.list .list-row:has(.list-col-grow:nth-child(6)){--list-grid-cols:minmax(0,auto)minmax(0,auto)minmax(0,auto)minmax(0,auto)minmax(0,auto)1fr}.list .list-row>:not(.list-col-wrap){grid-row-start:1}.checkbox:disabled,.radio:disabled{cursor:not-allowed;opacity:.2}.rating.rating-xs :where(:not(.rating-hidden)){width:1rem;height:1rem}.rating.rating-sm :where(:not(.rating-hidden)){width:1.25rem;height:1.25rem}.rating.rating-md :where(:not(.rating-hidden)){width:1.5rem;height:1.5rem}.rating.rating-lg :where(:not(.rating-hidden)){width:1.75rem;height:1.75rem}.rating.rating-xl :where(:not(.rating-hidden)){width:2rem;height:2rem}.tooltip-left>.tooltip-content,.tooltip-left[data-tip]:before{transform:translate(calc(var(--tt-pos,.25rem) - .25rem))translateY(-50%);inset:50% var(--tt-off)auto auto}.tooltip-left:after{transform:translate(var(--tt-pos,.25rem))translateY(-50%)rotate(-90deg);inset:50% calc(var(--tt-tail) + 1px)auto auto}.tooltip-right>.tooltip-content,.tooltip-right[data-tip]:before{transform:translate(calc(var(--tt-pos,-.25rem) + .25rem))translateY(-50%);inset:50% auto auto var(--tt-off)}.tooltip-right:after{transform:translate(var(--tt-pos,-.25rem))translateY(-50%)rotate(90deg);inset:50% auto auto calc(var(--tt-tail) + 1px)}.dropdown-right{--anchor-h:right;--anchor-v:span-bottom}.dropdown-right .dropdown-content{transform-origin:0;inset-inline-start:100%;top:0;bottom:auto}.dropdown-left{--anchor-h:left;--anchor-v:span-bottom}.dropdown-left .dropdown-content{transform-origin:100%;inset-inline-end:100%;top:0;bottom:auto}.dropdown-end{--anchor-h:span-left}.dropdown-end :where(.dropdown-content){inset-inline-end:0;translate:0}[dir=rtl] :is(.dropdown-end :where(.dropdown-content)){translate:0}.dropdown-end.dropdown-left{--anchor-h:left;--anchor-v:span-top}.dropdown-end.dropdown-left .dropdown-content{top:auto;bottom:0}.dropdown-end.dropdown-right{--anchor-h:right;--anchor-v:span-top}.dropdown-end.dropdown-right .dropdown-content{top:auto;bottom:0}.btn-active{--btn-bg:var(--btn-color,var(--color-base-200))}@supports (color:color-mix(in lab,red,red)){.btn-active{--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-200)),#000 7%)}}.btn-active{--btn-shadow:0 0 0 0 oklch(0% 0 0/0),0 0 0 0 oklch(0% 0 0/0);isolation:isolate}:is(.stack,.stack.stack-bottom)>*{grid-area:3/3/6/4}:is(.stack,.stack.stack-bottom)>:nth-child(2){grid-area:2/2/5/5}:is(.stack,.stack.stack-bottom)>:first-child{grid-area:1/1/4/6}.stack.stack-top>*{grid-area:1/3/4/4}.stack.stack-top>:nth-child(2){grid-area:2/2/5/5}.stack.stack-top>:first-child{grid-area:3/1/6/6}.stack.stack-start>*{grid-area:3/1/4/4}.stack.stack-start>:nth-child(2){grid-area:2/2/5/5}.stack.stack-start>:first-child{grid-area:1/3/6/6}.stack.stack-end>*{grid-area:3/3/4/6}.stack.stack-end>:nth-child(2){grid-area:2/2/5/5}.stack.stack-end>:first-child{grid-area:1/1/6/4}.input-sm{--size:calc(var(--size-field,.25rem)*8);font-size:max(var(--font-size,.75rem),.75rem)}.input-sm[type=number]::-webkit-inner-spin-button{margin-block:-.5rem;margin-inline-end:-.75rem}.btn-circle{width:var(--size);height:var(--size);border-radius:3.40282e38px;padding-inline:0}.btn-square{width:var(--size);height:var(--size);padding-inline:0}.loading-sm{width:calc(var(--size-selector,.25rem)*5)}.loading-xs{width:calc(var(--size-selector,.25rem)*4)}.badge-soft{color:var(--badge-color,var(--color-base-content));background-color:var(--badge-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.badge-soft{background-color:color-mix(in oklab,var(--badge-color,var(--color-base-content))8%,var(--color-base-100))}}.badge-soft{border-color:var(--badge-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.badge-soft{border-color:color-mix(in oklab,var(--badge-color,var(--color-base-content))10%,var(--color-base-100))}}.badge-soft{background-image:none}.loading-spinner{-webkit-mask-image:url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E")}.radio-sm{padding:.1875rem}.radio-sm[type=radio]{--size:calc(var(--size-selector,.25rem)*5)}.select-sm{--size:calc(var(--size-field,.25rem)*8);font-size:.75rem}.select-sm option{padding-block:.25rem;padding-inline:.625rem}.badge-sm{--size:calc(var(--size-selector,.25rem)*5);padding-inline:calc(.25rem*2.5 - var(--border));font-size:.75rem}.badge-xs{--size:calc(var(--size-selector,.25rem)*4);padding-inline:calc(.25rem*2 - var(--border));font-size:.625rem}.alert-error{color:var(--color-error-content);--alert-border-color:var(--color-error);--alert-color:var(--color-error)}.alert-info{color:var(--color-info-content);--alert-border-color:var(--color-info);--alert-color:var(--color-info)}.alert-success{color:var(--color-success-content);--alert-border-color:var(--color-success);--alert-color:var(--color-success)}.alert-warning{color:var(--color-warning-content);--alert-border-color:var(--color-warning);--alert-color:var(--color-warning)}.progress-primary{color:var(--color-primary)}.link-hover{text-decoration-line:none}@media(hover:hover){.link-hover:hover{text-decoration-line:underline}}.btn-lg{--fontsize:1.125rem;--btn-p:1.25rem;--size:calc(var(--size-field,.25rem)*12)}.btn-sm{--fontsize:.75rem;--btn-p:.75rem;--size:calc(var(--size-field,.25rem)*8)}.btn-xs{--fontsize:.6875rem;--btn-p:.5rem;--size:calc(var(--size-field,.25rem)*6)}.badge-accent{--badge-color:var(--color-accent);--badge-fg:var(--color-accent-content)}.badge-info{--badge-color:var(--color-info);--badge-fg:var(--color-info-content)}.badge-primary{--badge-color:var(--color-primary);--badge-fg:var(--color-primary-content)}.badge-secondary{--badge-color:var(--color-secondary);--badge-fg:var(--color-secondary-content)}.btn-accent{--btn-color:var(--color-accent);--btn-fg:var(--color-accent-content)}.btn-error{--btn-color:var(--color-error);--btn-fg:var(--color-error-content)}.btn-info{--btn-color:var(--color-info);--btn-fg:var(--color-info-content)}.btn-neutral{--btn-color:var(--color-neutral);--btn-fg:var(--color-neutral-content)}.btn-primary{--btn-color:var(--color-primary);--btn-fg:var(--color-primary-content)}.btn-secondary{--btn-color:var(--color-secondary);--btn-fg:var(--color-secondary-content)}.btn-success{--btn-color:var(--color-success);--btn-fg:var(--color-success-content)}.btn-warning{--btn-color:var(--color-warning);--btn-fg:var(--color-warning-content)}.card-border{border:var(--border)solid var(--color-base-200)}.radio-primary,.toggle-primary:checked,.toggle-primary[aria-checked=true]{--input-color:var(--color-primary)}}.pointer-events-none{pointer-events:none}.invisible{visibility:hidden}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.inset-0{inset:calc(var(--spacing)*0)}.-top-2{top:calc(var(--spacing)*-2)}.top-2{top:calc(var(--spacing)*2)}.top-4{top:calc(var(--spacing)*4)}.top-\\[50\\%\\]{top:50%}.-right-1{right:calc(var(--spacing)*-1)}.-right-2{right:calc(var(--spacing)*-2)}.right-2{right:calc(var(--spacing)*2)}.right-4{right:calc(var(--spacing)*4)}.-bottom-1{bottom:calc(var(--spacing)*-1)}.bottom-4{bottom:calc(var(--spacing)*4)}.left-1{left:calc(var(--spacing)*1)}.left-1\\/2{left:50%}.left-2{left:calc(var(--spacing)*2)}.left-4{left:calc(var(--spacing)*4)}.left-\\[-15px\\]{left:-15px}.z-10{z-index:10}.z-50{z-index:50}.z-1000{z-index:1000}.mx-auto{margin-inline:auto}.my-2{margin-block:calc(var(--spacing)*2)}.join-item:where(:not(:first-child,:disabled,[disabled],.btn-disabled)){margin-block-start:0;margin-inline-start:calc(var(--border,1px)*-1)}.join-item:where(:is(:disabled,[disabled],.btn-disabled)){border-width:var(--border,1px)0 var(--border,1px)var(--border,1px)}.mt-1{margin-top:calc(var(--spacing)*1)}.mt-2{margin-top:calc(var(--spacing)*2)}.mt-3{margin-top:calc(var(--spacing)*3)}.mt-16{margin-top:calc(var(--spacing)*16)}.mt-px{margin-top:1px}.mb-1{margin-bottom:calc(var(--spacing)*1)}.mb-2{margin-bottom:calc(var(--spacing)*2)}.mb-4{margin-bottom:calc(var(--spacing)*4)}.mb-6{margin-bottom:calc(var(--spacing)*6)}.ml-auto{margin-left:auto}.alert{border-width:var(--border);border-color:var(--alert-border-color,var(--color-base-200))}.join{--join-ss:0;--join-se:0;--join-es:0;--join-ee:0;align-items:stretch;display:inline-flex}.join :where(.join-item){border-start-start-radius:var(--join-ss,0);border-start-end-radius:var(--join-se,0);border-end-end-radius:var(--join-ee,0);border-end-start-radius:var(--join-es,0)}.join :where(.join-item) *{--join-ss:var(--radius-field);--join-se:var(--radius-field);--join-es:var(--radius-field);--join-ee:var(--radius-field)}.join>.join-item:where(:first-child),.join :first-child:not(:last-child) :where(.join-item){--join-ss:var(--radius-field);--join-se:0;--join-es:var(--radius-field);--join-ee:0}.join>.join-item:where(:last-child),.join :last-child:not(:first-child) :where(.join-item){--join-ss:0;--join-se:var(--radius-field);--join-es:0;--join-ee:var(--radius-field)}.join>.join-item:where(:only-child),.join :only-child :where(.join-item){--join-ss:var(--radius-field);--join-se:var(--radius-field);--join-es:var(--radius-field);--join-ee:var(--radius-field)}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.table{display:table}.size-1{width:calc(var(--spacing)*1);height:calc(var(--spacing)*1)}.size-2{width:calc(var(--spacing)*2);height:calc(var(--spacing)*2)}.h-3{height:calc(var(--spacing)*3)}.h-4{height:calc(var(--spacing)*4)}.h-5{height:calc(var(--spacing)*5)}.h-8{height:calc(var(--spacing)*8)}.h-16{height:calc(var(--spacing)*16)}.max-h-60{max-height:calc(var(--spacing)*60)}.max-h-full{max-height:100%}.w-3{width:calc(var(--spacing)*3)}.w-4{width:calc(var(--spacing)*4)}.w-5{width:calc(var(--spacing)*5)}.w-8{width:calc(var(--spacing)*8)}.w-12{width:calc(var(--spacing)*12)}.w-16{width:calc(var(--spacing)*16)}.w-24{width:calc(var(--spacing)*24)}.w-28{width:calc(var(--spacing)*28)}.w-32{width:calc(var(--spacing)*32)}.w-40{width:calc(var(--spacing)*40)}.w-48{width:calc(var(--spacing)*48)}.w-52{width:calc(var(--spacing)*52)}.w-56{width:calc(var(--spacing)*56)}.w-64{width:calc(var(--spacing)*64)}.w-full{width:100%}.max-w-full{max-width:100%}.max-w-sm{max-width:var(--container-sm)}.min-w-0{min-width:calc(var(--spacing)*0)}.flex-1{flex:1}.shrink-0{flex-shrink:0}.grow{flex-grow:1}.-translate-x-1{--tw-translate-x:calc(var(--spacing)*-1);translate:var(--tw-translate-x)var(--tw-translate-y)}.-translate-x-1\\/2{--tw-translate-x: -50% ;translate:var(--tw-translate-x)var(--tw-translate-y)}.translate-x-\\[15px\\]{--tw-translate-x:15px;translate:var(--tw-translate-x)var(--tw-translate-y)}.rotate-15{rotate:15deg}.transform{transform:var(--tw-rotate-x,)var(--tw-rotate-y,)var(--tw-rotate-z,)var(--tw-skew-x,)var(--tw-skew-y,)}.cursor-pointer{cursor:pointer}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-row-reverse{flex-direction:row-reverse}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-start{justify-content:flex-start}.gap-0{gap:calc(var(--spacing)*0)}.gap-0\\.5{gap:calc(var(--spacing)*.5)}.gap-1{gap:calc(var(--spacing)*1)}.gap-1\\.5{gap:calc(var(--spacing)*1.5)}.gap-2{gap:calc(var(--spacing)*2)}.gap-2\\.5{gap:calc(var(--spacing)*2.5)}.gap-3{gap:calc(var(--spacing)*3)}.gap-4{gap:calc(var(--spacing)*4)}:where(.space-y-1>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*1)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*1)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-1\\.5>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*1.5)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*1.5)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-2>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*2)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*2)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-4>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*4)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*4)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-6>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*6)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*6)*calc(1 - var(--tw-space-y-reverse)))}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-y-auto{overflow-y:auto}.rounded{border-radius:.25rem}.rounded-box{border-radius:var(--radius-box)}.rounded-full{border-radius:3.40282e38px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-sm{border-radius:var(--radius-sm)}.rounded-xl{border-radius:var(--radius-xl)}.border{border-style:var(--tw-border-style);border-width:1px}.border-\\(length\\:--border\\){border-style:var(--tw-border-style);border-width:var(--border)}.border-base-300{border-color:var(--color-base-300)}.border-base-content,.border-base-content\\/10{border-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.border-base-content\\/10{border-color:color-mix(in oklab,var(--color-base-content)10%,transparent)}}.border-white{border-color:var(--color-white)}.border-white\\/5{border-color:#ffffff0d}@supports (color:color-mix(in lab,red,red)){.border-white\\/5{border-color:color-mix(in oklab,var(--color-white)5%,transparent)}}.bg-accent{background-color:var(--color-accent)}.bg-base-100{background-color:var(--color-base-100)}.bg-base-200,.bg-base-200\\/70{background-color:var(--color-base-200)}@supports (color:color-mix(in lab,red,red)){.bg-base-200\\/70{background-color:color-mix(in oklab,var(--color-base-200)70%,transparent)}}.bg-base-content{background-color:var(--color-base-content)}.bg-black{background-color:var(--color-black)}.bg-black\\/90{background-color:#000000e6}@supports (color:color-mix(in lab,red,red)){.bg-black\\/90{background-color:color-mix(in oklab,var(--color-black)90%,transparent)}}.bg-primary{background-color:var(--color-primary)}.bg-secondary{background-color:var(--color-secondary)}@layer daisyui.l1{.alert-soft{color:var(--alert-color,var(--color-base-content));background:var(--alert-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.alert-soft{background:color-mix(in oklab,var(--alert-color,var(--color-base-content))8%,var(--color-base-100))}}.alert-soft{--alert-border-color:var(--alert-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.alert-soft{--alert-border-color:color-mix(in oklab,var(--alert-color,var(--color-base-content))10%,var(--color-base-100))}}.alert-soft{box-shadow:none;background-image:none}.btn-ghost:not(.btn-active,:hover,:active:focus,:focus-visible,input:checked:not(.filter .btn)){--btn-shadow:"";--btn-bg:#0000;--btn-border:#0000;--btn-noise:none}.btn-ghost:not(.btn-active,:hover,:active:focus,:focus-visible,input:checked:not(.filter .btn)):not(:disabled,[disabled],.btn-disabled){--btn-fg:var(--btn-color,currentColor);outline-color:currentColor}@media(hover:none){.btn-ghost:not(.btn-active,:active,:focus-visible,input:checked:not(.filter .btn)):hover{--btn-shadow:"";--btn-bg:#0000;--btn-fg:var(--btn-color,currentColor);--btn-border:#0000;--btn-noise:none;outline-color:currentColor}}.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,input:checked:not(.filter .btn),:disabled,[disabled],.btn-disabled){--btn-shadow:"";--btn-fg:var(--btn-color,var(--color-base-content));--btn-bg:var(--btn-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,input:checked:not(.filter .btn),:disabled,[disabled],.btn-disabled){--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-content))8%,var(--color-base-100))}}.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,input:checked:not(.filter .btn),:disabled,[disabled],.btn-disabled){--btn-border:var(--btn-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,input:checked:not(.filter .btn),:disabled,[disabled],.btn-disabled){--btn-border:color-mix(in oklab,var(--btn-color,var(--color-base-content))10%,var(--color-base-100))}}.btn-soft:not(.btn-active,:hover,:active:focus,:focus-visible,input:checked:not(.filter .btn),:disabled,[disabled],.btn-disabled){--btn-noise:none}@media(hover:none){.btn-soft:not(.btn-active,:active,:focus-visible,input:checked:not(.filter .btn)):hover{--btn-shadow:"";--btn-fg:var(--btn-color,var(--color-base-content));--btn-bg:var(--btn-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.btn-soft:not(.btn-active,:active,:focus-visible,input:checked:not(.filter .btn)):hover{--btn-bg:color-mix(in oklab,var(--btn-color,var(--color-base-content))8%,var(--color-base-100))}}.btn-soft:not(.btn-active,:active,:focus-visible,input:checked:not(.filter .btn)):hover{--btn-border:var(--btn-color,var(--color-base-content))}@supports (color:color-mix(in lab,red,red)){.btn-soft:not(.btn-active,:active,:focus-visible,input:checked:not(.filter .btn)):hover{--btn-border:color-mix(in oklab,var(--btn-color,var(--color-base-content))10%,var(--color-base-100))}}.btn-soft:not(.btn-active,:active,:focus-visible,input:checked:not(.filter .btn)):hover{--btn-noise:none}}}.fill-current{fill:currentColor}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.p-1{padding:calc(var(--spacing)*1)}.p-2{padding:calc(var(--spacing)*2)}.p-3{padding:calc(var(--spacing)*3)}.p-4{padding:calc(var(--spacing)*4)}.px-1{padding-inline:calc(var(--spacing)*1)}.px-1\\.5{padding-inline:calc(var(--spacing)*1.5)}.px-2{padding-inline:calc(var(--spacing)*2)}.py-0{padding-block:calc(var(--spacing)*0)}.py-0\\.5{padding-block:calc(var(--spacing)*.5)}.py-1{padding-block:calc(var(--spacing)*1)}.py-8{padding-block:calc(var(--spacing)*8)}.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}.font-mono{font-family:var(--font-mono)}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-lg{font-size:var(--text-lg);line-height:var(--tw-leading,var(--text-lg--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\\[10px\\]{font-size:10px}.leading-normal{--tw-leading:var(--leading-normal);line-height:var(--leading-normal)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.font-semibold{--tw-font-weight:var(--font-weight-semibold);font-weight:var(--font-weight-semibold)}.break-all{word-break:break-all}.text-base-content,.text-base-content\\/90{color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.text-base-content\\/90{color:color-mix(in oklab,var(--color-base-content)90%,transparent)}}.text-info{color:var(--color-info)}.text-primary{color:var(--color-primary)}.text-warning{color:var(--color-warning)}.text-white{color:var(--color-white)}.capitalize{text-transform:capitalize}.uppercase{text-transform:uppercase}.ordinal{--tw-ordinal:ordinal;font-variant-numeric:var(--tw-ordinal,)var(--tw-slashed-zero,)var(--tw-numeric-figure,)var(--tw-numeric-spacing,)var(--tw-numeric-fraction,)}.opacity-50{opacity:.5}.opacity-60{opacity:.6}.opacity-70{opacity:.7}.opacity-80{opacity:.8}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a),0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px var(--tw-shadow-color,#00000040);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a),0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.outline{outline-style:var(--tw-outline-style);outline-width:1px}.outline-\\(length\\:--border\\){outline-style:var(--tw-outline-style);outline-width:var(--border)}.outline-black{outline-color:var(--color-black)}.outline-black\\/5{outline-color:#0000000d}@supports (color:color-mix(in lab,red,red)){.outline-black\\/5{outline-color:color-mix(in oklab,var(--color-black)5%,transparent)}}.filter{filter:var(--tw-blur,)var(--tw-brightness,)var(--tw-contrast,)var(--tw-grayscale,)var(--tw-hue-rotate,)var(--tw-invert,)var(--tw-saturate,)var(--tw-sepia,)var(--tw-drop-shadow,)}.backdrop-blur-sm{--tw-backdrop-blur:blur(var(--blur-sm));-webkit-backdrop-filter:var(--tw-backdrop-blur,)var(--tw-backdrop-brightness,)var(--tw-backdrop-contrast,)var(--tw-backdrop-grayscale,)var(--tw-backdrop-hue-rotate,)var(--tw-backdrop-invert,)var(--tw-backdrop-opacity,)var(--tw-backdrop-saturate,)var(--tw-backdrop-sepia,);backdrop-filter:var(--tw-backdrop-blur,)var(--tw-backdrop-brightness,)var(--tw-backdrop-contrast,)var(--tw-backdrop-grayscale,)var(--tw-backdrop-hue-rotate,)var(--tw-backdrop-invert,)var(--tw-backdrop-opacity,)var(--tw-backdrop-saturate,)var(--tw-backdrop-sepia,)}.transition-\\[height\\,max-height\\]{transition-property:height,max-height;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-all{transition-property:all;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-300{--tw-duration:.3s;transition-duration:.3s}.ease-in-out{--tw-ease:var(--ease-in-out);transition-timing-function:var(--ease-in-out)}.ease-out{--tw-ease:var(--ease-out);transition-timing-function:var(--ease-out)}@media(hover:hover){.group-hover\\:border-base-content\\/20:is(:where(.group):hover *){border-color:var(--color-base-content)}@supports (color:color-mix(in lab,red,red)){.group-hover\\:border-base-content\\/20:is(:where(.group):hover *){border-color:color-mix(in oklab,var(--color-base-content)20%,transparent)}}.hover\\:translate-x-\\[15px\\]:hover{--tw-translate-x:15px;translate:var(--tw-translate-x)var(--tw-translate-y)}.hover\\:rotate-15:hover{rotate:15deg}.hover\\:opacity-100:hover{opacity:1}}@media(min-width:40rem){.sm\\:inline-block{display:inline-block}.sm\\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(min-width:48rem){.md\\:flex{display:flex}}.\\[\\&_svg\\]\\:visible svg{visibility:visible}}:host{font-family:var(--font-family,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif)}:host([data-font=Lato]){--font-family:"Lato",system-ui,-apple-system,sans-serif}:host([data-font=Montserrat]){--font-family:"Montserrat",system-ui,-apple-system,sans-serif}:host([data-font=Noto\\ Sans]){--font-family:"Noto Sans",system-ui,-apple-system,sans-serif}:host([data-font=Open\\ Sans]){--font-family:"Open Sans",system-ui,-apple-system,sans-serif}:host([data-font=Raleway]){--font-family:"Raleway",system-ui,-apple-system,sans-serif}@keyframes rating{0%,40%{filter:brightness(1.05)contrast(1.05);scale:1.1}}@keyframes dropdown{0%{opacity:0}}@keyframes radio{0%{padding:5px}50%{padding:3px}}@keyframes toast{0%{opacity:0;scale:.9}to{opacity:1;scale:1}}@keyframes rotator{89.9999%,to{--first-item-position:0 0%}90%,99.9999%{--first-item-position:0 calc(var(--items)*100%)}to{translate:0 -100%}}@keyframes skeleton{0%{background-position:150%}to{background-position:-50%}}@keyframes progress{50%{background-position-x:-115%}}@property --tw-translate-x{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-y{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-z{syntax:"*";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:"*";inherits:false}@property --tw-rotate-y{syntax:"*";inherits:false}@property --tw-rotate-z{syntax:"*";inherits:false}@property --tw-skew-x{syntax:"*";inherits:false}@property --tw-skew-y{syntax:"*";inherits:false}@property --tw-space-y-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-leading{syntax:"*";inherits:false}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-ordinal{syntax:"*";inherits:false}@property --tw-slashed-zero{syntax:"*";inherits:false}@property --tw-numeric-figure{syntax:"*";inherits:false}@property --tw-numeric-spacing{syntax:"*";inherits:false}@property --tw-numeric-fraction{syntax:"*";inherits:false}@property --tw-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:"*";inherits:false}@property --tw-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:"*";inherits:false}@property --tw-inset-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:"*";inherits:false}@property --tw-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:"*";inherits:false}@property --tw-inset-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:"*";inherits:false}@property --tw-ring-offset-width{syntax:"<length>";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:"*";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-blur{syntax:"*";inherits:false}@property --tw-brightness{syntax:"*";inherits:false}@property --tw-contrast{syntax:"*";inherits:false}@property --tw-grayscale{syntax:"*";inherits:false}@property --tw-hue-rotate{syntax:"*";inherits:false}@property --tw-invert{syntax:"*";inherits:false}@property --tw-opacity{syntax:"*";inherits:false}@property --tw-saturate{syntax:"*";inherits:false}@property --tw-sepia{syntax:"*";inherits:false}@property --tw-drop-shadow{syntax:"*";inherits:false}@property --tw-drop-shadow-color{syntax:"*";inherits:false}@property --tw-drop-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:"*";inherits:false}@property --tw-backdrop-blur{syntax:"*";inherits:false}@property --tw-backdrop-brightness{syntax:"*";inherits:false}@property --tw-backdrop-contrast{syntax:"*";inherits:false}@property --tw-backdrop-grayscale{syntax:"*";inherits:false}@property --tw-backdrop-hue-rotate{syntax:"*";inherits:false}@property --tw-backdrop-invert{syntax:"*";inherits:false}@property --tw-backdrop-opacity{syntax:"*";inherits:false}@property --tw-backdrop-saturate{syntax:"*";inherits:false}@property --tw-backdrop-sepia{syntax:"*";inherits:false}@property --tw-duration{syntax:"*";inherits:false}@property --tw-ease{syntax:"*";inherits:false}`;
   dayjs.extend(localizedFormat);
+  function loadGoogleFonts() {
+    if (document.getElementById("tmd-google-fonts")) {
+      return;
+    }
+    const fontCSS = `@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');`;
+    if (typeof window.GM_addStyle !== "undefined") {
+      window.GM_addStyle(fontCSS);
+    } else {
+      const link = document.createElement("link");
+      link.id = "tmd-google-fonts";
+      link.rel = "stylesheet";
+      link.href = "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap";
+      document.head.appendChild(link);
+    }
+  }
   function mountApp() {
+    loadGoogleFonts();
     const root = document.createElement("div");
     root.id = "tmd-root";
     document.body.append(root);
@@ -7906,4 +6444,4 @@ u("div", { id: "tmd-portal-root" })
     mountApp();
   }
 
-})(preact, preactSignals, preactHooks, i18next, dayjs, Dexie, FileSaver, fflate);
+})(preact, preactSignals, preactHooks, i18next, dayjs, Dexie, FileSaver, gifshot, fflate);
