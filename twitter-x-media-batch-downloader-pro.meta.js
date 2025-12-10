@@ -9,7 +9,7 @@
 // @supportURL      https://www.patreon.com/exyezed
 // @homepageURL     https://www.patreon.com/exyezed
 // @antifeature     payment Using this script requires an active monthly subscription.
-// @version         1.1.0
+// @version         1.1.1
 // @author          exyezed
 // @license         MIT
 // @updateURL       https://github.com/exyezed/chatgpt-tts/releases/latest/download/twitter-x-media-batch-downloader-pro.meta.js
